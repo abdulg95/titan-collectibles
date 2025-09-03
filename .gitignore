@@ -1,0 +1,49 @@
+# --- OS / editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+*.iml
+
+# --- Env / secrets
+.env
+*.env
+*.env.*
+!.env.example           # keep a template in git
+
+# --- Logs / caches
+logs/
+*.log
+.cache/
+.tmp/
+coverage/
+pytest_cache/
+.mypy_cache/
+
+# --- Python (backend)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.python-version
+.venv/
+venv/
+instance/
+# SQLite (if you ever use locally)
+*.sqlite
+*.sqlite3
+
+# --- Node / Vite (frontend)
+node_modules/
+dist/
+.vite/
+*.tsbuildinfo
+
+# --- Misc build
+build/
+.out/
