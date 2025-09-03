@@ -1,0 +1,33 @@
+/* src/styles/theme.css */
+
+  
+ 
+  
+  :root{
+    --bg: #000;                        /* whole-site baseline is black */
+    --text: #E9EEF7;
+    --muted: #C5D0DF;
+    --stroke: rgba(255,255,255,.18);
+    --primary: #9BE2FF;
+    --primary-2: #66B6FF;
+    --radius: 14px;
+  
+    /* gradient palette (was used before) */
+    --grad-base: #0c1220;
+    --grad-a: #1a2436;
+    --grad-b: #151f30;
+  }
+  
+  * { box-sizing: border-box; }
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, "Helvetica Neue", Arial;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  html { scroll-behavior: smooth; }
+
+  
