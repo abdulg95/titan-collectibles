@@ -8,7 +8,6 @@ flask-login
 python-dotenv
 authlib>=1.0,<2.0
 google-auth
-passlib[bcrypt]==1.*
 itsdangerous==2.*
 sendgrid
 gunicorn
