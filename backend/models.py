@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import func, Enum, CheckConstraint
+from werkzeug.security import generate_password_hash, check_password_hash
 import uuid, enum
 
 db = SQLAlchemy()
@@ -27,10 +28,10 @@ class User(db.Model):
      # helpers
     def set_password(self, raw: str):
         # You can add your own policy checks before hashing (len, entropy, etc.)
-        self.password_hash = bcrypt.hash(raw)
+        self.password_hash = generate_password_hash(raw, method='pbkdf2:sha256', salt_length=16)
 
     def check_password(self, raw: str) -> bool:
-        return bool(self.password_hash) and bcrypt.verify(raw, self.password_hash)
+        return bool(self.password_hash) and check_password_hash(self.password_hash, raw)
 
 class Athlete(db.Model):
     __tablename__ = 'athletes'
