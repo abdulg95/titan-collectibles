@@ -15,7 +15,43 @@
   max-width: 44ch;
 }
 
-.hero__cta{ display:flex; gap:14px; align-items:center; margin: 22px 0 26px; flex-wrap: wrap; }
+/* --- Fix: prevent CTA buttons from stretching full width --- */
+.hero__cta > a.btn-primary,
+.hero__cta > a.btn-ghost {
+  display: inline-flex !important;   /* beat any global a{display:block} */
+  flex: 0 0 auto !important;         /* NEVER grow/shrink in the flex row */
+  width: auto !important;            /* kill any width:100% somewhere */
+  max-width: none !important;
+  white-space: nowrap;
+  line-height: 1;
+  font-size: 15px;
+  padding: 10px 16px;
+  min-height: 40px;
+  border-radius: 12px;
+}
+
+
+.hero__cta{
+  display: flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 24px;      /* horizontal gap */
+  row-gap: 12px;         /* vertical when they wrap */
+  gap: 24px;             /* shorthand (most browsers) */
+}
+
+
+
+/* Optional: tidy mobile */
+@media (max-width: 420px){
+  .hero__cta { gap: 10px; }
+  .hero__cta > a.btn-primary,
+  .hero__cta > a.btn-ghost {
+    font-size: 14px;
+    padding: 9px 14px;
+    min-height: 38px;
+  }
+}
 .btn-primary{
   display:inline-flex; align-items:center; justify-content:center;
   background-image: linear-gradient(90deg, var(--primary), var(--primary-2));
