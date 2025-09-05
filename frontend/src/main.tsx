@@ -13,6 +13,8 @@ import SignUp from './pages/SignUp'
 import Contact from './pages/Contact'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
+import Shop from './pages/Shop'
+import { CartProvider } from './state/cart' 
 import './styles/theme.css'
 
 
@@ -28,7 +30,7 @@ const router = createBrowserRouter([
       { path: '/', element: <Home/> },
       { path: '/about', element: <About/> },
       { path: '/contact', element: <Contact/> },
-      { path: '/buy', element: <BuyNow/> },
+      { path: '/buy', element: <Shop/> },
       { path: '/terms', element: <Terms/> },
       { path: '/privacy', element: <Privacy/> },
 
@@ -48,6 +50,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <CartProvider>
+      <RouterProvider router={router} />
+    </CartProvider>
   </React.StrictMode>
 )

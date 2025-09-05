@@ -4,6 +4,8 @@ import './layout.css'
 import HashScroll from './HashScroll'
 import Footer from './Footer'
 import AuthModal from './AuthModal'
+import CartDrawer from './CartDrawer'
+import CartIcon from './CartIcon'
 
 
 
@@ -64,9 +66,7 @@ export default function Layout(){
 
           {/* right actions */}
           <div className="nav-actions">
-            <Link to="/cart" className="cart-btn" aria-label="Cart">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6h14l-1.5 9h-11L6 6Zm0 0L5 3H2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/><circle cx="9" cy="20" r="1.5" fill="currentColor"/><circle cx="17" cy="20" r="1.5" fill="currentColor"/></svg>
-            </Link>
+            <CartIcon />
             {loading ? null : me ? (
                 <button className="btn-outline" onClick={signOut}>Sign Out</button>
                 ) : (
@@ -77,6 +77,7 @@ export default function Layout(){
       </header>
 
       <main><HashScroll offset={80}/><Outlet/></main>
+      <CartDrawer />
       <Footer/>
       <AuthModal
         open={showAuth}

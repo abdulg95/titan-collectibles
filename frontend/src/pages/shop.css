@@ -1,0 +1,330 @@
+.shop-page{
+    padding: 24px 0 64px;
+    background: #000; /* page is dark */
+    min-height: 100vh;
+  }
+  
+  .shop__title{
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 800;
+    letter-spacing: .02em;
+    margin: 12px 0 18px;
+  }
+  
+ /* ~3/4 size overall */
+.product-card{
+    max-width: 540px;        /* was 380px */
+    margin-inline: auto;
+    padding: 12px;
+  }
+  
+  .product-card__media{
+    margin-bottom: 12px;
+    min-height: 200px;       /* a bit taller than the 1/2 version */
+    padding: 10px;
+  }
+  
+  /* 3-image stack at ~75% of original */
+  .product-card__stack{
+    position: relative;
+    width: 100%;
+    max-width: 420px;        /* 560px * .75 */
+    aspect-ratio: 4 / 3;
+    margin-inline: auto;
+  }
+  
+  .product-card__stack .img{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 12px 18px rgba(0,0,0,.45));
+    will-change: transform;
+  }
+  
+  /* center pack slightly larger than the 1/2 version */
+  .product-card__stack .img--pack{
+    width: 42%;              /* was 36% */
+    z-index: 3;
+  }
+  
+  /* flanking cards: a touch larger, still spaced out */
+  .product-card__stack .img--left{
+    width: 31%;              /* was 28% */
+    z-index: 2;
+    transform: translate(calc(-50% - 32%), -50%) rotate(-10deg);  /* was 36% */
+  }
+  .product-card__stack .img--right{
+    width: 31%;
+    z-index: 2;
+    transform: translate(calc(-50% + 32%), -50%) rotate(10deg);
+  }
+  
+  @media (min-width: 768px){
+    .product-card__stack{ max-width: 440px; }
+    .product-card__stack .img--left{
+      transform: translate(calc(-50% - 34%), -50%) rotate(-10deg);
+    }
+    .product-card__stack .img--right{
+      transform: translate(calc(-50% + 34%), -50%) rotate(10deg);
+    }
+  }
+  
+  /* reuse button look from home */
+  .btn-primary{
+    display:inline-flex; align-items:center; justify-content:center;
+    background-image: linear-gradient(90deg, var(--primary), var(--primary-2));
+    color: #0b1220; font-weight: 700;
+    padding: 12px 18px; border-radius: var(--radius, 14px);
+    border: 1px solid transparent; box-shadow: 0 0 28px var(--btn-glow, rgba(96,178,255,.25));
+  }
+  
+  /* spacing for small hint */
+  .config-hint{
+    margin-top: 10px; font-size: 12px; color: #9fb0c6;
+    word-break: break-word;
+  }
+  
+  /* container helper if you don’t already have one */
+  .container{
+    max-width: 1080px;
+    padding: 0 16px;
+    margin: 0 auto;
+  }
+
+  /* existing … */
+/* === MORE SPACING & BREATHING ROOM FOR 3-IMAGE STACK === */
+
+/* Let glow & edges show outside */
+.product-card{ overflow: visible; }
+
+/* Stop cropping inside the media frame so the wider spread is visible */
+.product-card__media{
+  overflow: visible;          /* was hidden */
+  padding: 18px;              /* tiny extra air so nothing feels cramped */
+}
+
+/* Stronger defaults; you can tweak --spread-x to taste */
+.product-card__stack{
+  --spread-x: 38%;            /* ↑ push side cards farther from center (try 40–44% if you want more) */
+  --tilt: 11deg;
+  --hover-scale: 1.08;
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 4 / 3;        /* keep the frame balanced */
+}
+
+/* Center pack: slightly smaller so it doesn’t collide with the flanks */
+.product-card__stack .img--pack{
+  width: clamp(40%, 44vw, 46%);                 /* ↓ from 52% */
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+
+/* Side cards: a touch narrower and pushed out more */
+.product-card__stack .img--left{
+  width: clamp(28%, 30vw, 33%);
+  transform: translate(calc(-50% - var(--spread-x)), -50%) rotate(calc(-1 * var(--tilt)));
+  z-index: 2;
+}
+.product-card__stack .img--right{
+  width: clamp(28%, 30vw, 33%);
+  transform: translate(calc(-50% + var(--spread-x)), -50%) rotate(var(--tilt));
+  z-index: 2;
+}
+
+/* Hover pop/glow stays the same */
+.product-card__stack .img{ transition: transform .25s ease, filter .25s ease, z-index .15s ease; cursor: pointer; }
+.product-card__stack .img--pack:hover{
+  z-index: 6; transform: translate(-50%, -50%) scale(var(--hover-scale));
+  filter: drop-shadow(0 0 22px rgba(96,178,255,.35)) brightness(1.05);
+}
+.product-card__stack .img--left:hover{
+  z-index: 6; transform: translate(calc(-50% - var(--spread-x)), -50%) rotate(calc(-1 * var(--tilt) + 2deg)) scale(1.06);
+  filter: drop-shadow(0 0 20px rgba(96,178,255,.32)) brightness(1.05);
+}
+.product-card__stack .img--right:hover{
+  z-index: 6; transform: translate(calc(-50% + var(--spread-x)), -50%) rotate(calc(var(--tilt) - 2deg)) scale(1.06);
+  filter: drop-shadow(0 0 20px rgba(96,178,255,.32)) brightness(1.05);
+}
+
+/* Desktop: push even more if you like */
+@media (min-width: 1024px){
+  .product-card__stack{ --spread-x: 42%; }      /* feel free to bump to 44% */
+}
+
+/* Small screens: keep things visible but still spaced */
+@media (max-width: 460px){
+  .product-card__stack{ --spread-x: 24%; }
+  .product-card__stack .img--left,
+  .product-card__stack .img--right{ width: clamp(27%, 40vw, 32%); }
+}
+
+.product-card__media{ overflow: visible; }   /* let wider spread show */
+
+.product-card__stack{
+  /* Increase horizontal offset a lot */
+  --spread-x: 50%;          /* was ~38–42%; try 52–56% if you want even more */
+  --tilt: 11deg;
+}
+
+/* Make the pack a touch smaller so nothing collides */
+.product-card__stack .img--pack{
+  width: clamp(34%, 38vw, 40%);   /* was ~44–46% */
+  transform: translate(-50%, -50%);
+}
+
+/* Push side cards further out and slightly narrower */
+.product-card__stack .img--left{
+  width: clamp(24%, 28vw, 28%);
+  transform: translate(calc(-50% - var(--spread-x)), -50%) rotate(calc(-1 * var(--tilt)));
+}
+
+.product-card__stack .img--right{
+  width: clamp(24%, 28vw, 28%);
+  transform: translate(calc(-50% + var(--spread-x)), -50%) rotate(var(--tilt));
+}
+
+/* On big desktops, give them even more breathing room */
+@media (min-width: 1280px){
+  .product-card__stack{ --spread-x: 80%; }   /* bump this up if you want more */
+}
+
+/* On small screens, still spaced but not too extreme */
+@media (max-width: 460px){
+  .product-card__stack{ --spread-x: 28%; }
+  .product-card__stack .img--left,
+  .product-card__stack .img--right{ width: clamp(26%, 40vw, 30%); }
+}
+
+/* ===== Product detail meta row ===== */
+.product-detail { padding-bottom: 80px; }
+
+.pd__meta{
+  margin: 14px 0 16px;
+  display:flex; justify-content: space-between; align-items:center;
+  gap: 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.35);
+}
+.pd__series{ color:#adc2dc; font-size:14px; margin-bottom:4px; }
+.pd__name{ font-weight: 700; font-size: 18px; }
+.pd__price{ color:#cfe3ff; font-weight:600; margin-top:2px; }
+
+.pill-btn{
+  padding: 10px 16px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.08);
+  color: #fff; font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+}
+.pill-btn:hover{ background: rgba(255,255,255,.12); transform: translateY(-1px); }
+
+/* ===== The big info card ===== */
+.pd__card{
+  background: radial-gradient(80% 140% at 15% 0%, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+  padding: 16px 14px;
+}
+
+.pd__section + .pd__section{ margin-top: 18px; }
+
+.pd__h{
+  font-size: 18px; font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.pd__bullets{
+  margin: 0; padding-left: 18px;
+  display: grid; gap: 6px;
+}
+
+.pd__card p{
+  margin: 10px 0;
+  color: var(--text, #dfe7f3);
+  opacity: .96; line-height: 1.6;
+}
+
+/* Specs list */
+.pd__specs{ margin: 0; }
+.pd__spec-row{
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 8px; padding: 8px 0;
+  border-top: 1px dashed rgba(255,255,255,.08);
+}
+.pd__spec-row:first-child{ border-top: none; }
+.pd__spec-row dt{ color:#adc2dc; }
+.pd__spec-row dd{ margin:0; font-weight:600; }
+
+.product-detail .product-card,
+.product-detail .pd__meta,
+.product-detail .pd__card{
+  max-width: 800px;        /* matches the visual width of your pack card */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* if you want it a touch narrower on small screens, optional */
+@media (max-width: 560px){
+  .product-detail .product-card,
+  .product-detail .pd__meta,
+  .product-detail .pd__card{
+    max-width: 96%;
+  }
+}
+
+@media (max-width: 560px){
+    /* tighten the row */
+    .product-detail .pd__meta{
+      padding: 10px 12px;
+      gap: 10px;
+      flex-wrap: wrap;          /* prevents overflow on very narrow devices */
+    }
+    /* .pd__series{ color:#adc2dc; font-size:10px; margin-bottom:4px; }
+    .pd__name{ font-weight: 500; font-size: 12px; }
+    .pd__price{ color:#cfe3ff; font: weight 400px;; margin-top:2px; } */
+
+  
+    /* smaller type in the left block */
+    .product-detail .pd__meta .product-card__series{
+      font-size: 12px;
+    }
+    .product-detail .pd__meta .product-card__name{
+      font-size: 14px;          /* was larger */
+      line-height: 1.2;
+    }
+    .product-detail .pd__meta .product-card__price{
+      font-size: 13px;
+    }
+  
+    /* smaller, tighter Add to Cart */
+    .product-detail .pd__meta .pill-btn{
+      flex: 0 0 auto;           /* don’t stretch */
+      font-size: 8px;
+      padding: 8px 12px;
+      min-height: 34px;
+      border-radius: 10px;
+    }
+  }
+  
+  /* extra-tight for sub-380px devices */
+  @media (max-width: 380px){
+    .product-detail .pd__meta{
+      gap: 8px;
+    }
+    .product-detail .pd__meta .btn-primary{
+      font-size: 13px;
+      padding: 8px 10px;
+    }
+  }
+
+  
+  
+  

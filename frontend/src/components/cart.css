@@ -1,0 +1,304 @@
+/* ===== Drawer container / overlay ===== */
+.cart-drawer{ position:fixed; inset:0; pointer-events:none; z-index:9999; }
+.cart-drawer.open{ pointer-events:auto; }
+
+.cart-drawer .overlay{
+  position:absolute; inset:0;
+  background: rgba(3,6,12,.60);       /* darker scrim */
+  opacity:0; transition:opacity .2s ease;
+  z-index:1;                          /* under panel */
+}
+.cart-drawer.open .overlay{ opacity:1; }
+
+/* ===== GLASS PANEL ===== */
+.cart-panel{
+      position:absolute;
+      top:12px; right:12px;             /* no bottom pin */
+      width:min(420px, 92vw);
+      height:auto;                       /* grow to content */
+      max-height:calc(100vh - 24px);     /* cap within viewport */
+      display:grid; grid-template-rows: auto minmax(0,1fr) auto;
+      transform: translateX(110%); transition: transform .25s ease;
+      z-index:2;
+      /* …keep your glass styles here… */
+    }
+.cart-drawer.open .cart-panel{ transform: translateX(0); }
+
+/* ===== Header ===== */
+.cart-head{
+  position: sticky; top: 0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+.cart-head h3{ margin:0; font-size:18px; font-weight:800; letter-spacing:.02em; }
+.cart-head .x{
+  display:inline-grid; place-items:center;
+  width:32px; height:32px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  color:#fff; cursor:pointer;
+}
+.cart-head .x:hover{ background: rgba(255,255,255,.10); }
+
+/* ===== Lines ===== */
+.cart-lines{
+  min-height:0;                        /* allow scrolling inside grid */
+  overflow:auto;
+  padding:10px 12px;
+  display:grid; gap:10px;
+}
+
+.line{
+  display:grid; grid-template-columns: 60px 1fr auto; gap:10px;
+  padding:10px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+}
+.line img{
+  width:60px; height:60px; object-fit:cover;
+  border-radius:10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+.meta{ min-width:0; }
+.cd-title{
+  font-weight:700; font-size:14px; line-height:1.25;
+  color:#eef4ff; margin-bottom:4px; word-break:break-word;
+}
+.cd-price{ color:#cfe3ff; font-weight:600; margin-bottom:8px; }
+
+.cd-qty{ display:inline-flex; align-items:center; gap:10px; }
+.cd-qty button{
+  width:28px; height:28px; border-radius:8px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.07); color:#fff;
+}
+.cd-qty button:hover{ background: rgba(255,255,255,.12); }
+.cd-qty-num{ min-width:1.5ch; text-align:center; }
+
+.rm{
+  align-self:start;
+  background: transparent;
+  color: #9fb0c6;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px; padding:6px 10px;
+}
+.rm:hover{ color:#d5e6ff; border-color: rgba(255,255,255,.22); }
+
+/* ===== Footer ===== */
+.cart-foot{
+  position: sticky; bottom: 0;
+  padding:12px 14px;
+  background: linear-gradient(0deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+  border-top: 1px solid rgba(255,255,255,.10);
+  display:grid; gap:10px;
+}
+.cart-foot .row{ display:flex; justify-content:space-between; font-weight:600; }
+.cart-foot .checkout{
+  background-image: linear-gradient(90deg, var(--primary), var(--primary-2));
+  color:#0b1220; font-weight:800;
+  border:0; border-radius: 12px; padding:12px 16px;
+  box-shadow: 0 10px 30px rgba(96,178,255,.25);
+}
+.cart-foot .continue{
+  background: transparent; color:#eaf2ff;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:12px; padding:10px 14px;
+}
+
+.cart-lines .line + .line{ border-top: 1px solid rgba(255,255,255,.06); }
+/* tiny screens */
+@media (max-width: 420px){
+    cart-panel{ right:8px; top:8px; max-height:calc(100vh - 16px); border-radius:16px; }
+}
+
+@media (max-width: 640px){
+    .cart-panel{
+      /* if you kept my CSS vars, this raises the fill opacity */
+      --glass-bg: rgba(8,12,20,.82);
+      --glass-stroke: rgba(255,255,255,.10);
+  
+      /* and also hard-override the background in case vars aren't present */
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 25%),
+        rgba(8,12,20,.82);
+  
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.65);
+    }
+  
+    /* darken the page dimmer a touch on mobile */
+    .cart-drawer .overlay{
+      background: rgba(0,0,0,.6);
+    }
+  }
+
+  .cart-btn{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    color: #eaf2ff;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .cart-btn:hover{ background: rgba(255,255,255,.10); }
+  
+  .cart-svg{
+    display: inline-block !important;   /* ← override any global rule */
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .cart-label{ font-weight: 600; font-size: 14px; }
+  
+  .cart-badge{
+    position: absolute;
+    top: -6px; right: -6px;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-2));
+    color: #0b1220;
+    font-weight: 800; font-size: 11px; line-height: 1;
+    border: 1px solid rgba(255,255,255,.35);
+  }
+
+  /* Icon-only cart button */
+.cart-btn.cart-btn--icon{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    /* invisible, comfy hit target */
+    padding: 6px;
+    border: 0;
+    background: transparent;
+  
+    cursor: pointer;
+    color: #eaf2ff;
+  
+    /* kill default outline, add subtle focus style */
+    outline: none;
+  }
+  .cart-btn.cart-btn--icon:focus-visible{
+    box-shadow: 0 0 0 2px rgba(255,255,255,.18);
+    border-radius: 10px;
+  }
+  
+  .cart-svg{
+    display: inline-block !important;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  
+  .cart-badge{
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+  
+    background: linear-gradient(90deg, var(--primary), var(--primary-2));
+    color: #0b1220;
+    font-weight: 800;
+    font-size: 11px;
+    line-height: 1;
+    border: 1px solid rgba(255,255,255,.35);
+  }
+  /* === Add-ons panel ============================================ */
+.cart-addons{
+    margin: 10px 12px 12px;
+    padding: 12px;
+    border-radius: 14px;
+    background: radial-gradient(80% 160% at 10% 0%, rgba(255,255,255,.06), rgba(255,255,255,.03));
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 8px 32px rgba(0,0,0,.35);
+  }
+  
+  .addons-head{
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #9fb0c6;
+    margin-bottom: 10px;
+  }
+  
+  .addon-item{
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .addon-img{
+    width: 56px; height: 56px; object-fit: cover; border-radius: 8px;
+    display: block;
+  }
+  
+  .addon-meta{ min-width: 0; }
+  .addon-title{
+    color: #eaf2ff;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.25;
+    word-break: break-word;
+    margin-bottom: 4px;
+  }
+  .addon-price{
+    color: #cfe3ff; font-weight: 600; font-size: 13px;
+  }
+  
+  .addon-qty{
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .addon-qty button{
+    width: 28px; height: 28px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.06); color: #fff;
+  }
+  .addon-qty button[disabled]{
+    opacity: .5; cursor: not-allowed;
+  }
+  .addon-qty-num{
+    min-width: 1.5ch; text-align: center;
+  }
+  /* center spinner inside tiny qty buttons */
+.line .cd-qty button,
+.addon-qty button{
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* minimal spinner */
+@keyframes spin{ to { transform: rotate(360deg); } }
+.btn-spinner{
+  width:14px; height:14px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.45);
+  border-top-color:#fff;
+  display:inline-block;
+  animation:spin .8s linear infinite;
+}
+.btn-spinner--lg{
+  width:16px; height:16px; border-width:2px;
+}
+
+  
+  
+  
