@@ -14,6 +14,7 @@ import Contact from './pages/Contact'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import Shop from './pages/Shop'
+import ResetPassword from './pages/ResetPassword'
 import { CartProvider } from './state/cart' 
 import './styles/theme.css'
 
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       // auth
       { path: '/signin', element: <SignIn/> },
       { path: '/signup', element: <SignUp/> },
+      { path: '/reset-password', element: <ResetPassword/> },
 
       // admin
       { path: '/admin/templates', element: <AdminTemplates/> },
