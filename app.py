@@ -26,7 +26,7 @@ app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "False"
 
 # CORS
 allowed = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()]
-CORS(app, origins=allowed, supports_credentials=True)
+CORS(app, origins=allowed, supports_credentials=True, allow_headers=["Content-Type"],methods=["GET", "POST", "OPTIONS"])
 
 # Init extensions
 db.init_app(app)
@@ -39,6 +39,7 @@ app.register_blueprint(cards_bp)
 app.register_blueprint(shopify_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(auth_bp)
+
 
 @app.get('/health')
 def health():

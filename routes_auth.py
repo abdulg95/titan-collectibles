@@ -45,9 +45,14 @@ def _redirect_uri() -> str:
     base = os.getenv("OAUTH_REDIRECT_BASE", request.host_url.rstrip("/"))
     return urljoin(base + "/", "api/auth/google/callback")
 
-def _serializer() -> URLSafeTimedSerializer:
+def _serializer(kind: str = 'email') -> URLSafeTimedSerializer:
     secret = current_app.config["SECRET_KEY"]
-    salt = current_app.config.get("EMAIL_VERIFICATION_SALT", "email-verify")
+    if kind == 'email':
+        salt = current_app.config.get("EMAIL_VERIFICATION_SALT", "email-verify")
+    elif kind == 'password':
+        salt = current_app.config.get("PASSWORD_RESET_SALT", "password-reset")
+    else:
+        raise ValueError("unknown serializer kind")
     return URLSafeTimedSerializer(secret_key=secret, salt=salt)
 
 def valid_email(s: str) -> bool:
@@ -293,3 +298,70 @@ def verify_resend():
     """
     send_email(u.email, "Verify your email", html, f"Open this link to verify: {verify_url}")
     return jsonify({"ok": True})
+
+    # --- Password reset: request link ---
+# --- Password reset: request link ---
+@bp.route('/password/forgot', methods=['POST', 'OPTIONS'])
+def password_forgot():
+    if request.method == 'OPTIONS':
+        return ('', 204)
+    data = request.get_json(force=True) or {}
+    email = (data.get('email') or '').strip().lower()
+    # Always return ok to avoid user enumeration
+    try:
+        if email:
+            u = User.query.filter_by(email=email).first()
+            if u:
+                token = _serializer('password').dumps({'uid': _id_str(u.id)})
+                reset_url = urljoin(_frontend_origin().rstrip('/') + '/', f"reset-password?{urlencode({'token': token})}")
+                html = f"""
+                  <p>Hi {getattr(u, 'name', None) or u.email},</p>
+                  <p>We received a request to reset your password. Click the link below to set a new one:</p>
+                  <p><a href="{reset_url}">Reset your password</a></p>
+                  <p>If you didn't request this, you can ignore this email.</p>
+                """
+                send_email(u.email, "Reset your password", html, f"Open this link: {reset_url}")
+    except Exception as e:
+        current_app.logger.exception("password_forgot error: %s", e)
+    return jsonify({'ok': True})
+
+
+# --- Password reset: apply new password ---
+@bp.route('/password/reset', methods=['POST', 'OPTIONS'])
+def password_reset():
+    if request.method == 'OPTIONS':
+        return ('', 204)
+
+    data = request.get_json(force=True) or {}
+    token = data.get('token') or ''
+    new_pw = data.get('password') or ''
+    if len(new_pw) < 8:
+        return jsonify({'ok': False, 'error': 'weak_password'}), 400
+
+    try:
+        payload = _serializer('password').loads(token, max_age=3600*2)  # 2h
+    except SignatureExpired:
+        return jsonify({'ok': False, 'error': 'token_expired'}), 400
+    except BadSignature:
+        return jsonify({'ok': False, 'error': 'token_invalid'}), 400
+
+    uid = _uuid(payload.get('uid'))
+    if not uid:
+        return jsonify({'ok': False, 'error': 'invalid_uid'}), 400
+
+    u = db.session.get(User, uid)
+    if not u:
+        return jsonify({'ok': False, 'error': 'not_found'}), 404
+
+    # Set new password
+    u.set_password(new_pw)
+
+    # ✅ Consider reset as proof of email ownership
+    if hasattr(User, 'email_verified') and not getattr(u, 'email_verified', False):
+        u.email_verified = True
+
+    db.session.commit()
+
+    # Optionally sign them in after reset
+    session['uid'] = _id_str(u.id)
+    return jsonify({'ok': True})
