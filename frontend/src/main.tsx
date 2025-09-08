@@ -17,6 +17,7 @@ import Shop from './pages/Shop'
 import ResetPassword from './pages/ResetPassword'
 import { CartProvider } from './state/cart' 
 import './styles/theme.css'
+import ScanRegistered from './pages/ScanRegistered'
 
 
 
@@ -36,6 +37,8 @@ const router = createBrowserRouter([
       { path: '/privacy', element: <Privacy/> },
 
       { path: '/scan/:tagId', element: <ScanLanding/> },
+      // wherever your routes are defined (e.g., main router)
+      { path: '/scan/registered', element: <ScanRegistered/> },
       { path: '/cards/:cardId', element: <CardView/> },
 
       // auth
