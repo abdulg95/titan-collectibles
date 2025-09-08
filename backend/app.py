@@ -8,6 +8,7 @@ from routes_scan import bp as scan_bp
 from routes_cards import bp as cards_bp
 from routes_shopify import bp as shopify_bp
 from routes_admin import bp as admin_bp
+from routes_collection import bp as collection_bp
 from routes_auth import bp as auth_bp, init_oauth  # <-- import init_oauth
 
 def _normalize_db_url(url: str | None) -> str:
@@ -39,6 +40,7 @@ app.register_blueprint(cards_bp)
 app.register_blueprint(shopify_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(collection_bp)
 
 
 @app.get('/health')
