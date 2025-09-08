@@ -88,11 +88,34 @@ def bind_by_scan():
     if not template:
         return jsonify({'error':'unknown template'}), 404
 
-    with db.session.begin():
-        template = db.session.execute(sel(CardTemplate).where(CardTemplate.id==template_id).with_for_update()).scalar_one()
-        template.minted_count = (template.minted_count or 0) + 1
-        inst = CardInstance(template_id=template.id, serial_no=template.minted_count,
-                            etrnl_tag_uid=uid, etrnl_tag_id=data.get('tagId'), last_ctr=ctr)
-        db.session.add(inst)
+    with db.session.begin_nested():  # works even if a transaction is already active
+        t_locked = db.session.execute(
+            select(CardTemplate)
+            .where(CardTemplate.id == (templ or template.id))
+            .with_for_update()
+        ).scalar_one()
+        next_serial = (t_locked.minted_count or 0) + 1
+        t_locked.minted_count = next_serial
 
-    return jsonify({'ok': True, 'cardId': str(inst.id), 'serial_no': inst.serial_no})
+        inst = CardInstance(
+            template_id=t_locked.id,
+            serial_no=next_serial,
+            etrnl_tag_uid=uid,
+            etrnl_tag_id=tag_id,
+            last_ctr=ctr,
+        )
+        db.session.add(inst)
+        db.session.flush()  # ensure inst.id is available for the ScanEvent
+
+        db.session.add(ScanEvent(
+            card_instance_id=inst.id,
+            tag_id=tag_id, uid=uid, ctr=ctr,
+            authentic=True,
+            ip=request.remote_addr,
+            user_agent=request.headers.get('User-Agent'),
+            tt_curr=data.get('ttCurrStatus'),
+            tt_perm=data.get('ttPermStatus'),
+        ))
+
+    db.session.commit()
+    return jsonify({'ok': True, 'state': 'unclaimed', 'cardId': str(inst.id)})
