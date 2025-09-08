@@ -56,12 +56,17 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
     if tt: payload['tt'] = tt
     else:  payload['cmac'] = cmac
 
-    r = requests.post(
-        ETRNL_URL, json=payload,
-        headers={'API-KEY': ETRNL_KEY, 'Content-Type': 'application/json'},
-        timeout=10
-    )
-    data = r.json()
+    # Call ETRNL (defensive network handling)
+    try:
+        r = requests.post(
+            ETRNL_URL, json=payload,
+            headers={'API-KEY': ETRNL_KEY, 'Content-Type': 'application/json'},
+            timeout=10
+        )
+        data = r.json()
+    except requests.RequestException:
+        return jsonify({'ok': False, 'reason': 'verify_upstream_error'}), 502
+
     if not data.get('success') or not data.get('authentic'):
         return jsonify({'ok': False, 'reason': 'not_authentic'}), 400
 
@@ -92,35 +97,45 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
         state = 'unclaimed' if not inst.owner_user_id else 'owned_by_other'
         return jsonify({'ok': True, 'state': state, 'cardId': str(inst.id)})
 
-    # First sighting → resolve template
+    # First sighting → resolve template (accept UUID, CSV id, or SKU)
     template = _find_template(templ_hint)
     if not template:
         return jsonify({'ok': False, 'reason': 'unknown_template'}), 404
 
-    with db.session.begin():
-        t_locked = db.session.execute(
-            select(CardTemplate).where(CardTemplate.id == template.id).with_for_update()
-        ).scalar_one()
-        next_serial = (t_locked.minted_count or 0) + 1
-        t_locked.minted_count = next_serial
+    # ---- FIX: use a SAVEPOINT to avoid "transaction already begun" ----
+    try:
+        with db.session.begin_nested():
+            t_locked = db.session.execute(
+                select(CardTemplate).where(CardTemplate.id == template.id).with_for_update()
+            ).scalar_one()
 
-        inst = CardInstance(
-            template_id=t_locked.id,
-            serial_no=next_serial,
-            etrnl_tag_uid=uid,
-            etrnl_tag_id=tag_id,
-            last_ctr=ctr,
-        )
-        db.session.add(inst)
-        db.session.add(ScanEvent(
-            card_instance_id=inst.id,
-            tag_id=tag_id, uid=uid, ctr=ctr,
-            authentic=True,
-            ip=request.remote_addr,
-            user_agent=request.headers.get('User-Agent'),
-            tt_curr=data.get('ttCurrStatus'),
-            tt_perm=data.get('ttPermStatus'),
-        ))
+            next_serial = (t_locked.minted_count or 0) + 1
+            t_locked.minted_count = next_serial
+
+            inst = CardInstance(
+                template_id=t_locked.id,
+                serial_no=next_serial,
+                etrnl_tag_uid=uid,
+                etrnl_tag_id=tag_id,
+                last_ctr=ctr,
+            )
+            db.session.add(inst)
+            db.session.flush()  # ensure inst.id exists
+
+            db.session.add(ScanEvent(
+                card_instance_id=inst.id,
+                tag_id=tag_id, uid=uid, ctr=ctr,
+                authentic=True,
+                ip=request.remote_addr,
+                user_agent=request.headers.get('User-Agent'),
+                tt_curr=data.get('ttCurrStatus'),
+                tt_perm=data.get('ttPermStatus'),
+            ))
+
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+        raise
 
     return jsonify({'ok': True, 'state': 'unclaimed', 'cardId': str(inst.id)})
 
