@@ -182,6 +182,7 @@ class AthleteQualification(db.Model):
     event = db.Column(db.String)
 
 
+# models.py  (CardTemplate)
 class CardTemplate(db.Model):
     __tablename__ = 'card_templates'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -193,12 +194,17 @@ class CardTemplate(db.Model):
     minted_count = db.Column(db.Integer, nullable=False, default=0)
     glb_url = db.Column(db.String)
     image_url = db.Column(db.String)
-    etrnl_url_group_id = db.Column(db.String)
-    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = (
-        CheckConstraint("version in ('regular','diamond')", name='ck_template_version'),
-    )
+    # NEW: your spreadsheet’s short code, e.g. 000000000018
+    template_code = db.Column(db.String, unique=True, index=True)   # <— add this
+
+    # Keep this strictly for the actual ETRNL group id returned by their API
+    etrnl_url_group_id = db.Column(db.String)
+    athlete = db.relationship('Athlete', backref=db.backref('templates', lazy='dynamic'))
+
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    __table_args__ = (CheckConstraint("version in ('regular','diamond')", name='ck_template_version'),)
+
 
 
 class CardInstance(db.Model):
@@ -213,6 +219,10 @@ class CardInstance(db.Model):
     owner_user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'))
     status = db.Column(Enum(CardStatus), nullable=False, default=CardStatus.unassigned)
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+
+    # NEW: ORM relationships
+    template = db.relationship('CardTemplate', backref=db.backref('instances', lazy='dynamic'))
+    owner = db.relationship('User', backref='card_instances', foreign_keys=[owner_user_id])
 
 
 class ScanEvent(db.Model):
