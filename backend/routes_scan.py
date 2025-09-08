@@ -1,4 +1,4 @@
-# routes_scan.py  (drop-in)
+# routes_scan.py
 
 from flask import Blueprint, request, jsonify
 from sqlalchemy import select, or_
@@ -52,11 +52,11 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
         return jsonify({'ok': False, 'reason': 'missing_params',
                         'need': 'tagId enc eCode and tt (tamper) OR cmac (mac)'}), 400
 
+    # Verify with ETRNL
     payload = {'tagId': tag_id, 'eCode': eCode, 'enc': enc}
     if tt: payload['tt'] = tt
     else:  payload['cmac'] = cmac
 
-    # Call ETRNL (defensive network handling)
     try:
         r = requests.post(
             ETRNL_URL, json=payload,
@@ -79,6 +79,7 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
     ).scalar_one_or_none()
 
     if inst:
+        # replay protection
         if ctr <= (inst.last_ctr or 0):
             return jsonify({'ok': False, 'reason': 'replay'}), 409
 
@@ -95,14 +96,15 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
         db.session.commit()
 
         state = 'unclaimed' if not inst.owner_user_id else 'owned_by_other'
-        return jsonify({'ok': True, 'state': state, 'cardId': str(inst.id)})
+        # 🔹 minted=False for subsequent scans
+        return jsonify({'ok': True, 'state': state, 'cardId': str(inst.id), 'minted': False})
 
-    # First sighting → resolve template (accept UUID, CSV id, or SKU)
+    # First sighting → resolve template
     template = _find_template(templ_hint)
     if not template:
         return jsonify({'ok': False, 'reason': 'unknown_template'}), 404
 
-    # ---- FIX: use a SAVEPOINT to avoid "transaction already begun" ----
+    # Mint + log scan (use SAVEPOINT to avoid nested TX errors)
     try:
         with db.session.begin_nested():
             t_locked = db.session.execute(
@@ -131,13 +133,13 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
                 tt_curr=data.get('ttCurrStatus'),
                 tt_perm=data.get('ttPermStatus'),
             ))
-
         db.session.commit()
     except Exception:
         db.session.rollback()
         raise
 
-    return jsonify({'ok': True, 'state': 'unclaimed', 'cardId': str(inst.id)})
+    # 🔹 minted=True for first-ever scan (warehouse registration)
+    return jsonify({'ok': True, 'state': 'unclaimed', 'cardId': str(inst.id), 'minted': True})
 
 @bp.get('/resolve')
 def resolve():
