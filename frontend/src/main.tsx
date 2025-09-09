@@ -18,6 +18,7 @@ import ResetPassword from './pages/ResetPassword'
 import { CartProvider } from './state/cart' 
 import './styles/theme.css'
 import ScanRegistered from './pages/ScanRegistered'
+import PreorderPage from './pages/Preorder'
 
 
 
@@ -27,9 +28,10 @@ const BuyNow = () => <div style={{padding:24}}><h1>Buy Packs</h1><p>Powered by S
 
 const router = createBrowserRouter([
   {
+    
     element: <Layout />,
     children: [
-      { path: '/', element: <Home/> },
+      // { path: '/', element: <Home/> },
       { path: '/about', element: <About/> },
       { path: '/contact', element: <Contact/> },
       { path: '/buy', element: <Shop/> },
@@ -50,7 +52,11 @@ const router = createBrowserRouter([
       { path: '/admin/templates', element: <AdminTemplates/> },
       { path: '/admin/bind', element: <AdminBind/> },
     ]
-  }
+  },
+  {
+    path: '/',
+    element: <PreorderPage />,
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

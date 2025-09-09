@@ -1,0 +1,471 @@
+/* ===== Global base ===== */
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    background: #000;            /* fallback behind gradient */
+  }
+  
+  /* ===== Page shell ===== */
+  .preorder-hero {
+    position: relative;
+    isolation: isolate;          /* for ::before bg layer */
+    color: #fff;
+    min-height: 100dvh;
+  
+    /* Figma frame paddings (top/right/bottom/left) */
+    padding: 59px 57px 169.56px 80px;
+  
+    /* Two columns with measured gap */
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: start;
+    column-gap: 169.56px;
+  }
+  
+  /* Full-viewport gradient background */
+  .preorder-hero::before {
+    content: "";
+    position: fixed;             /* cover the viewport */
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(100% 100% at 50% 0%, #475C7E 0%, #000 100%);
+  }
+  
+  /* iOS Safari tweak: absolute + 100vw */
+  @supports (-webkit-touch-callout: none) {
+    .preorder-hero::before {
+      position: absolute;
+      width: 100vw;
+      left: 50%;
+      margin-left: -50vw;
+      top: 0;
+      height: 100dvh;
+    }
+  }
+  
+  /* ===== Header logo ===== */
+  .titan-logo {
+    position: absolute;
+    top: 59px;
+    left: 80px;
+    width: 179px;
+    height: 47.895px;
+    aspect-ratio: 179 / 47.9;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  /* ===== Left column ===== */
+  .hero-content {
+    max-width: 560px;
+    /* bottom-of-logo → top-of-title = 169.56px
+       47.895 (logo height) + 169.56 = 217.455 */
+    padding-top: 217.455px;
+  }
+  
+  .hero-title {
+    margin: 0 0 16px 0;
+    font-family: "SF Pro", -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 45px;        /* (desktop comp feel) */
+    font-weight: 700;
+    line-height: 70.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  
+  .hero-copy {
+    margin: 0 0 28px 0;
+    font-size: 16px;
+    line-height: 24px;
+    opacity: 0.92;
+  }
+  
+  /* ===== Buttons ===== */
+  .button-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  
+  .cta {
+    appearance: none;
+    border: 0;
+    cursor: pointer;
+  
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #9CE1FF 0%, #7BD1FF 100%);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow:
+      0 10px 24px rgba(124, 210, 255, 0.25),
+      0 1px 0 rgba(255, 255, 255, 0.35) inset;
+    transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+  }
+  .cta::before {
+    content: "";
+    position: absolute;
+    inset: -24px -36px auto auto;
+    width: 160px;
+    height: 120px;
+    filter: blur(24px);
+    border-radius: 50%;
+    background: radial-gradient(60% 60% at 30% 70%, rgba(166,142,255,0.45), rgba(166,142,255,0) 70%);
+    pointer-events: none;
+  }
+  .cta:hover   { transform: translateY(-1px); }
+  .cta:active  { transform: translateY(0); box-shadow: 0 6px 16px rgba(124,210,255,.22); }
+  .cta:disabled{ opacity:.6; cursor:not-allowed; }
+  
+  /* ===== Partner lockup ===== */
+  .partner img  { height: 60px; width: auto; display: block; }
+  .partner small{ display: block; margin-top: 8px; opacity: 0.8; font-size: 12px; }
+  
+  /* ===== Right column (pack) ===== */
+  .pack-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 110px;
+    margin-right: 200px;
+  }
+  .pack-img {
+    width: 321px;
+    height: 504px;
+    aspect-ratio: 107 / 168;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 34px rgba(0,0,0,.45));
+  }
+  
+  /* ===== Footer (logo row, copyright underneath) ===== */
+  .preorder-footer {
+    position: absolute;
+    left: 0; right: 0; bottom: 24px;
+    padding: 0 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    color: rgba(255,255,255,.85);
+    font-size: 12px;
+  }
+  .footer-left .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .footer-left .ig {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px; height: 24px;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 999px;
+    color: #fff;
+    text-decoration: none;
+    opacity: .9;
+    transition: opacity 120ms ease, border-color 120ms ease;
+  }
+  .footer-left .ig:hover { opacity: 1; border-color: rgba(255,255,255,.6); }
+  .footer-left .ig-icon { display:block; }
+  
+  /* ===== Modal ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(2px);
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+  }
+  .modal {
+    width: min(560px, 94vw);
+    background: #0c1522;
+    color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.06);
+    padding: 22px 22px 18px;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .modal h2 { margin: 0 0 8px 0; font-size: 22px; line-height: 28px; }
+  .modal-copy { margin: 0 0 16px 0; opacity: .9; font-size: 14px; line-height: 20px; }
+  
+  .modal-grid { display: grid; gap: 16px; }
+  .qty { display: grid; gap: 8px; font-weight: 600; }
+  .qty-ctrl {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px; padding: 6px;
+  }
+  .qty-ctrl input {
+    width: 64px; text-align: center; background: transparent; border: 0;
+    color: #fff; font-size: 16px; outline: none;
+  }
+  .qty-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.04); color: #fff; cursor: pointer;
+  }
+  
+  .addons { display: grid; gap: 10px; margin-top: 4px; }
+  .addon {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+  }
+  
+  /* Mini order summary */
+  .line-items { margin-top: 14px; border-top: 1px solid rgba(255,255,255,.08); padding-top: 12px; display: grid; gap: 10px; }
+  .line-item  { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 12px; }
+  .line-item .thumb { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+  .line-item .meta { display: grid; gap: 3px; }
+  .line-item .ti   { font-size: 14px; font-weight: 600; }
+  .line-item .sub  { font-size: 12px; opacity: .8; }
+  .qty-pill        { padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.06); font-size: 12px; }
+  .line-total      { margin-top: 4px; display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,.12); font-size: 14px; }
+  .line-total strong { font-size: 15px; }
+  
+  .modal-actions { margin-top: 16px; display: flex; justify-content: flex-end; gap: 12px; }
+  .btn-secondary  { display: inline-flex; align-items: center; justify-content: center; padding: 13px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,.35); color: #fff; background: transparent; cursor: pointer; }
+
+  .cartline-ctrls {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .icon-btn.rm-line {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.15);
+    background: rgba(255,255,255,.04);
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .icon-btn.rm-line:hover {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.25);
+  }
+  
+  .icon-btn.rm-line svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  /* If you had old text-button styles on .rm-line, neutralize them */
+  .rm-line {
+    text-decoration: none;
+    border: 0;
+  }
+  
+  /* ===== Responsive ===== */
+
+  
+  /* collapse to single column sooner + general spacing */
+  @media (max-width: 980px) {
+    .preorder-hero { grid-template-columns: 1fr; row-gap: 48px; padding-right: 24px; }
+    .pack-wrap { padding-top: 12px; justify-content: flex-start; margin-right: 0; }
+    .preorder-footer { padding: 0 24px; }
+  }
+  /* mobile stacking & type scale (matches your mobile comp) */
+  @media (max-width: 760px) {
+    .titan-logo {
+        position: absolute;
+        top: 32px;
+    
+        /* hard centering regardless of padding/bleed */
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+    
+        /* remove any previous transforms */
+        transform: none;
+    
+        width: 231.714px;
+        height: 62px;
+        aspect-ratio: 231.714 / 62;
+        object-fit: contain;
+        z-index: 2; /* sit above background/pack if needed */
+
+        
+    
+        /* only change size/spacing */
+        top: 40px;
+        width: 140px;
+        height: auto;
+    }
+
+    /* give the pack room under the centered logo */
+    .pack-wrap {
+        padding-top: calc(62px + 56px); /* logo height + extra spacing */
+    }
+    .pack-img {
+        width: 220px;
+        height: 346px;
+        aspect-ratio: 103 / 162;
+        object-fit: contain;
+    }
+    .preorder-hero {
+      column-gap: 0;
+      padding: 48px 20px 96px;
+      row-gap: 0;
+    }
+    .partner img {
+        width: 112px;
+        height: auto;              /* let aspect-ratio set the height */
+        aspect-ratio: 112 / 41;    /* results in ~41px tall */
+        display: block;
+        margin-inline: auto;       /* keep it centered */
+    }
+
+    .cta {
+        display: flex;
+        width: 132px;
+        height: 40px;
+        padding: 0 !important;        /* override desktop padding */
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+      }
+  
+
+    /* Pack first, centered */
+    .pack-wrap { order: 1; padding-top: 84px; justify-content: center; }
+    .hero-content {
+      order: 2;
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 0; max-width: 520px; margin: 0 auto; text-align: center;
+    }
+  
+    .button-row { order: 2; justify-content: center; margin: 18px 0 14px; }
+    .partner { order: 3; margin-top: 8px; }
+    .partner img { height: 44px; margin-inline: auto; }
+    .partner small { text-align: center; }
+  
+    .hero-title { order: 4; font-size: 32px; line-height: 40px; margin: 38px 0 10px; }
+    .hero-copy  { order: 5; font-size: 15px; line-height: 22px; opacity: .95; max-width: 30ch; margin: 0 auto; }
+    .hero-copy {
+        margin: 0 0 28px 0;
+        color: #FFF;
+        font-family: "SF Pro", -apple-system, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; /* 133.333% */
+        text-align: center;  /* desktop default */
+        opacity: 1;     
+        margin-bottom: 110.5px !important;   /* ensure pure white, remove older .92 if present */
+      }
+  
+    /* Footer left-aligned; copyright under logo */
+    .preorder-footer { bottom: 20px; padding: 0 20px; gap: 6px; }
+    .preorder-footer .brand-row { gap: 12px; }
+    .preorder-footer .legal { white-space: normal; opacity: .9; }
+     /* Modal overall */
+     .modal { width: 90vw; padding: 14px; }
+     .modal-grid { gap: 10px; }
+     .modal h2 { font-size: 17px; line-height: 22px; }
+     .modal-copy { font-size: 12.5px; line-height: 18px; margin-bottom: 10px; }
+   
+     /* Qty control (top section) */
+     .qty-ctrl {
+       gap: 6px;
+       padding: 4px;
+       border-radius: 8px;
+     }
+     .qty-ctrl input { width: 40px; font-size: 14px; }
+     .qty-btn { width: 22px; height: 22px; border-radius: 6px; }
+   
+     /* Add-on row */
+     .addons { gap: 8px; }
+     .addon { padding: 8px 10px; gap: 8px; }
+     .addon img { width: 24px; height: 24px; border-radius: 6px; }
+     .addon .ti { font-size: 12px; }
+     .addon .sub { font-size: 10.5px; opacity: .8; }
+     .addon .qty-btn { width: 22px; height: 22px; }
+     .addon span { font-size: 12px; }
+   
+     /* Mini order summary list */
+     .line-items { gap: 8px; padding-top: 10px; }
+     .line-item {
+       /* thumbnail / flexible text / small right column */
+       grid-template-columns: 40px minmax(0,1fr) auto;
+       gap: 6px;
+     }
+     .line-item .thumb { width: 40px; height: 40px; border-radius: 6px; }
+     .line-item .meta { min-width: 0; gap: 2px; }  /* allow ellipsis */
+     .line-item .ti {
+       font-size: 12px;
+       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+     }
+     .line-item .sub { font-size: 10.5px; opacity: .8; }
+   
+     .qty-pill {
+       padding: 3px 6px;
+       font-size: 10.5px;
+       border-radius: 999px;
+     }
+   
+     /* Trash button (if present) */
+     .icon-btn.rm-line { width: 22px; height: 22px; border-radius: 6px; }
+     .icon-btn.rm-line svg { width: 13px; height: 13px; }
+   
+     /* Totals + actions */
+     .line-total { font-size: 12.5px; }
+     .line-total strong { font-size: 13.5px; }
+     .btn-secondary { padding: 9px 12px; font-size: 13px; }
+     .cta { height: 38px; padding: 0 14px; font-size: 13px; }
+     .line-item {
+        align-items: start;                   /* align top so multi-line text doesn't look off */
+        grid-template-columns: 40px 1fr auto; /* thumb / text / qty or delete */
+        gap: 8px;
+      }
+    
+      .line-item .meta {
+        min-width: 0;                         /* enable wrapping within the grid cell */
+      }
+    
+      .line-item .ti {
+        font-size: 12.5px;
+        line-height: 1.25;
+        white-space: normal;                  /* <-- allow wrapping */
+        overflow: visible;                    /* no clipping */
+        text-overflow: clip;                  /* no ellipsis */
+        word-break: break-word;               /* break long words if needed */
+      }
+    
+      .line-item .sub {
+        font-size: 11px;
+        line-height: 1.2;
+        white-space: normal;                  /* allow wrapping for price/notes too */
+        word-break: break-word;
+      }
+    
+      /* Keep the right column neat when text wraps */
+      .qty-pill,
+      .icon-btn.rm-line {
+        align-self: start;                    /* align with first line of text */
+      }
+  }
+
