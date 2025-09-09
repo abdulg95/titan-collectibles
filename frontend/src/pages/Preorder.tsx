@@ -164,7 +164,7 @@ export default function PreorderPage() {
         <div className="footer-left">
           <div className="brand-row">
             <img src={logoSrc} alt="TITAN" width="92" height="20" />
-            <a href="https://instagram.com/titansportshq" aria-label="Instagram" className="ig" target="_blank" rel="noreferrer">
+            <a href="https://instagram.com/titansportshq"  target="_blank" rel="noreferrer">
               <svg className="ig-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Z" stroke="currentColor" strokeWidth="1.4"/>
                 <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.4"/>

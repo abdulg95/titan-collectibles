@@ -302,8 +302,6 @@ html, body, #root {
         /* remove any previous transforms */
         transform: none;
     
-        width: 231.714px;
-        height: 62px;
         aspect-ratio: 231.714 / 62;
         object-fit: contain;
         z-index: 2; /* sit above background/pack if needed */
@@ -312,14 +310,12 @@ html, body, #root {
     
         /* only change size/spacing */
         top: 40px;
-        width: 140px;
+        width: 177.5px;
         height: auto;
     }
 
     /* give the pack room under the centered logo */
-    .pack-wrap {
-        padding-top: calc(62px + 56px); /* logo height + extra spacing */
-    }
+
     .pack-img {
         width: 220px;
         height: 346px;
@@ -351,7 +347,7 @@ html, body, #root {
   
 
     /* Pack first, centered */
-    .pack-wrap { order: 1; padding-top: 84px; justify-content: center; }
+    .pack-wrap { order: 1; padding-top: 50px; justify-content: center; }
     .hero-content {
       order: 2;
       display: flex; flex-direction: column; align-items: center;
@@ -379,7 +375,7 @@ html, body, #root {
       }
   
     /* Footer left-aligned; copyright under logo */
-    .preorder-footer { bottom: 20px; padding: 0 20px; gap: 6px; }
+    .preorder-footer { bottom: 20px; padding: 0 20px; gap: 6px;margin-bottom: 54px; }
     .preorder-footer .brand-row { gap: 12px; }
     .preorder-footer .legal { white-space: normal; opacity: .9; }
      /* Modal overall */
@@ -435,7 +431,7 @@ html, body, #root {
      .line-total { font-size: 12.5px; }
      .line-total strong { font-size: 13.5px; }
      .btn-secondary { padding: 9px 12px; font-size: 13px; }
-     .cta { height: 38px; padding: 0 14px; font-size: 13px; }
+     .cta { height: 38px; padding: 0 14px; font-size: 16px; }
      .line-item {
         align-items: start;                   /* align top so multi-line text doesn't look off */
         grid-template-columns: 40px 1fr auto; /* thumb / text / qty or delete */
@@ -468,4 +464,9 @@ html, body, #root {
         align-self: start;                    /* align with first line of text */
       }
   }
+.preorder-footer { bottom: 55px; }
+
+@media (max-width: 760px){
+  .preorder-footer { bottom: 55px; }
+}
 
