@@ -30,4 +30,55 @@
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
   html { scroll-behavior: smooth; }
 
+  /* “Coming soon” screen for claim=1 */
+.claim-soon {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 64px 20px;
+    color: #fff;
+    background: radial-gradient(100% 100% at 50% 0%, #475C7E 0%, #000 100%);
+  }
+  .claim-soon__box {
+    max-width: 720px;
+    text-align: center;
+  }
+  .claim-soon h1 {
+    margin: 0 0 12px 0;
+    font-size: 28px;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .claim-soon p {
+    margin: 0 auto 20px auto;
+    max-width: 45ch;
+    opacity: .9;
+  }
+  .claim-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .claim-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #9CE1FF 0%, #7BD1FF 100%);
+    color: #0B1B2E;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow:
+      0 10px 24px rgba(124, 210, 255, 0.25),
+      0 1px 0 rgba(255,255,255,.35) inset;
+  }
+  .claim-btn--ghost {
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.35);
+    box-shadow: none;
+  }
+
   

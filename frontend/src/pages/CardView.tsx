@@ -1,62 +1,90 @@
-import { useEffect, useState, Suspense } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment } from '@react-three/drei'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import * as THREE from 'three'
+// src/pages/CardView.tsx
+import { useEffect, useState } from 'react'
+import { useParams, useSearchParams, Link } from 'react-router-dom'
 
-type CardDTO = { id:string; owned:boolean; ownedByMe:boolean; serial_no:number; template:{ version:'regular'|'diamond'; glb_url:string; athlete:{ full_name:string; dob:string|null; sport:string; nationality:string; handedness?:string|null; world_ranking?:number|null; best_world_ranking?:number|null; intl_debut_year?:number|null; }}}
-
-function Model({ url }:{ url:string }){
-  const [g,setG] = useState<THREE.Group|null>(null)
-  useEffect(()=>{ new GLTFLoader().load(url, (res)=>setG(res.scene)) },[url])
-  return g ? <primitive object={g}/> : null
+type CardResponse = {
+  id: string
+  owned: boolean
+  ownedByMe: boolean
+  serial_no: number
+  template: {
+    athlete: {
+      full_name: string | null
+      sport: string | null
+    }
+    glb_url: string | null
+    version: string | null
+  }
 }
 
-export default function CardView(){
+export default function CardView() {
   const { cardId } = useParams()
   const [sp] = useSearchParams()
-  const [data,setData] = useState<CardDTO|null>(null)
+  const isClaim = sp.get('claim') === '1'
 
-  useEffect(()=>{ (async()=>{
-    const r = await fetch(`/api/cards/${cardId}`, { credentials:'include' })
-    const j = await r.json(); setData(j)
-  })() },[cardId])
+  // If claim flow is not ready, show “coming soon” immediately.
+  if (isClaim) return <ClaimComingSoon />
 
-  async function claim(){
-    const r = await fetch(`/api/cards/${cardId}/claim`, { method:'POST', credentials:'include' })
-    if(r.ok) location.reload(); else alert('Unable to claim')
-  }
+  const [loading, setLoading] = useState(true)
+  const [err, setErr] = useState<string | null>(null)
+  const [card, setCard] = useState<CardResponse | null>(null)
 
-  if(!data) return <p style={{padding:24}}>Loading…</p>
-  const wantClaim = sp.get('claim')==='1' && !data.owned
+  useEffect(() => {
+    let canceled = false
+    async function go() {
+      setLoading(true); setErr(null)
+      try {
+        const base = import.meta.env.VITE_API_BASE_URL || ''
+        const url = new URL(`/api/cards/${cardId}`, base)
+        const r = await fetch(url.toString(), { credentials: 'include' })
+        if (!r.ok) throw new Error(`Card ${r.status}`)
+        const j: CardResponse = await r.json()
+        if (!canceled) setCard(j)
+      } catch (e: any) {
+        if (!canceled) setErr(e?.message || 'Failed to load card')
+      } finally {
+        if (!canceled) setLoading(false)
+      }
+    }
+    if (cardId) go()
+    return () => { canceled = true }
+  }, [cardId])
+
+  if (loading) return <div className="card-loading">Loading…</div>
+  if (err)     return <div className="card-error">Error: {err}</div>
+  if (!card)   return <div className="card-error">Card not found.</div>
 
   return (
-    <div style={{display:'grid', gridTemplateColumns:'1fr 380px', gap:24, padding:24}}>
-      <div style={{height:'70vh', background:'#111'}}>
-        <Canvas camera={{fov:60, position:[0,0.6,1.2]}}>
-          <ambientLight/>
-          <Suspense fallback={null}>
-            <Model url={data.template.glb_url}/>
-            <Environment preset='city'/>
-          </Suspense>
-          <OrbitControls enablePan enableRotate enableZoom/>
-        </Canvas>
+    <main className="card-page">
+      <h1>Card #{card.serial_no}</h1>
+      <p>
+        {card.template?.athlete?.full_name || 'Athlete'} — {card.template?.athlete?.sport || ''}
+      </p>
+      {/* …rest of your card UI… */}
+    </main>
+  )
+}
+
+function ClaimComingSoon() {
+  return (
+    <main className="claim-soon">
+      <div className="claim-soon__box">
+        <h1>Digital experience will be available soon</h1>
+        <p>
+          You’ve successfully scanned a registered card. The full digital
+          experience for this card is not live yet. Check back shortly.
+        </p>
+        <div className="claim-actions">
+          <Link to="/" className="claim-btn">Return Home</Link>
+          <a
+            className="claim-btn claim-btn--ghost"
+            href="https://instagram.com/titansportshq"
+            target="_blank" rel="noreferrer"
+          >
+            Follow updates
+          </a>
+        </div>
       </div>
-      <aside>
-        <h2>{data.template.athlete.full_name} — {data.template.version.toUpperCase()} #{data.serial_no}</h2>
-        <ul>
-          {data.template.athlete.dob && <li>DOB: {new Date(data.template.athlete.dob).toLocaleDateString()}</li>}
-          <li>Sport: {data.template.athlete.sport}</li>
-          <li>Nationality: {data.template.athlete.nationality}</li>
-          {data.template.athlete.handedness && <li>Handedness: {data.template.athlete.handedness}</li>}
-          {data.template.athlete.world_ranking!=null && <li>World Ranking: {data.template.athlete.world_ranking}</li>}
-          {data.template.athlete.best_world_ranking!=null && <li>Best Ranking: {data.template.athlete.best_world_ranking}</li>}
-          {data.template.athlete.intl_debut_year && <li>International Debut: {data.template.athlete.intl_debut_year}</li>}
-        </ul>
-        {!data.owned && wantClaim && <button onClick={claim}>Add to my collection</button>}
-        {data.owned && !data.ownedByMe && <div>Already owned by another collector</div>}
-      </aside>
-    </div>
+    </main>
   )
 }
