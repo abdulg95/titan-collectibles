@@ -104,16 +104,21 @@ except Exception:
 @bp.get("/me")
 def me():
     sid = session.get("uid")
+    print(f"🔍 /me endpoint: sid={sid}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     if not sid:
+        print("❌ No session ID found")
         return jsonify({"user": None})
     uid = _uuid(sid)
     if not uid:
+        print(f"❌ Invalid session ID: {sid}")
         session.clear()
         return jsonify({"user": None})
     u = db.session.get(User, uid)
     if not u:
+        print(f"❌ User not found for UID: {uid}")
         session.clear()
         return jsonify({"user": None})
+    print(f"✅ User found: {u.email}")
     return jsonify({"user": user_json(u)})
 
 @bp.post("/logout")
@@ -239,6 +244,7 @@ def google_cb():
     db.session.commit()
 
     session["uid"] = _id_str(user.id)
+    print(f"🔐 Google callback: Set session uid={session['uid']}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     dest = session.pop("post_login_redirect", None) or _frontend_origin()
     return redirect(dest)
 
