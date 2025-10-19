@@ -206,7 +206,7 @@ class CardTemplate(db.Model):
     image_url = db.Column(db.String)
 
     # NEW: your spreadsheet’s short code, e.g. 000000000018
-    template_code = db.Column(db.String, unique=True, index=True)   # <— add this
+    template_code = db.Column(db.String, index=True)   # <— add this
 
     # Keep this strictly for the actual ETRNL group id returned by their API
     etrnl_url_group_id = db.Column(db.String)
