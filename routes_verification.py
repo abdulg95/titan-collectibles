@@ -123,7 +123,7 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
         return jsonify({
             'ok': False, 
             'reason': 'not_authentic'
-        }), 400
+        }), 200
 
     # Check if we already have a card instance for this tag_id
     existing_instance = db.session.execute(
