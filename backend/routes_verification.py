@@ -137,6 +137,7 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
     if existing_instance:
         # Re-scan of existing card
         # Update scan event
+        data_dict = verification_result['data'] if isinstance(verification_result['data'], dict) else {}
         db.session.add(ScanEvent(
             card_instance_id=existing_instance.id,
             tag_id=tag_id,
@@ -145,8 +146,8 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
             authentic=True,
             ip=request.remote_addr,
             user_agent=request.headers.get('User-Agent'),
-            tt_curr=verification_result['data'].get('status'),
-            tt_perm=verification_result['data'].get('permanent_status'),
+            tt_curr=data_dict.get('status'),
+            tt_perm=data_dict.get('permanent_status'),
         ))
         db.session.commit()
 
