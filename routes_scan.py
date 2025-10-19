@@ -289,6 +289,11 @@ def dev_fake_scan():
         db.session.rollback()
         return jsonify({'ok': False, 'reason': 'mint_failed', 'error': str(e)}), 500
 
+# Test route
+@bp.route('/test', methods=['GET'])
+def test_route():
+    return jsonify({'ok': True, 'message': 'Test route works'})
+
 # Titan NFC verification endpoint
 @bp.route('/verify', methods=['GET'])
 def verify_titan_nfc():
