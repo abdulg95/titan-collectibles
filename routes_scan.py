@@ -338,3 +338,4 @@ def verify_titan_nfc():
             
     except Exception as e:
         return jsonify({'ok': False, 'reason': 'error', 'error': str(e)}), 500# Force update
+# Force deployment Sun Oct 19 12:27:49 EDT 2025
