@@ -7,7 +7,7 @@ import os, requests, uuid
 
 bp = Blueprint('scan_api', __name__, url_prefix='/api/scan')
 ETRNL_URL = 'https://third-party.etrnl.app/v1/tags/verify-authenticity'
-ETRNL_KEY = os.environ['ETRNL_PRIVATE_KEY']
+ETRNL_KEY = os.environ.get('ETRNL_PRIVATE_KEY', '')
 
 def _g(param, *alts):
     v = request.args.get(param)
@@ -148,3 +148,139 @@ def resolve():
 @bp.get('/<templ>/<tag_id>')
 def resolve_path(templ, tag_id):
     return _resolve_core(template_hint=templ, tag_id_hint=tag_id)
+
+@bp.get('/dev/templates')
+def dev_list_templates():
+    """
+    DEV ONLY: List all templates for the dev scan UI.
+    """
+    # Only allow in development
+    if os.getenv('FLASK_ENV') == 'production':
+        return jsonify({'ok': False, 'reason': 'dev_only'}), 403
+    
+    from models import Athlete
+    
+    rows = db.session.execute(select(CardTemplate)).scalars().all()
+    templates = []
+    for t in rows:
+        athlete = db.session.get(Athlete, t.athlete_id)
+        templates.append({
+            'id': str(t.id),
+            'athlete_name': athlete.full_name if athlete else 'Unknown',
+            'version': t.version,
+            'template_code': t.template_code,
+            'minted_count': t.minted_count or 0,
+            'edition_cap': t.edition_cap,
+        })
+    
+    return jsonify({'templates': templates})
+
+@bp.post('/dev/fake-scan')
+def dev_fake_scan():
+    """
+    DEV ONLY: Simulate an ETRNL tag scan without calling the external API.
+    Generates random tag credentials and mints a card instance.
+    
+    Body: { "template_id": "uuid" } or { "template_code": "code" }
+    """
+    import secrets
+    
+    # Only allow in development
+    if os.getenv('FLASK_ENV') == 'production':
+        return jsonify({'ok': False, 'reason': 'dev_only'}), 403
+    
+    data = request.get_json() or {}
+    template_hint = data.get('template_id') or data.get('template_code')
+    
+    if not template_hint:
+        return jsonify({'ok': False, 'reason': 'missing_template'}), 400
+    
+    # Find the template
+    template = _find_template(template_hint)
+    if not template:
+        return jsonify({'ok': False, 'reason': 'template_not_found'}), 404
+    
+    # Generate fake ETRNL tag data
+    fake_uid = secrets.token_hex(8)  # 16 char hex string
+    fake_tag_id = f"fake-{secrets.token_hex(6)}"
+    fake_ctr = 1
+    
+    # Check if this is a re-scan (for testing re-scan flow)
+    force_new = data.get('force_new', True)
+    
+    if not force_new:
+        # Check if we already have a card with this fake UID (for re-scan testing)
+        existing = db.session.execute(
+            select(CardInstance).where(CardInstance.etrnl_tag_uid == fake_uid)
+        ).scalar_one_or_none()
+        
+        if existing:
+            existing.last_ctr = fake_ctr
+            db.session.add(ScanEvent(
+                card_instance_id=existing.id,
+                tag_id=fake_tag_id,
+                uid=fake_uid,
+                ctr=fake_ctr,
+                authentic=True,
+                ip=request.remote_addr,
+                user_agent=request.headers.get('User-Agent'),
+            ))
+            db.session.commit()
+            
+            state = 'unclaimed' if not existing.owner_user_id else 'owned_by_other'
+            return jsonify({
+                'ok': True, 
+                'state': state, 
+                'cardId': str(existing.id), 
+                'minted': False,
+                'dev_mode': True,
+                'fake_uid': fake_uid,
+                'fake_tag_id': fake_tag_id
+            })
+    
+    # Mint new card instance
+    try:
+        with db.session.begin_nested():
+            t_locked = db.session.execute(
+                select(CardTemplate).where(CardTemplate.id == template.id).with_for_update()
+            ).scalar_one()
+            
+            next_serial = (t_locked.minted_count or 0) + 1
+            t_locked.minted_count = next_serial
+            
+            inst = CardInstance(
+                template_id=t_locked.id,
+                serial_no=next_serial,
+                etrnl_tag_uid=fake_uid,
+                etrnl_tag_id=fake_tag_id,
+                last_ctr=fake_ctr,
+            )
+            db.session.add(inst)
+            db.session.flush()
+            
+            db.session.add(ScanEvent(
+                card_instance_id=inst.id,
+                tag_id=fake_tag_id,
+                uid=fake_uid,
+                ctr=fake_ctr,
+                authentic=True,
+                ip=request.remote_addr,
+                user_agent=request.headers.get('User-Agent'),
+            ))
+        
+        db.session.commit()
+        
+        return jsonify({
+            'ok': True,
+            'state': 'unclaimed',
+            'cardId': str(inst.id),
+            'minted': True,
+            'dev_mode': True,
+            'fake_uid': fake_uid,
+            'fake_tag_id': fake_tag_id,
+            'serial_no': next_serial
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'ok': False, 'reason': 'mint_failed', 'error': str(e)}), 500

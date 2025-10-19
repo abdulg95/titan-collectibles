@@ -75,13 +75,15 @@ def _uuid(val) -> uuid.UUID | None:
         return None
 
 def user_json(u: User) -> dict:
-    # Works even if your model doesn’t have `name` or `picture`
+    # Works even if your model doesn't have `name` or `picture`
     return {
         "id": _id_str(u.id),
         "email": u.email,
         "name": getattr(u, "name", None),
         "picture": getattr(u, "picture", None),
         "email_verified": bool(getattr(u, "email_verified", False)),
+        "location": getattr(u, "location", None),
+        "date_of_birth": getattr(u, "date_of_birth", None),
     }
 
 # ---------------- mail helper ----------------
@@ -114,10 +116,58 @@ def me():
         return jsonify({"user": None})
     return jsonify({"user": user_json(u)})
 
-@bp.post("/logout")
-def logout():
-    session.clear()
-    return jsonify({"ok": True})
+@bp.route("/update-profile", methods=["POST", "OPTIONS"])
+def update_profile():
+    # Handle CORS preflight
+    if request.method == "OPTIONS":
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 200
+    
+    current_app.logger.info("Update profile endpoint hit")
+    
+    sid = session.get("uid")
+    if not sid:
+        current_app.logger.warning("No session ID found")
+        return jsonify({"ok": False, "error": "not_logged_in"}), 401
+    
+    uid = _uuid(sid)
+    if not uid:
+        current_app.logger.warning("Invalid session ID: %s", sid)
+        session.clear()
+        return jsonify({"ok": False, "error": "invalid_session"}), 401
+    
+    user = db.session.get(User, uid)
+    if not user:
+        current_app.logger.warning("User not found for ID: %s", uid)
+        session.clear()
+        return jsonify({"ok": False, "error": "user_not_found"}), 404
+    
+    data = request.get_json(force=True) or {}
+    name = data.get("name")
+    current_app.logger.info("Updating name to: %s", name)
+    
+    if name is not None:
+        if hasattr(User, "name"):
+            user.name = name.strip() if name.strip() else None
+        else:
+            current_app.logger.error("Name field not available on User model")
+            return jsonify({"ok": False, "error": "name_field_not_available"}), 400
+    
+    try:
+        db.session.commit()
+        current_app.logger.info("Profile updated successfully")
+        response = jsonify({"ok": True, "user": user_json(user)})
+        response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.exception("Profile update error: %s", e)
+        return jsonify({"ok": False, "error": "update_failed"}), 500
 
 # ---------------- Google OAuth ----------------
 @bp.get("/google/start")
@@ -194,6 +244,8 @@ def signup():
     email = (data.get("email") or "").strip().lower()
     password = data.get("password") or ""
     name = data.get("name") or ""
+    location = data.get("location") or ""
+    date_of_birth = data.get("date_of_birth")
 
     if not valid_email(email):
         return jsonify({"ok": False, "error": "invalid_email"}), 400
@@ -208,6 +260,14 @@ def signup():
     new_kwargs = {"email": email, "email_verified": False}
     if hasattr(User, "name"):
         new_kwargs["name"] = name
+    if hasattr(User, "location"):
+        new_kwargs["location"] = location if location else None
+    if hasattr(User, "date_of_birth") and date_of_birth:
+        from datetime import datetime
+        try:
+            new_kwargs["date_of_birth"] = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
+        except ValueError:
+            pass  # Invalid date format, skip
 
     u = User(**new_kwargs)
     u.set_password(password)

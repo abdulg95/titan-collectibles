@@ -42,6 +42,8 @@ class User(db.Model):
     email_verified = db.Column(db.Boolean, default=False)
     google_sub = db.Column(db.String, unique=True, index=True, nullable=True)
     picture = db.Column(db.String, nullable=True)
+    location = db.Column(db.String, nullable=True)
+    date_of_birth = db.Column(db.Date, nullable=True)
 
     created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True),
@@ -65,6 +67,10 @@ class Athlete(db.Model):
     # Identity / routing
     full_name = db.Column(db.String, nullable=False, index=True)
     slug = db.Column(db.String, unique=True, index=True)      # e.g., "mathias-fullerton"
+    
+    # Series information
+    series_number = db.Column(db.Integer, nullable=False, default=1)  # Series 1, 2, 3, etc.
+    card_number = db.Column(db.Integer, unique=True, index=True)       # 001, 002, 003, etc.
 
     # About
     dob = db.Column(db.Date)                                   # birth date
@@ -85,9 +91,13 @@ class Athlete(db.Model):
     quote_source = db.Column(db.String)                        # optional attribution
 
     # Media used on the page
-    card_image_url = db.Column(db.Text)                        # trading card image
+    card_image_url = db.Column(db.Text)                        # trading card image (front)
+    card_back_url = db.Column(db.Text)                         # trading card back image
     hero_image_url = db.Column(db.Text)                        # top banner image
     video_url = db.Column(db.Text)                             # interview/highlight video
+    quote_photo_url = db.Column(db.Text)                       # background photo for quote section
+    action_photo_url = db.Column(db.Text)                       # action photo after career statistics
+    qualification_image_url = db.Column(db.Text)                # best qualification graph image
     gallery = db.Column(JSONB, default=list)                   # [{url,alt,caption,order}, …]
 
     # Links / social / sponsors

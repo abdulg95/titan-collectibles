@@ -26,8 +26,15 @@ app.config["SESSION_COOKIE_SAMESITE"] = os.getenv("SESSION_COOKIE_SAMESITE", "La
 app.config["SESSION_COOKIE_SECURE"] = os.getenv("SESSION_COOKIE_SECURE", "False") == "True"
 
 # CORS
-allowed = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",") if o.strip()]
-CORS(app, origins=allowed, supports_credentials=True, allow_headers=["Content-Type"],methods=["GET", "POST", "OPTIONS"])
+allowed = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173").split(",") if o.strip()]
+print(f"CORS allowed origins: {allowed}")
+
+CORS(app, 
+     origins=allowed, 
+     supports_credentials=True, 
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     expose_headers=["Content-Type"])
 
 # Init extensions
 db.init_app(app)
