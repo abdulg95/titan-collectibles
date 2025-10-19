@@ -5,6 +5,7 @@ import os
 
 from models import db, migrate
 from routes_scan import bp as scan_bp
+from routes_verification import bp as verification_bp
 from routes_cards import bp as cards_bp
 from routes_shopify import bp as shopify_bp
 from routes_admin import bp as admin_bp
@@ -43,6 +44,7 @@ init_oauth(app)  # <-- registers 'google' client with this app
 
 # Blueprints
 app.register_blueprint(scan_bp)
+app.register_blueprint(verification_bp)
 app.register_blueprint(cards_bp)
 app.register_blueprint(shopify_bp)
 app.register_blueprint(admin_bp)
