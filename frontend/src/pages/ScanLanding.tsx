@@ -15,7 +15,7 @@ export default function ScanLanding(){
     
     // Check if this is the new URL format (titansportshq.com/scan?t=000000000002)
     const templateCode = sp.get('t')
-    const newTagId = sp.get('id') || tagId
+    const newTagId = sp.get('tagId') || sp.get('id') || tagId
     const encryptedData = sp.get('data')
     
     let apiUrl
