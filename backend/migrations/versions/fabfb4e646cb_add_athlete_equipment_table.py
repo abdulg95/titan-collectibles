@@ -17,18 +17,24 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table('athlete_equipment',
-        sa.Column('id', sa.UUID(), nullable=False),
-        sa.Column('athlete_id', sa.UUID(), nullable=False),
-        sa.Column('category', sa.String(), nullable=False),
-        sa.Column('brand', sa.String(), nullable=True),
-        sa.Column('model', sa.String(), nullable=True),
-        sa.Column('url', sa.Text(), nullable=True),
-        sa.Column('notes', sa.String(), nullable=True),
-        sa.Column('display_order', sa.Integer(), nullable=True),
-        sa.ForeignKeyConstraint(['athlete_id'], ['athletes.id'], ),
-        sa.PrimaryKeyConstraint('id')
-    )
+    # Check if table already exists before creating it
+    connection = op.get_bind()
+    inspector = sa.inspect(connection)
+    tables = inspector.get_table_names()
+    
+    if 'athlete_equipment' not in tables:
+        op.create_table('athlete_equipment',
+            sa.Column('id', sa.UUID(), nullable=False),
+            sa.Column('athlete_id', sa.UUID(), nullable=False),
+            sa.Column('category', sa.String(), nullable=False),
+            sa.Column('brand', sa.String(), nullable=True),
+            sa.Column('model', sa.String(), nullable=True),
+            sa.Column('url', sa.Text(), nullable=True),
+            sa.Column('notes', sa.String(), nullable=True),
+            sa.Column('display_order', sa.Integer(), nullable=True),
+            sa.ForeignKeyConstraint(['athlete_id'], ['athletes.id'], ),
+            sa.PrimaryKeyConstraint('id')
+        )
 
 
 def downgrade():
