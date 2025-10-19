@@ -17,15 +17,21 @@ depends_on = None
 
 
 def upgrade():
-    op.create_table('athlete_qualifications',
-        sa.Column('id', sa.UUID(), nullable=False),
-        sa.Column('athlete_id', sa.UUID(), nullable=False),
-        sa.Column('year', sa.Integer(), nullable=False),
-        sa.Column('score', sa.Numeric(precision=6, scale=2), nullable=False),
-        sa.Column('event', sa.String(), nullable=True),
-        sa.ForeignKeyConstraint(['athlete_id'], ['athletes.id'], ),
-        sa.PrimaryKeyConstraint('id')
-    )
+    # Check if table already exists before creating it
+    connection = op.get_bind()
+    inspector = sa.inspect(connection)
+    tables = inspector.get_table_names()
+    
+    if 'athlete_qualifications' not in tables:
+        op.create_table('athlete_qualifications',
+            sa.Column('id', sa.UUID(), nullable=False),
+            sa.Column('athlete_id', sa.UUID(), nullable=False),
+            sa.Column('year', sa.Integer(), nullable=False),
+            sa.Column('score', sa.Numeric(precision=6, scale=2), nullable=False),
+            sa.Column('event', sa.String(), nullable=True),
+            sa.ForeignKeyConstraint(['athlete_id'], ['athletes.id'], ),
+            sa.PrimaryKeyConstraint('id')
+        )
 
 
 def downgrade():
