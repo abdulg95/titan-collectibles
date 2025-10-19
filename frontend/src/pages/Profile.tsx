@@ -168,7 +168,7 @@ export default function Profile() {
                 me={user}
                 onSignInClick={() => navigate('/signin')}
                 onSignOut={() => {
-                  fetch(new URL('/api/auth/signout', API).toString(), { 
+                  fetch(new URL('/api/auth/logout', API).toString(), { 
                     method: 'POST', 
                     credentials: 'include' 
                   }).then(() => {
@@ -272,7 +272,7 @@ export default function Profile() {
               me={user}
               onSignInClick={() => navigate('/signin')}
               onSignOut={() => {
-                fetch(new URL('/api/auth/signout', API).toString(), { 
+                fetch(new URL('/api/auth/logout', API).toString(), { 
                   method: 'POST', 
                   credentials: 'include' 
                 }).then(() => {
