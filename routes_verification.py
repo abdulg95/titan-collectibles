@@ -45,6 +45,7 @@ def _find_template(hint: str | None) -> CardTemplate | None:
 
 def _verify_with_titan_nfc(tag_id: str, encrypted_data: str) -> dict:
     """Verify card authenticity with the new Titan NFC service."""
+    print(f"🔍 Titan NFC verification: tag_id={tag_id}, data={encrypted_data[:16]}...")
     try:
         response = requests.get(
             TITAN_NFC_URL,
@@ -57,6 +58,7 @@ def _verify_with_titan_nfc(tag_id: str, encrypted_data: str) -> dict:
             },
             timeout=10
         )
+        print(f"📡 Titan NFC response: status={response.status_code}, content={response.text[:100]}...")
         
         if response.status_code == 200:
             try:
@@ -100,6 +102,8 @@ def _resolve_core(template_hint: str | None, tag_id_hint: str | None):
     tag_id = tag_id_hint or _g('tagId', 'tid', 'id')
     encrypted_data = _g('data', 'enc', 'encrypted')
     template_hint = template_hint or _g('t', 'template', 'templateId')
+    
+    print(f"🚀 Verification request: tag_id={tag_id}, data={encrypted_data[:16] if encrypted_data else 'None'}..., template={template_hint}")
 
     # Validate required parameters
     if not tag_id or not encrypted_data:
