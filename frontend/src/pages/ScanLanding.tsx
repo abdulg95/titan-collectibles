@@ -46,10 +46,25 @@ export default function ScanLanding(){
         const r = await fetch(fullUrl, { credentials:'include' })
         const j = await r.json().catch(()=>null)
 
-        if (!r.ok || !j || j.ok === false) {
+        if (!r.ok || !j) {
           console.error('Verification failed:', j)
-          setError(j.reason || 'Verification failed')
+          setError('Verification failed')
           return
+        }
+
+        // Handle specific verification responses
+        if (j.ok === false) {
+          if (j.reason === 'not_authentic') {
+            setError('This card could not be verified as authentic. Please check the card and try again.')
+            return
+          } else if (j.reason === 'unknown_template') {
+            setError('Unknown card template. This card may not be supported.')
+            return
+          } else {
+            console.error('Verification failed:', j)
+            setError(j.reason || 'Verification failed')
+            return
+          }
         }
 
         // First-ever scan (warehouse registration)
