@@ -53,7 +53,7 @@ def _verify_with_titan_nfc(tag_id: str, encrypted_data: str) -> dict:
                 'data': encrypted_data
             },
             headers={
-                'Authorization': f'Bearer {TITAN_NFC_KEY}'
+                'Authorization': TITAN_NFC_KEY
             },
             timeout=10
         )
