@@ -1,0 +1,175 @@
+/* Hamburger Menu Styles - MOBILE ONLY */
+
+/* Hide hamburger menu on desktop */
+.hamburger-menu {
+  display: none;
+}
+
+/* Show hamburger menu only on mobile */
+@media (max-width: 900px) {
+  .hamburger-menu {
+    display: block !important;
+    position: relative;
+    z-index: 1000;
+    justify-self: end !important;
+    margin-left: auto !important;
+    align-self: center;
+  }
+
+  /* When hamburger menu is inside nav-actions, ensure it's positioned correctly */
+  .nav-actions .hamburger-menu {
+    margin-left: auto !important;
+  }
+
+  /* Hamburger Button */
+  .hamburger-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    gap: 6px;
+  }
+
+  .hamburger-line {
+    width: 28px;
+    height: 2px;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    border-radius: 1px;
+  }
+
+  /* Hamburger Animation */
+  .hamburger-button.open .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .hamburger-button.open .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-button.open .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  /* Overlay */
+  .hamburger-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+  }
+
+  /* Menu Panel */
+  .hamburger-panel {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    z-index: 999;
+    transition: left 0.3s ease;
+    padding: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hamburger-panel.open {
+    left: 0;
+  }
+
+  /* Header with Logo and Close Button */
+  .hamburger-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hamburger-logo {
+    display: block;
+  }
+
+  .hamburger-logo-img {
+    height: 24px;
+    width: auto;
+  }
+
+  /* Close Button */
+  .hamburger-close {
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hamburger-close:hover {
+    color: var(--primary);
+  }
+
+  /* Navigation */
+  .hamburger-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    flex: 1;
+  }
+
+  .hamburger-nav-item {
+    display: block;
+    padding: 16px 0;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 590;
+    text-decoration: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .hamburger-nav-button {
+    width: 100%;
+  }
+
+  .hamburger-nav-item:hover {
+    opacity: 1;
+  }
+
+  /* Divider */
+  .hamburger-nav-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 16px 0;
+  }
+
+  /* Cart Button */
+  .hamburger-cart {
+    color: #4ade80;
+  }
+
+  /* Sign Out Button */
+  .hamburger-signout {
+    color: #ff6b6b;
+  }
+}

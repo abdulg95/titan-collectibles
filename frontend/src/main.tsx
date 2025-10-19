@@ -11,6 +11,7 @@ import AdminBind from './pages/admin/Bind'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Contact from './pages/Contact'
+import Profile from './pages/Profile'
 import Terms from './pages/Terms'
 import Privacy from './pages/Privacy'
 import Shop from './pages/Shop'
@@ -19,6 +20,7 @@ import { CartProvider } from './state/cart'
 import './styles/theme.css'
 import ScanRegistered from './pages/ScanRegistered'
 import PreorderPage from './pages/Preorder'
+import DevScan from './pages/DevScan'
 
 
 
@@ -31,17 +33,19 @@ const router = createBrowserRouter([
     
     element: <Layout />,
     children: [
-      // { path: '/', element: <Home/> },
+      { path: '/', element: <Home/> },
       { path: '/about', element: <About/> },
       { path: '/contact', element: <Contact/> },
       { path: '/buy', element: <Shop/> },
       { path: '/terms', element: <Terms/> },
       { path: '/privacy', element: <Privacy/> },
+      { path: '/profile', element: <Profile/> },
 
       { path: '/scan/:tagId', element: <ScanLanding/> },
       // wherever your routes are defined (e.g., main router)
       { path: '/scan/registered', element: <ScanRegistered/> },
       { path: '/cards/:cardId', element: <CardView/> },
+      { path: '/profile', element: <Profile/> },
 
       // auth
       { path: '/signin', element: <SignIn/> },
@@ -51,10 +55,13 @@ const router = createBrowserRouter([
       // admin
       { path: '/admin/templates', element: <AdminTemplates/> },
       { path: '/admin/bind', element: <AdminBind/> },
+      
+      // dev tools
+      { path: '/dev/scan', element: <DevScan/> },
     ]
   },
   {
-    path: '/',
+    path: '/preorder',
     element: <PreorderPage />,
   },
 ])

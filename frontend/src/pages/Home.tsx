@@ -1,25 +1,107 @@
 // src/pages/Home.tsx
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Reveal, ParallaxY } from '../components/Reveal'
 import './home.css'
 
 export default function Home(){
+  const [currentTextIndex, setCurrentTextIndex] = useState(0)
+  const phoneScreenRef = useRef<HTMLDivElement>(null)
+
+  const scrollTexts = [
+    {
+      title: "Unlock the",
+      highlight: "digital",
+      subtitle: "experience",
+      description: "NFC-powered instant access to athlete digital cards. It’s your direct link to athletes you love."
+    },
+    {
+      title: "Unlock the",
+      highlight: "digital",
+      subtitle: "experience",
+      description: "Powered by NFC technology, TITAN cards are more than just collectibles. Tap your card to unlock exclusive digital content and connect with the athletes you love."
+    },
+    {
+      title: "Exclusive",
+      highlight: "content",
+      subtitle: ""
+    },
+    {
+      title: "Exclusive",
+      highlight: "content",
+      subtitle: ""
+    },
+    {
+      title: "",
+      highlight: "",
+      subtitle: "",
+      description: ""
+    }
+  ]
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!phoneScreenRef.current) return
+      
+      const scrollTop = phoneScreenRef.current.scrollTop
+      const scrollHeight = phoneScreenRef.current.scrollHeight - phoneScreenRef.current.clientHeight
+      const scrollPercentage = scrollTop / scrollHeight
+      
+      // Adjust thresholds to make last section trigger lower
+      // Sections: 0-20%, 20-40%, 40-60%, 60-85%, 85-100%
+      let sectionIndex = 0
+      if (scrollPercentage >= 0.20) sectionIndex = 1
+      if (scrollPercentage >= 0.40) sectionIndex = 2
+      if (scrollPercentage >= 0.60) sectionIndex = 3
+      if (scrollPercentage >= 0.85) sectionIndex = 4
+      
+      setCurrentTextIndex(sectionIndex)
+    }
+
+    const phoneScreen = phoneScreenRef.current
+    if (phoneScreen) {
+      phoneScreen.addEventListener('scroll', handleScroll)
+      return () => phoneScreen.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
     <div className="home">
        <div className="top-bg">
         {/* HERO */}
         <section id="hero" className="hero">
           <div className="container hero__grid">
-            <Reveal>
+            {/* Mobile: Image first, Desktop: Text first */}
+            <ParallaxY move={[0, -30]} className="hero__art-mobile-first">
+              <div className="hero__art">
+                <div className="pack-wrap">
+                  <img src="/assets/pack-placeholder.png" alt="Series One Pack" />
+                </div>
+              </div>
+            </ParallaxY>
+
+            <Reveal className="hero__copy-mobile-second">
               <div className="hero__copy">
                 <h1 className="hero__title">SERIES ONE: A NEW ERA.</h1>
                 <p className="hero__body">
                   Tap your card to reveal exclusive athlete stories, stats, and gear insights — powered by NFC.
-                  Collect all 8 cards featuring the sport’s top athletes to unlock the bonus 9th.
+                  Collect all 8 cards featuring the sport's top athletes to unlock the bonus 9th.
                 </p>
                 <div className="hero__cta">
                   <Link to="/buy" className="btn-primary">Buy Now</Link>
-                  <Link to="/#about" className="btn-ghost">Learn More</Link>
+                  <a 
+                    href="#"
+                    className="btn-ghost"
+                    onClick={(e) => {
+                      e.preventDefault()
+                      const aboutEl = document.getElementById('about')
+                      if (aboutEl) {
+                        aboutEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }}
+                  >
+                    Learn More
+                  </a>
                 </div>
                 <div className="hero__license">
                   <img src="/assets/world-archery.png" alt="World Archery" />
@@ -27,47 +109,74 @@ export default function Home(){
                 </div>
               </div>
             </Reveal>
+          </div>
+        </section>
 
-            <ParallaxY move={[0, -30]}>
-              <div className="hero__art">
-                <div className="pack-wrap">
-                  <img src="/assets/pack-placeholder.png" alt="Series One Pack" />
+            {/* PHYSICAL MEETS DIGITAL (video first, text below) */}
+            <section id="physical" className="physical">
+              <div className="container physical__grid">
+                <div className="physical__image">
+                  <div className="phone-wrap">
+                    {/* Scrollable screen area */}
+                    <div className="phone-screen" ref={phoneScreenRef}>
+                      {/* The Ella features image is taller than the screen so you can scroll */}
+                      <img 
+                        src="/assets/card-features/Ella features call out prototype.png" 
+                        alt="Ella features" 
+                        className="screen-photo"
+                      />
+                    </div>
+
+                    {/* The iPhone frame sits on top; pointer-events none so scroll still works */}
+                    <img 
+                      src="/assets/card-features/iPhone 14 Pro.png" 
+                      alt="iPhone frame" 
+                      className="phone-frame"
+                    />
+                  </div>
+                </div>
+                <div className="physical__content">
+                  <h3 className="physical__title">
+                    <span className="accent">{scrollTexts[currentTextIndex].title} </span>
+                    <span className="highlight">{scrollTexts[currentTextIndex].highlight}</span>
+                    <br />
+                    <span className="highlight">{scrollTexts[currentTextIndex].subtitle}</span>
+                  </h3>
+                  {scrollTexts[currentTextIndex].description && (
+                    <p className="physical__para">
+                      {scrollTexts[currentTextIndex].description}
+                    </p>
+                  )}
+                  {currentTextIndex === 1 && (
+                    <div className="bio-pill">
+                      BIO
+                    </div>
+                  )}
+                  {currentTextIndex === 2 && (
+                    <div className="pills-container">
+                      <div className="personal-video-pill">
+                        Personal Video
+                      </div>
+                      <div className="diamond-feature-pill">
+                        <span className="pill-icon">💎</span>
+                        Diamond Feature
+                      </div>
+                    </div>
+                  )}
+                  {currentTextIndex === 3 && (
+                    <div className="pills-container">
+                      <div className="personal-video-pill">
+                        Mental Game
+                      </div>
+                      <div className="diamond-feature-pill">
+                        <span className="pill-icon">💎</span>
+                        Diamond Feature
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            </ParallaxY>
-          </div>
-        </section>
-
-        {/* PHYSICAL MEETS DIGITAL (video first, text below) */}
-        <section id="physical" className="physical">
-          <div className="physical__video">
-            <video
-              className="bgvid"
-              autoPlay
-              muted
-              loop
-              playsInline
-              poster="/assets/pack-placeholder.png"
-            >
-              <source src="/assets/phone-video.webm" type="video/webm" />
-              <source src="/assets/phone-video.mp4" type="video/mp4" />
-            </video>
-            <div className="video__overlay" />
-          </div>
-
-          {/* text below the video */}
-          <div className="container physical__copy">
-            <h3><span className="accent">Physical</span> meets digital</h3>
-            <p className="physical__para">
-            Each card is embedded with NFC technology — just tap 
-              <br className="br-desktop" />
-              your phone to unlock exclusive content, see personal stats,
-              <br className="br-desktop" />
-              training insights & gear breakdowns.
-            </p>
-          </div>
-
-        </section>
+            </section>
 
        </div>
       
@@ -238,7 +347,7 @@ export default function Home(){
               </div>
               <label>Email<input type="email" required/></label>
               <label>Message<textarea rows={5} required/></label>
-              <button className="btn-primary" type="submit">Send</button>
+              <button className="btn-secondary" type="submit">Contact Us</button>
             </form>
           </Reveal>
         </div>

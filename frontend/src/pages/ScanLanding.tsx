@@ -38,10 +38,9 @@ export default function ScanLanding(){
           return
         }
 
-        // Normal behavior: send to claim if unclaimed, else just view the card
+        // Subsequent scans: always send to card view, which will handle claim UI
         const id = j.cardId
-        if (j.state === 'unclaimed') nav(`/cards/${id}?claim=1`, { replace:true })
-        else nav(`/cards/${id}`, { replace:true })
+        nav(`/cards/${id}`, { replace:true })
       } catch {
         nav('/?scan=fail', { replace:true })
       }

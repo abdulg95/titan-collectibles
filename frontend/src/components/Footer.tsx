@@ -8,7 +8,6 @@ export default function Footer(){
         <div className="foot-left">
           <div className="foot-brand">
             <img src="/assets/logo-titan.svg" alt="TITAN" className="foot-logo" />
-            <span className="foot-sub">COLLECTIBLES</span>
           </div>
         </div>
 

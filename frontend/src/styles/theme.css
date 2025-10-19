@@ -28,6 +28,14 @@
   }
   a { color: inherit; text-decoration: none; }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  
+  /* Desktop: Position all content 80px from left edge */
+  @media (min-width: 769px) {
+    .container {
+      margin-left: 80px;
+      margin-right: auto;
+    }
+  }
   html { scroll-behavior: smooth; }
 
   /* “Coming soon” screen for claim=1 */

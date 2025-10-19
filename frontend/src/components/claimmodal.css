@@ -1,0 +1,133 @@
+/* Claim Modal - matches Figma design */
+.claim-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.claim-modal-panel {
+  width: 100%;
+  max-width: 345px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 
+    0px 20px 24px -4px rgba(10, 13, 18, 0.1),
+    0px 8px 8px -4px rgba(10, 13, 18, 0.04);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.claim-modal-header {
+  padding: 20px 16px 0;
+  background: #fff;
+}
+
+.claim-modal-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #181d27;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.claim-modal-description {
+  font-size: 14px;
+  font-weight: 400;
+  color: #535862;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.claim-modal-divider {
+  height: 1px;
+  background: #e1e6ef;
+  margin: 12px 0;
+}
+
+.claim-modal-actions {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.claim-btn-primary,
+.claim-btn-cancel {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  text-align: center;
+}
+
+.claim-btn-primary {
+  background: #475c7e;
+  color: #fff;
+  box-shadow: none;
+}
+
+.claim-btn-primary:hover:not(:disabled) {
+  background: #5a6f94;
+}
+
+.claim-btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.claim-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.claim-btn-cancel {
+  background: #fff;
+  color: #1d2433;
+  border: 1px solid #e1e6ef;
+}
+
+.claim-btn-cancel:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.claim-btn-cancel:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.claim-btn-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+

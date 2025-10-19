@@ -1,0 +1,145 @@
+/* ---- Page layout ---- */
+.profile-wrap {
+    --maxw: 1100px;
+    margin: 0 auto;
+    padding: 40px 16px 64px;
+    max-width: var(--maxw);
+  }
+  
+  .profile-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+  
+  @media (max-width: 900px) {
+    .profile-grid { grid-template-columns: 1fr; }
+  }
+  
+  /* ---- Profile header (avatar + text) ---- */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: #121317;
+    border: 1px solid #23252b;
+    border-radius: 14px;
+  }
+  
+  .profile-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #1a1c22;
+    border: 1px solid #2a2d34;
+  }
+  
+  .profile-ident {
+    line-height: 1.25;
+  }
+  .profile-ident .name {
+    font-weight: 700;
+    color: #e7ecf7;
+  }
+  .profile-ident .email {
+    color: #9aa5b3;
+    font-size: 0.92rem;
+  }
+  
+  /* ---- Achievements card (SOLID dark) ---- */
+  :root {
+    --card-bg: #17181d;      /* solid dark grey panel */
+    --card-border: #2a2c31;
+    --ring-track: #2f3540;   /* donut track */
+    --gold: #f4c24f;         /* progress color */
+  }
+  
+  .ach-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 14px 14px 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  }
+  
+  .ach-head .ach-title {
+    font-weight: 800;
+    color: #e7ecf7;
+  }
+  .ach-head .ach-sub {
+    margin-top: 2px;
+    color: #9aa5b3;
+    font-size: .9rem;
+  }
+  
+  .ach-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .ach-ring {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--ring-track);
+    position: relative;
+  }
+  .ach-ring-inner {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: #0f1116;                 /* solid inner */
+    border: 1px solid #262a32;
+    display: grid;
+    place-items: center;
+    color: #e7ecf7;
+    font-weight: 800;
+    font-size: 20px;
+  }
+  
+  .ach-bonus {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 10px;
+    align-items: center;
+    background: #121317;
+    border: 1px dashed #30343c;
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .ach-lock {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: #0f1116;
+    color: #b7beca;
+    font-size: 18px;
+  }
+  .ach-bonus-label {
+    color: #c5ceda;
+    font-weight: 600;
+  }
+  .ach-bonus-sub {
+    color: #8d97a6;
+    font-weight: 500;
+    font-size: .9rem;
+  }
+  
+  /* Optional: tidy section heading at top of page */
+  .profile-title {
+    margin: 0 0 18px;
+    font-weight: 800; 
+    font-size: 28px;
+    color: #e7ecf7;
+  }
+  

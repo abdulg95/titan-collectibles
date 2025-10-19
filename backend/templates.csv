@@ -3,6 +3,7 @@ template_id,display_name,version,sku
 000000000002,Brady Ellison — Diamond,diamond,BE-DIA
 000000000003,Mete Gazoz  — Regular,regular,MG-REG
 000000000004,Mete Gazoz  — Diamond,diamond,MG-DIA
+000000000005,Ella Gibson — Regular,regular,EG-REG
 000000000006,Ella Gibson — Diamond,diamond,EG-DIA
 000000000007,Deepika Kumari - Regular,regular,DK-REG
 000000000008,Deepika Kumari - Diamond,diamond,DK-DIA
@@ -12,7 +13,7 @@ template_id,display_name,version,sku
 000000000012,Mike Schloesser - Diamond,diamond,MS-DIA
 000000000013,Lim Sihyeon - Regular,regular,LS-REG
 000000000014,Lim Sihyeon - Diamond,diamond,LS-DIA
-000000000015,Matias Fullerton - Classic,regular,MF-REG
-000000000016,Matias Fullerton - Classic,diamond,MF-DIA
-000000000017,Kim Woojin - Classic,regular,KW-REG
-000000000018,Kim Woojin - Classic,diamond,KW-DIA
+000000000015,Matias Fullerton - Regular,regular,MF-REG
+000000000016,Matias Fullerton - Diamond,diamond,MF-DIA
+000000000017,Kim Woojin - Regular,regular,KW-REG
+000000000018,Kim Woojin - Diamond,diamond,KW-DIA

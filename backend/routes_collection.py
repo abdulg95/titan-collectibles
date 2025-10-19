@@ -48,6 +48,8 @@ def my_collection():
                 'full_name': getattr(ath, 'full_name', ''),
                 'slug': getattr(ath, 'slug', ''),
                 'card_image_url': getattr(ath, 'card_image_url', None),
+                'card_number': getattr(ath, 'card_number', None),
+                'series_number': getattr(ath, 'series_number', None),
             }
         })
 

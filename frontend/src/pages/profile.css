@@ -1,0 +1,361 @@
+/* Profile Header */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.profile-name-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.profile-name {
+  margin: 0;
+  flex: 1;
+}
+
+.profile-edit-btn {
+  background: none;
+  border: none;
+  color: #7e7e7e;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.profile-edit-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.profile-name-edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-name-input {
+  background: #2a2a2a;
+  border: 1px solid #3a4a5c;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.profile-name-input:focus {
+  border-color: #4ade80;
+}
+
+.profile-name-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.profile-save-btn,
+.profile-cancel-btn {
+  background: none;
+  border: none;
+  color: #7e7e7e;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.profile-save-btn:hover {
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.profile-cancel-btn:hover {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.profile-save-btn:disabled {
+  color: #4a4a4a;
+  cursor: not-allowed;
+}
+
+/* Personal Information Card */
+.personal-info-card {
+  background: #202020;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.personal-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Personal Information Section */
+
+.personal-info-title {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.personal-info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.personal-info-label {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 18px;
+  color: #ffffff;
+}
+
+.personal-info-value {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 16px;
+  color: #7e7e7e;
+}
+/* Page container on plain background */
+.collection{
+    padding: 24px;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  /* Headline and copy */
+  .collection__title{
+    margin: 0 0 10px;
+    font-size: clamp(24px, 5vw, 32px);
+    letter-spacing: .2px;
+  }
+  
+  .collection__sub{
+    margin: 0 0 18px;
+    color: #c9d1db; /* subtle */
+  }
+  
+  .collection__fine{
+    margin: 14px 0 0;
+    font-size: 12px;
+    color: #9aa7b6;
+  }
+  
+  .collection__error{
+    color: #ff8080;
+    margin-top: 10px;
+  }
+  
+  /* Empty art (your PNG) */
+  .collection__art{
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    border-radius: 16px;
+    margin: 8px 0 22px;
+  }
+  
+  /* Button on dark theme */
+  .collection .btn-primary{
+    display: inline-block;
+    width: 100%;
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 12px;
+    background: #fff;
+    color: #000;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  /* Lightweight loading skeletons (no card backdrop) */
+  .skeleton{
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    position: relative;
+  }
+  .skeleton::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+    animation: shimmer 1.2s infinite;
+  }
+  .skeleton.title{ height: 28px; width: 60%; margin: 6px 0 12px; }
+  .skeleton.line{ height: 14px; width: 80%; margin: 0 0 16px; }
+  .skeleton.art{ height: 180px; border-radius: 16px; margin: 8px 0 22px; }
+  .skeleton.button{ height: 44px; border-radius: 12px; }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* Collection Grid */
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .collection-slot {
+    aspect-ratio: 0.75; /* 4:3 aspect ratio to match Figma */
+    position: relative;
+  }
+
+  /* Collected Card */
+  .collection-card {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.2s ease;
+  }
+
+  .collection-card:hover {
+    transform: scale(1.05);
+  }
+
+  .collection-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+
+  /* Empty Slot */
+  .collection-empty-slot {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .collection-empty-slot:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .collection-empty-number {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* Profile Section */
+  .profile-section {
+    margin: 32px 0;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .profile-details {
+    flex: 1;
+  }
+
+  .profile-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+    margin: 0 0 4px 0;
+  }
+
+  .profile-email {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+
+  /* Collection Page Header */
+  .collection-page {
+    min-height: 100vh;
+    background: #0a0a0a;
+  }
+
+  .collection-header {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .collection-header {
+      display: block;
+      background: #0a0a0a;
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .collection-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .collection-logo {
+      display: block;
+    }
+
+    .collection-logo-img {
+      height: 26px;
+      width: auto;
+    }
+  }
+
+  /* Safety: if old classes linger, neutralize them */
+  .collection-wrap, .collection-card{
+    background: none !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 !important;
+  }
+  

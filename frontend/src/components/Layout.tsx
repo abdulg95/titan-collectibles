@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import './layout.css'
 import HashScroll from './HashScroll'
@@ -6,6 +6,25 @@ import Footer from './Footer'
 import AuthModal from './AuthModal'
 import CartDrawer from './CartDrawer'
 import CartIcon from './CartIcon'
+import HamburgerMenu from './HamburgerMenu'
+import UserMenu from './UserMenu'
+
+// Hook to detect mobile viewport
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 900)
+    }
+    
+    checkIsMobile()
+    window.addEventListener('resize', checkIsMobile)
+    return () => window.removeEventListener('resize', checkIsMobile)
+  }, [])
+
+  return isMobile
+}
 
 
 
@@ -16,7 +35,9 @@ export default function Layout(){
   const [me, setMe] = useState<User>(null)
   const [loading, setLoading] = useState(true)
   const nav = useNavigate()
+  const location = useLocation()
   const [showAuth, setShowAuth] = useState(false)
+  const isMobile = useIsMobile()
 
   async function fetchMe(){
     try{
@@ -47,8 +68,11 @@ export default function Layout(){
     nav('/')
   }
 
+  const hideHeader = location.pathname.startsWith('/cards') || (location.pathname.startsWith('/profile') && isMobile)
+
   return (
     <div className="app-shell">
+      {!hideHeader && (
       <header className="site-nav">
         <div className="container nav-grid">
           {/* left: logo */}
@@ -56,29 +80,85 @@ export default function Layout(){
             <img src="/assets/logo-titan.svg" alt="TITAN Collectibles" className="brand__logo" />
           </Link>
 
+          {/* center links - only show on desktop */}
+          {!isMobile && (
+            <nav className="nav-links">
+              <Link to="/buy">Shop</Link>
+              <a 
+                href="#"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (window.location.pathname !== '/') {
+                    nav('/')
+                    setTimeout(() => {
+                      const aboutEl = document.getElementById('about')
+                      if (aboutEl) {
+                        aboutEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }, 100)
+                  } else {
+                    const aboutEl = document.getElementById('about')
+                    if (aboutEl) {
+                      aboutEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
+                }}
+              >
+                About Us
+              </a>
+              <a 
+                href="#"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  if (window.location.pathname !== '/') {
+                    nav('/')
+                    setTimeout(() => {
+                      const contactEl = document.getElementById('contact')
+                      if (contactEl) {
+                        contactEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }, 100)
+                  } else {
+                    const contactEl = document.getElementById('contact')
+                    if (contactEl) {
+                      contactEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                  }
+                }}
+              >
+                Contact
+              </a>
+            </nav>
+          )}
 
-          {/* center links */}
-          <nav className="nav-links">
-            <Link to="/buy">Shop</Link>
-            <Link to="/#about">About Us</Link>      {/* scrolls to About on home */}
-            <Link to="/#contact">Contact</Link>     {/* scrolls to Contact on home */}
-          </nav>
-
-          {/* right actions */}
+          {/* right actions - desktop nav actions OR mobile hamburger */}
           <div className="nav-actions">
-            <CartIcon />
-            {loading ? null : me ? (
-                <button className="btn-outline" onClick={signOut}>Sign Out</button>
-                ) : (
-                <button className="btn-outline" onClick={onSignInClick}>Sign In</button>
+            {!isMobile ? (
+              <>
+                <CartIcon />
+                {loading ? null : me ? (
+                    <UserMenu user={me} onSignOut={signOut} />
+                    ) : (
+                    <button className="btn-outline" onClick={onSignInClick}>Sign In</button>
+                  )}
+              </>
+            ) : (
+              <HamburgerMenu 
+                me={me} 
+                onSignInClick={onSignInClick} 
+                onSignOut={signOut} 
+              />
             )}
           </div>
         </div>
       </header>
+      )}
 
       <main><HashScroll offset={80}/><Outlet/></main>
       <CartDrawer />
-      <Footer/>
+      {!location.pathname.startsWith('/cards') && !location.pathname.startsWith('/profile') && <Footer/>}
       <AuthModal
         open={showAuth}
         onClose={()=>setShowAuth(false)}

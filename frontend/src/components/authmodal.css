@@ -40,13 +40,147 @@
   .row-between{ display:flex; justify-content:flex-end }
   .muted.small{ font-size:12px; color:#b7c5dc; text-decoration:underline; }
   
-  .btn-primary{
-    width:100%; padding:12px; border-radius:10px; border:0; cursor:pointer;
-    background: linear-gradient(180deg, #9BE2FF, #66B6FF);
-    color:#001221; font-weight:700;
-    opacity: 1;
+  .auth-submit-btn{
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 0;
+    cursor: pointer;
+    background: #fff;
+    color: #000000;
+    font-weight: 600;
+    font-size: 16px;
+    display: block;
+    text-align: center;
   }
-  .btn-primary:disabled{ opacity:.6; cursor:not-allowed }
+  .auth-submit-btn:disabled{ 
+    background: #CBCBCB;
+    cursor: not-allowed; 
+  }
+  
+  .auth-submit-btn:hover{
+    background: #f8f8f8;
+  }
+  .auth-submit-btn::before{
+    display: none !important;
+  }
+  .auth-submit-btn::after{
+    display: none !important;
+  }
+  
+  /* Date input calendar icon styling */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+  
+  input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(1);
+  }
+  
+  /* Location autocomplete styling */
+  .location-autocomplete {
+    position: relative;
+  }
+  
+  .location-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #3a4a5c;
+    background: #1a2332;
+    color: #ffffff;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .location-input:focus {
+    outline: none;
+    border-color: #4ade80;
+  }
+  
+  .autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #1a2332;
+    border: 1px solid #3a4a5c;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  
+  .suggestion-item {
+    padding: 12px;
+    cursor: pointer;
+    color: #ffffff;
+    border-bottom: 1px solid #3a4a5c;
+  }
+  
+  .suggestion-item:last-child {
+    border-bottom: none;
+  }
+  
+  .suggestion-item--active,
+  .suggestion-item:hover {
+    background: #2a3441;
+    color: #4ade80;
+  }
+  
+  /* Password validation styling */
+  .password-validation {
+    margin-top: 8px;
+    padding: 12px;
+    background: #1a2332;
+    border-radius: 8px;
+  }
+  
+  .validation-title {
+    font-size: 12px;
+    color: #ff6b6b;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  .validation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .validation-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #b7c5dc;
+  }
+  
+  .validation-icon {
+    font-size: 10px;
+    font-weight: bold;
+    width: 12px;
+    text-align: center;
+    color: #ff6b6b;
+  }
+  
+  .validation-error {
+    color: #b7c5dc;
+  }
+  
+  .validation-success {
+    color: #4ade80;
+  }
+  .auth-submit-btn:disabled{ 
+    opacity: .6; 
+    cursor: not-allowed; 
+  }
+  
+  .auth-submit-btn:hover{
+    background: #f8f8f8 !important;
+  }
   
   .or{ display:flex; align-items:center; gap:10px; margin: 14px 0 10px; color:#9fb0c6; }
   .or::before, .or::after{
@@ -75,4 +209,3 @@
   
   /* prevent background scroll when modal open */
   body.modal-open{ overflow: hidden; }
-  

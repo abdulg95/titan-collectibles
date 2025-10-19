@@ -3,14 +3,7 @@ import './terms.css' // reuse the same legal styles
 export default function Privacy(){
   return (
     <div className="terms">{/* reuse .terms wrapper styles */}
-      <div className="terms-hero">
-        <div className="container">
-          <div className="terms-brand">
-            <img src="/assets/logo-titan.svg" alt="TITAN" />
-            <span>COLLECTIBLES</span>
-          </div>
-        </div>
-      </div>
+
 
       <div className="container">
         <article className="terms-card">

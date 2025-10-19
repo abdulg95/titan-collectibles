@@ -12,7 +12,20 @@ export default function ProductDescription(){
     price: "$20",
     bullets: [
       "4 cards per pack",
-      "Guaranteed 1 diamond card per pack"
+      "Guaranteed 1 diamond card per pack",
+      "Digital cards include:",
+      "Athlete sports card",
+      "About",
+      "Bio",
+      "Exclusive video*",
+      "Top achievements",
+      "Quote*",
+      "Equipment*",
+      "Best qualification*",
+      "Career statistics*",
+      "Socials",
+      "Sponsors",
+      "*Only available on diamond tier cards"
     ],
     details: [
       "Step into the world of elite archery with the first-ever officially licensed World Archery trading card series. Each pack features athletes at the top of their game—Olympians, world champions, and stars who define the sport.",
@@ -22,8 +35,7 @@ export default function ProductDescription(){
     ],
     specs: [
       ["Card dimensions", "63.5mm x 88.9mm"],
-      ["Type", "Foil pack"],
-      ["SKU", "#7201440"]
+      ["Type", "Foil pack"]
     ]
   }
 
@@ -44,7 +56,7 @@ export default function ProductDescription(){
         >
           Add to Cart
         </button> */}
-        <AddToCartButton handle="series-1-card-pack" style="pill" />
+        <AddToCartButton handle="series-1-card-pack" style="primary" />
       </div>
 
       {/* === The info card === */}

@@ -153,7 +153,7 @@
   }
   .cart-btn:hover{ background: rgba(255,255,255,.10); }
   
-  .cart-svg{
+  .cart-img{
     display: inline-block !important;   /* ← override any global rule */
     vertical-align: middle;
     flex-shrink: 0;
@@ -195,7 +195,7 @@
     border-radius: 10px;
   }
   
-  .cart-svg{
+  .cart-img{
     display: inline-block !important;
     vertical-align: middle;
     width: 24px;

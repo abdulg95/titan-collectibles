@@ -4,14 +4,6 @@ export default function Terms(){
   return (
     <div className="terms">
       {/* gradient cap to match your style */}
-      <div className="terms-hero">
-        <div className="container">
-          <div className="terms-brand">
-            <img src="/assets/logo-titan.svg" alt="TITAN" />
-            <span>COLLECTIBLES</span>
-          </div>
-        </div>
-      </div>
 
       <div className="container">
         <article className="terms-card">
