@@ -30,8 +30,8 @@ export default function SignUp(){
   if(ok) return (
     <div style={{maxWidth:420, margin:'0 auto', padding:24}}>
       <h1 style={{fontWeight:700, fontSize:22, marginBottom:8}}>Check your email</h1>
-      <p>We’ve sent a verification link to <b>{email}</b>. Click it to activate your account.</p>
-      <p style={{marginTop:12, fontSize:12, color:'#666'}}>Didn’t get it? Check spam or try again later.</p>
+      <p>We've sent a verification link to <b>{email}</b>. Click it to activate your account.</p>
+      <p style={{marginTop:12, fontSize:12, color:'#666'}}>Didn't get it? Check spam or try again later.</p>
     </div>
   )
 

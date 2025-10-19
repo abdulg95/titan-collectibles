@@ -19,7 +19,7 @@ export default function Home(){
       title: "Unlock the",
       highlight: "digital",
       subtitle: "experience",
-      description: "Powered by NFC technology, TITAN cards are more than just collectibles. Tap your card to unlock exclusive digital content and connect with the athletes you love."
+      description: ""
     },
     {
       title: "Exclusive",
@@ -66,7 +66,7 @@ export default function Home(){
   }, [])
 
   return (
-    <div className="home">
+    <div className={`home ${currentTextIndex === 4 ? 'dark-background' : ''}`}>
        <div className="top-bg">
         {/* HERO */}
         <section id="hero" className="hero">
@@ -174,6 +174,11 @@ export default function Home(){
                       </div>
                     </div>
                   )}
+                  {currentTextIndex === 4 && (
+                    <div className="titan-icon-container">
+                      <img src="/assets/titan-icon 1.png" alt="TITAN" className="titan-icon" />
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -181,27 +186,57 @@ export default function Home(){
        </div>
       
 
-      {/* VALUE POINTS */}
-      <section className="value">
-        <div className="container value__grid">
-          <Reveal delay={0.05}>
-            <div className="value__card">
-              <h3>Direct support to the athletes</h3>
-              <p>Every pack purchased directly contributes to featured athletes.</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <div className="value__card">
-              <h3>Verified authenticity</h3>
-              <p>NFC tags are verified on tap and bound to a single collection.</p>
-            </div>
-          </Reveal>
-          <Reveal delay={0.25}>
-            <div className="value__card">
-              <h3>Unlock the bonus card</h3>
-              <p>Collect all 8 to unlock an exclusive 9th bonus card.</p>
-            </div>
-          </Reveal>
+      {/* ABOUT SECTION */}
+      <section className="about-section">
+        <div className="container about-section__content">
+          <div className="about-section__amount">
+            $<span className="amount-spacing">1800+</span>
+          </div>
+          <div className="about-section__text">
+            <h3 className="about-section__title">
+              Direct support
+              <span className="about-section__accent"> to<br />the athletes</span>
+            </h3>
+            <p className="about-section__description">
+              Every pack sold puts money straight into the hands of the athletes featured, helping fund their training and competitions. When you collect Titan cards, you're supporting the athletes you love.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* UNLOCK BONUS CARD SECTION */}
+      <section className="unlock-bonus-section">
+        <div className="container unlock-bonus-section__content">
+          <div className="unlock-bonus-section__image">
+            <img 
+              src="/assets/Diamond-card-package.png" 
+              alt="Bonus Card" 
+              className="bonus-card-image"
+            />
+          </div>
+          <div className="unlock-bonus-section__text">
+            <h3 className="unlock-bonus-section__title">
+              Unlock<span className="unlock-bonus-section__accent"> the </span>
+              <span className="unlock-bonus-section__highlight">bonus card</span>
+            </h3>
+            <p className="unlock-bonus-section__description">
+              Collect all 8 cards in the Series One set to unlock the exclusive 9th card. Trust us, it's a card most archery fans would want.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* VIDEO SECTION */}
+      <section className="video-section">
+        <div className="video-section__container">
+          <iframe 
+            className="video-section__iframe"
+            src="https://www.youtube.com/embed/j_bccP1N0JA?autoplay=1&mute=1&loop=1&playlist=j_bccP1N0JA"
+            title="TITAN Website Video"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
         </div>
       </section>
 
@@ -226,6 +261,24 @@ export default function Home(){
 
           <div className="about__image">
             <img src="/assets/about-team.jpg" alt="Titan team" />
+          </div>
+        </div>
+      </section>
+
+      {/* CELEBRATE THE SPORT SECTION */}
+      <section className="celebrate-section">
+        <div className="celebrate-section__background">
+          <img src="/GWANGJU_TITAN_11SEP25_0022.jpg" alt="Celebrate the sport" />
+        </div>
+        <div className="container celebrate-section__content">
+          <div className="celebrate-section__text">
+            <h2 className="celebrate-section__title">
+              celebrate the sport.<br />
+              honour the athlete.
+            </h2>
+            <Link to="/buy" className="btn-primary celebrate-section__button">
+              Buy Now
+            </Link>
           </div>
         </div>
       </section>

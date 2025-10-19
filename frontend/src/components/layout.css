@@ -27,7 +27,7 @@
   .brand__titan{ font-weight:800; font-size:22px; }
   .brand__sub{ font-size:11px; color: var(--muted); letter-spacing:.28em }
   
-  .nav-links{ display:flex; gap:28px; justify-content:center; }
+  .nav-links{ display:flex; gap:28px; justify-content:center; margin-left: 40px; }
   .nav-links a,
   .nav-link{ 
     color: var(--text); 
@@ -40,11 +40,11 @@
   
   .nav-actions{ display:flex; gap:12px; justify-content:flex-end; align-items:center; grid-column: 3; }
   
-  /* Desktop: Position cart and profile at end of grid */
+  /* Desktop: Position cart and profile closer to right edge */
   @media (min-width: 901px) {
     .nav-actions {
       justify-self: end;
-      margin-right: -40px;
+      margin-right: -80px;
       padding-right: 0;
     }
   }
