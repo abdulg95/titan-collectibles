@@ -9,6 +9,10 @@ bp = Blueprint('scan_api', __name__, url_prefix='/api/scan')
 ETRNL_URL = 'https://third-party.etrnl.app/v1/tags/verify-authenticity'
 ETRNL_KEY = os.environ.get('ETRNL_PRIVATE_KEY', '')
 
+# Titan NFC verification
+TITAN_NFC_URL = os.environ.get('TITAN_NFC_URL', 'https://titan-nfc-144404400823.us-east4.run.app/tags/authenticity')
+TITAN_NFC_KEY = os.environ.get('TITAN_NFC_KEY', 'UIZ3GBlAXrfaHtnAoP4fPPeCjs2mYWAw')
+
 def _g(param, *alts):
     v = request.args.get(param)
     if v: return v
@@ -284,3 +288,53 @@ def dev_fake_scan():
     except Exception as e:
         db.session.rollback()
         return jsonify({'ok': False, 'reason': 'mint_failed', 'error': str(e)}), 500
+
+# Titan NFC verification endpoint
+@bp.route('/verify', methods=['GET'])
+def verify_titan_nfc():
+    """Verify a card using Titan NFC service"""
+    try:
+        card_id = request.args.get('id')
+        data = request.args.get('data')
+        
+        if not card_id or not data:
+            return jsonify({'ok': False, 'reason': 'missing_params'}), 400
+        
+        # Call Titan NFC verification service
+        headers = {
+            'Authorization': f'Bearer {TITAN_NFC_KEY}',
+            'Content-Type': 'application/json'
+        }
+        
+        params = {
+            'id': card_id,
+            'data': data
+        }
+        
+        response = requests.get(TITAN_NFC_URL, headers=headers, params=params, timeout=10)
+        
+        if response.status_code == 200:
+            result = response.json()
+            if result.get('authentic', False):
+                # Find the card template
+                template = _find_template(card_id)
+                if template:
+                    return jsonify({
+                        'ok': True,
+                        'authentic': True,
+                        'template': {
+                            'id': str(template.id),
+                            'template_code': template.template_code,
+                            'version': template.version,
+                            'athlete_id': template.athlete_id
+                        }
+                    })
+                else:
+                    return jsonify({'ok': False, 'reason': 'template_not_found'}), 404
+            else:
+                return jsonify({'ok': False, 'reason': 'not_authentic'}), 400
+        else:
+            return jsonify({'ok': False, 'reason': 'verification_failed'}), 500
+            
+    except Exception as e:
+        return jsonify({'ok': False, 'reason': 'error', 'error': str(e)}), 500
