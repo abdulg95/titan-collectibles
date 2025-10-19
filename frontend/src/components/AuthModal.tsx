@@ -54,7 +54,6 @@ export default function AuthModal({ open, onClose, onSignedIn }: Props){
   useEffect(() => {
     const checkGoogleLoaded = () => {
       if (window.google && window.google.maps && window.google.maps.places) {
-        console.log('Google Places API loaded successfully')
         return true
       }
       return false
@@ -108,7 +107,6 @@ export default function AuthModal({ open, onClose, onSignedIn }: Props){
       setPasswordErrors(errors)
       // Only show validation if user has already tried to submit
       if (showPasswordValidation) {
-        console.log('Password validation:', { password: newPassword, errors })
       }
     }
   }
@@ -296,7 +294,6 @@ export default function AuthModal({ open, onClose, onSignedIn }: Props){
                         try {
                           const results = await geocodeByAddress(address)
                           const latLng = await getLatLng(results[0])
-                          console.log('Selected location:', address, latLng)
                         } catch (error) {
                           console.error('Error geocoding address:', error)
                         }

@@ -92,7 +92,7 @@
     .nav-links a{ display: none !important }
     .nav-link{ display: none !important }
     .cart-btn{ display: none !important }
-    .btn-outline{ display: none !important }
+    .site-nav .btn-outline{ display: none !important }
   }
 
   @media (max-width: 480px){
@@ -101,7 +101,7 @@
     .nav-link{ display: none !important }
     .nav-actions{ display: none !important }
     .cart-btn{ display: none !important }
-    .btn-outline{ display: none !important }
+    .site-nav .btn-outline{ display: none !important }
   }
   .brand__logo{ 
     height:26px; 

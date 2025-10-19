@@ -818,7 +818,7 @@ summary{ cursor:pointer; font-weight: 600; outline:none; }
     transform: scale(1.3);
   }
   
-  /* Mobile: Hide scrollbar inside iPhone */
+  /* Hide scrollbar inside iPhone on all devices */
   .phone-screen {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */

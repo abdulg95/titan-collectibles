@@ -20,8 +20,6 @@ export default function UserMenu({ user, onSignOut }: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
 
-  // Debug: Log user data to see what we're working with
-  console.log('UserMenu received user:', user)
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -56,11 +54,11 @@ export default function UserMenu({ user, onSignOut }: Props) {
           src={user.picture || "/assets/default-avatar.jpg"} 
           alt="Profile" 
           className="user-avatar"
-          onLoad={() => console.log('Profile image loaded successfully:', user.picture)}
           onError={(e) => {
-            console.log('Profile image failed to load:', user.picture)
-            console.log('Error event:', e)
-            e.currentTarget.src = "/assets/default-avatar.jpg"
+            // If the image fails to load (429 error, etc.), use default avatar
+            if (e.currentTarget.src !== "/assets/default-avatar.jpg") {
+              e.currentTarget.src = "/assets/default-avatar.jpg"
+            }
           }}
         />
         <svg 
@@ -87,10 +85,7 @@ export default function UserMenu({ user, onSignOut }: Props) {
               src={user.picture || "/assets/default-avatar.jpg"} 
               alt="Profile" 
               className="dropdown-avatar"
-              onLoad={() => console.log('Dropdown profile image loaded successfully:', user.picture)}
               onError={(e) => {
-                console.log('Dropdown profile image failed to load:', user.picture)
-                console.log('Error event:', e)
                 e.currentTarget.src = "/assets/default-avatar.jpg"
               }}
             />

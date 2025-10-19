@@ -61,7 +61,6 @@ export default function DevScan() {
       }
 
       // Show success message
-      console.log('✅ Fake scan successful:', data)
       setSuccess(`Card #${data.serial_no} minted!`)
       
       // Refresh templates to show updated minted count

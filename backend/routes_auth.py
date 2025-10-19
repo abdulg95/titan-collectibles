@@ -116,6 +116,11 @@ def me():
         return jsonify({"user": None})
     return jsonify({"user": user_json(u)})
 
+@bp.post("/logout")
+def logout():
+    session.clear()
+    return jsonify({"ok": True})
+
 @bp.route("/update-profile", methods=["POST", "OPTIONS"])
 def update_profile():
     # Handle CORS preflight

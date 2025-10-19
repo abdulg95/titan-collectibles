@@ -69,9 +69,7 @@ export default function Profile() {
     if (!user || !editedName.trim()) return
     
     try {
-      console.log('Saving name:', editedName.trim())
       const url = new URL('/api/auth/update-profile', API).toString()
-      console.log('API URL:', url)
       
       const response = await fetch(url, {
         method: 'POST',
@@ -80,12 +78,8 @@ export default function Profile() {
         body: JSON.stringify({ name: editedName.trim() })
       })
       
-      console.log('Response status:', response.status)
-      console.log('Response headers:', response.headers)
-      
       if (response.ok) {
         const result = await response.json()
-        console.log('Update result:', result)
         
         // Update the user state with the new data from backend
         if (result.user) {
@@ -205,10 +199,16 @@ export default function Profile() {
           {user && (
             <div className="profile-section">
               <div className="profile-info">
-                <img 
+                <img
                   src={user.picture || "/assets/default-avatar.jpg"} 
                   alt="Profile" 
-                  className="profile-avatar" 
+                  className="profile-avatar"
+                  onError={(e) => {
+                    // If the image fails to load (429 error, etc.), use default avatar
+                    if (e.currentTarget.src !== "/assets/default-avatar.jpg") {
+                      e.currentTarget.src = "/assets/default-avatar.jpg"
+                    }
+                  }}
                 />
                 <div className="profile-details">
                   <h2 className="profile-name">{user.name || user.email}</h2>
@@ -316,10 +316,16 @@ export default function Profile() {
       {/* Profile Header */}
       {user && (
         <div className="profile-header">
-          <img 
+          <img
             src={user.picture || "/assets/default-avatar.jpg"} 
             alt="Profile" 
-            className="profile-avatar" 
+            className="profile-avatar"
+            onError={(e) => {
+              // If the image fails to load (429 error, etc.), use default avatar
+              if (e.currentTarget.src !== "/assets/default-avatar.jpg") {
+                e.currentTarget.src = "/assets/default-avatar.jpg"
+              }
+            }}
           />
           <div className="profile-details">
             {isEditingName ? (

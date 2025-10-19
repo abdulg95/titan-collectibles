@@ -43,7 +43,6 @@ export default function ScanLanding(){
 
     ;(async()=>{
       try {
-        console.log('Verifying with URL:', fullUrl)
         const r = await fetch(fullUrl, { credentials:'include' })
         const j = await r.json().catch(()=>null)
 
