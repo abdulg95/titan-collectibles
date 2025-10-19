@@ -59,12 +59,28 @@ def _verify_with_titan_nfc(tag_id: str, encrypted_data: str) -> dict:
         )
         
         if response.status_code == 200:
-            data = response.json()
-            return {
-                'success': True,
-                'authentic': data.get('authentic', False),
-                'data': data
-            }
+            try:
+                data = response.json()
+                if isinstance(data, dict):
+                    return {
+                        'success': True,
+                        'authentic': data.get('authentic', False),
+                        'data': data
+                    }
+                else:
+                    # Handle case where response is not a dict (e.g., boolean)
+                    return {
+                        'success': True,
+                        'authentic': bool(data),
+                        'data': data
+                    }
+            except ValueError:
+                # Handle case where response is not valid JSON
+                return {
+                    'success': True,
+                    'authentic': False,
+                    'data': response.text
+                }
         else:
             return {
                 'success': False,
