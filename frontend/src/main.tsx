@@ -42,6 +42,7 @@ const router = createBrowserRouter([
       { path: '/profile', element: <Profile/> },
 
       { path: '/scan/:tagId', element: <ScanLanding/> },
+      { path: '/scan', element: <ScanLanding/> },
       // wherever your routes are defined (e.g., main router)
       { path: '/scan/registered', element: <ScanRegistered/> },
       { path: '/cards/:cardId', element: <CardView/> },
