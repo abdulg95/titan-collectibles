@@ -117,13 +117,12 @@ except Exception:
 # ---------------- session endpoints ----------------
 @bp.get("/me")
 def me():
-    # Try Authorization header first (for Safari mobile compatibility)
-    auth_header = request.headers.get('Authorization')
-    print(f"🔍 /me endpoint: auth_header={auth_header[:50] + '...' if auth_header else None}, sid={session.get('uid')}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
+    # Try auth token from query parameter first (for Safari mobile compatibility)
+    auth_token = request.args.get('auth_token')
+    print(f"🔍 /me endpoint: auth_token={auth_token[:50] + '...' if auth_token else None}, sid={session.get('uid')}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     
-    if auth_header and auth_header.startswith('Bearer '):
-        token = auth_header[7:]  # Remove 'Bearer ' prefix
-        user_id = _verify_auth_token(token)
+    if auth_token:
+        user_id = _verify_auth_token(auth_token)
         if user_id:
             uid = _uuid(user_id)
             if uid:
@@ -136,7 +135,26 @@ def me():
                     response.headers['Access-Control-Allow-Credentials'] = 'true'
                     response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
                     return response
-        print(f"❌ Invalid auth token: {token[:20]}...")
+        print(f"❌ Invalid auth token: {auth_token[:20]}...")
+    
+    # Try Authorization header as fallback
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header[7:]  # Remove 'Bearer ' prefix
+        user_id = _verify_auth_token(token)
+        if user_id:
+            uid = _uuid(user_id)
+            if uid:
+                u = db.session.get(User, uid)
+                if u:
+                    print(f"✅ User found via auth header: {u.email}")
+                    response = jsonify({"user": user_json(u)})
+                    # Explicitly set CORS headers
+                    response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+                    response.headers['Access-Control-Allow-Credentials'] = 'true'
+                    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+                    return response
+        print(f"❌ Invalid auth header token: {token[:20]}...")
     
     # Fallback to session-based authentication
     sid = session.get("uid")
