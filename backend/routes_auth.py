@@ -293,14 +293,10 @@ def google_cb():
     auth_token = _generate_auth_token(user.id)
     
     print(f"🔐 Google callback: Set session uid={session['uid']}, auth_token={auth_token[:20]}..., user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
-    dest = session.pop("post_login_redirect", None) or _frontend_origin()
     
-    # Add auth token to redirect URL for Safari mobile compatibility
-    dest_url = urlparse(dest)
-    query_params = parse_qs(dest_url.query)
-    query_params['auth_token'] = [auth_token]
-    new_query = urlencode(query_params, doseq=True)
-    dest_with_token = f"{dest_url.scheme}://{dest_url.netloc}{dest_url.path}?{new_query}"
+    # Always redirect to clean frontend URL with auth token (ignore any previous redirect with errors)
+    frontend_origin = _frontend_origin()
+    dest_with_token = f"{frontend_origin}?auth_token={auth_token}"
     
     return redirect(dest_with_token)
 
