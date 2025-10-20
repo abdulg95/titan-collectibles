@@ -130,26 +130,51 @@ def me():
                 u = db.session.get(User, uid)
                 if u:
                     print(f"✅ User found via auth token: {u.email}")
-                    return jsonify({"user": user_json(u)})
+                    response = jsonify({"user": user_json(u)})
+                    # Explicitly set CORS headers
+                    response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+                    response.headers['Access-Control-Allow-Credentials'] = 'true'
+                    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+                    return response
         print(f"❌ Invalid auth token: {token[:20]}...")
     
     # Fallback to session-based authentication
     sid = session.get("uid")
     if not sid:
         print("❌ No session ID found")
-        return jsonify({"user": None})
+        response = jsonify({"user": None})
+        # Explicitly set CORS headers
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+        return response
     uid = _uuid(sid)
     if not uid:
         print(f"❌ Invalid session ID: {sid}")
         session.clear()
-        return jsonify({"user": None})
+        response = jsonify({"user": None})
+        # Explicitly set CORS headers
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+        return response
     u = db.session.get(User, uid)
     if not u:
         print(f"❌ User not found for UID: {uid}")
         session.clear()
-        return jsonify({"user": None})
+        response = jsonify({"user": None})
+        # Explicitly set CORS headers
+        response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+        return response
     print(f"✅ User found: {u.email}")
-    return jsonify({"user": user_json(u)})
+    response = jsonify({"user": user_json(u)})
+    # Explicitly set CORS headers
+    response.headers['Access-Control-Allow-Origin'] = request.headers.get('Origin', '*')
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-Requested-With'
+    return response
 
 @bp.post("/logout")
 def logout():
