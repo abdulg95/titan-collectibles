@@ -119,6 +119,8 @@ except Exception:
 def me():
     # Try Authorization header first (for Safari mobile compatibility)
     auth_header = request.headers.get('Authorization')
+    print(f"🔍 /me endpoint: auth_header={auth_header[:50] + '...' if auth_header else None}, sid={session.get('uid')}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
+    
     if auth_header and auth_header.startswith('Bearer '):
         token = auth_header[7:]  # Remove 'Bearer ' prefix
         user_id = _verify_auth_token(token)
@@ -133,7 +135,6 @@ def me():
     
     # Fallback to session-based authentication
     sid = session.get("uid")
-    print(f"🔍 /me endpoint: sid={sid}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     if not sid:
         print("❌ No session ID found")
         return jsonify({"user": None})
