@@ -213,12 +213,27 @@ def update_profile():
 def google_start():
     nxt = request.args.get("next") or _frontend_origin()
     session["post_login_redirect"] = nxt
+    
+    # Debug: Log session info
+    print(f"🔍 Google start debug:")
+    print(f"  - Session ID: {session.get('_id', 'None')}")
+    print(f"  - Redirect to: {nxt}")
+    print(f"  - User agent: {request.headers.get('User-Agent', 'Unknown')[:50]}...")
+    
     client = get_oauth_client()
     return client.authorize_redirect(redirect_uri=_redirect_uri(), prompt="select_account")
 
 @bp.get("/google/callback")
 def google_cb():
     client = get_oauth_client()
+    
+    # Debug: Log the incoming request parameters
+    print(f"🔍 Google callback debug:")
+    print(f"  - State param: {request.args.get('state')}")
+    print(f"  - Code param: {request.args.get('code', '')[:20]}...")
+    print(f"  - Session ID: {session.get('_id', 'None')}")
+    print(f"  - User agent: {request.headers.get('User-Agent', 'Unknown')[:50]}...")
+    
     try:
         token = client.authorize_access_token()
 
