@@ -41,19 +41,19 @@ export default function Layout(){
 
   async function fetchMe(){
     try{
-      const headers: HeadersInit = { credentials:'include' }
-      
-      // Add auth token from sessionStorage if available (for Safari mobile compatibility)
       const authToken = sessionStorage.getItem('auth_token')
+      let url = new URL('/api/auth/me', API).toString()
+      
       if (authToken) {
-        headers['Authorization'] = `Bearer ${authToken}`
-        console.log('🔐 Sending Authorization header:', `Bearer ${authToken.substring(0, 20)}...`)
+        // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+        url += `?auth_token=${encodeURIComponent(authToken)}`
+        console.log('🔐 Sending auth token as query parameter:', `${authToken.substring(0, 20)}...`)
       } else {
         console.log('❌ No auth token found in sessionStorage')
       }
       
-      console.log('🌐 Fetching /api/auth/me with headers:', Object.keys(headers))
-      const r = await fetch(new URL('/api/auth/me', API).toString(), headers)
+      console.log('🌐 Fetching /api/auth/me with URL:', url)
+      const r = await fetch(url, { credentials:'include' })
       const j = await r.json()
       console.log('📥 /api/auth/me response:', j)
       setMe(j.user)
@@ -98,17 +98,22 @@ export default function Layout(){
   }
 
   async function refreshMe(){
-    const headers: HeadersInit = { credentials:'include' }
-    
-    // Add auth token from sessionStorage if available (for Safari mobile compatibility)
-    const authToken = sessionStorage.getItem('auth_token')
-    if (authToken) {
-      headers['Authorization'] = `Bearer ${authToken}`
+    try {
+      const authToken = sessionStorage.getItem('auth_token')
+      let url = new URL('/api/auth/me', API).toString()
+      
+      if (authToken) {
+        // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+        url += `?auth_token=${encodeURIComponent(authToken)}`
+      }
+      
+      const r = await fetch(url, { credentials: 'include' })
+      const j = await r.json()
+      setMe(j.user || null)
+    } catch (error) {
+      console.error('Error refreshing user data:', error)
+      setMe(null)
     }
-    
-    const r = await fetch(new URL('/api/auth/me', API).toString(), headers)
-    const j = await r.json()
-    setMe(j.user || null)
   }
 
   function signInGoogle(){
@@ -116,9 +121,23 @@ export default function Layout(){
     window.location.href = new URL(`/api/auth/google/start?next=${encodeURIComponent(nxt)}`, API).toString()
   }
   async function signOut(){
-    await fetch(new URL('/api/auth/logout', API).toString(), { method:'POST', credentials:'include' })
-    setMe(null)
-    nav('/')
+    try {
+      const authToken = sessionStorage.getItem('auth_token')
+      let url = new URL('/api/auth/logout', API).toString()
+      
+      if (authToken) {
+        // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+        url += `?auth_token=${encodeURIComponent(authToken)}`
+      }
+      
+      await fetch(url, { method:'POST', credentials:'include' })
+      setMe(null)
+      nav('/')
+    } catch (error) {
+      console.error('Error during logout:', error)
+      setMe(null)
+      nav('/')
+    }
   }
 
   const hideHeader = location.pathname.startsWith('/cards') || (location.pathname.startsWith('/profile') && isMobile)
