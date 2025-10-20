@@ -47,10 +47,15 @@ export default function Layout(){
       const authToken = sessionStorage.getItem('auth_token')
       if (authToken) {
         headers['Authorization'] = `Bearer ${authToken}`
+        console.log('🔐 Sending Authorization header:', `Bearer ${authToken.substring(0, 20)}...`)
+      } else {
+        console.log('❌ No auth token found in sessionStorage')
       }
       
+      console.log('🌐 Fetching /api/auth/me with headers:', Object.keys(headers))
       const r = await fetch(new URL('/api/auth/me', API).toString(), headers)
       const j = await r.json()
+      console.log('📥 /api/auth/me response:', j)
       setMe(j.user)
     } finally { setLoading(false) }
   }
@@ -63,6 +68,14 @@ export default function Layout(){
     const hashParams = new URLSearchParams(location.hash.substring(1))
     const authToken = urlParams.get('auth_token') || hashParams.get('auth_token')
     
+    console.log('🔍 Token extraction debug:', {
+      search: location.search,
+      hash: location.hash,
+      urlParams: Object.fromEntries(urlParams.entries()),
+      hashParams: Object.fromEntries(hashParams.entries()),
+      authToken: authToken ? `${authToken.substring(0, 20)}...` : null
+    })
+    
     if (authToken) {
       // Store the auth token in sessionStorage
       sessionStorage.setItem('auth_token', authToken)
@@ -73,7 +86,7 @@ export default function Layout(){
       newUrl.hash = newUrl.hash.replace(/[?&]auth_token=[^&]*/, '').replace(/^#/, '')
       window.history.replaceState({}, '', newUrl.toString())
       
-      console.log('🔐 Auth token stored from URL for Safari mobile compatibility')
+      console.log('🔐 Auth token stored from URL for Safari mobile compatibility:', `${authToken.substring(0, 20)}...`)
       
       // Refresh user data with the new token
       fetchMe()
