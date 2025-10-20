@@ -56,5 +56,14 @@ app.register_blueprint(collection_bp)
 def health():
     return {"ok": True}
 
+# Debug CORS preflight requests
+@app.options('/api/auth/me')
+def options_me():
+    print(f"🔍 CORS preflight OPTIONS request for /api/auth/me")
+    print(f"  - Origin: {request.headers.get('Origin')}")
+    print(f"  - Access-Control-Request-Method: {request.headers.get('Access-Control-Request-Method')}")
+    print(f"  - Access-Control-Request-Headers: {request.headers.get('Access-Control-Request-Headers')}")
+    return "", 200
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv('PORT', '5001')), debug=True)
