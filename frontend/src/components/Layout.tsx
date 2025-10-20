@@ -41,19 +41,56 @@ export default function Layout(){
 
   async function fetchMe(){
     try{
-      const r = await fetch(new URL('/api/auth/me', API).toString(), { credentials:'include' })
+      const headers: HeadersInit = { credentials:'include' }
+      
+      // Add auth token from sessionStorage if available (for Safari mobile compatibility)
+      const authToken = sessionStorage.getItem('auth_token')
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`
+      }
+      
+      const r = await fetch(new URL('/api/auth/me', API).toString(), headers)
       const j = await r.json()
       setMe(j.user)
     } finally { setLoading(false) }
   }
   useEffect(()=>{ fetchMe() }, [])
 
+  // Handle auth token from URL parameters (for Safari mobile compatibility)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search)
+    const authToken = urlParams.get('auth_token')
+    
+    if (authToken) {
+      // Store the auth token in sessionStorage
+      sessionStorage.setItem('auth_token', authToken)
+      
+      // Remove auth_token from URL to clean up the address bar
+      const newUrl = new URL(window.location.href)
+      newUrl.searchParams.delete('auth_token')
+      window.history.replaceState({}, '', newUrl.toString())
+      
+      console.log('🔐 Auth token stored from URL for Safari mobile compatibility')
+      
+      // Refresh user data with the new token
+      fetchMe()
+    }
+  }, [location])
+
   function onSignInClick(){
     setShowAuth(true)            // ⬅️ open modal instead of redirecting
   }
 
   async function refreshMe(){
-    const r = await fetch(new URL('/api/auth/me', API).toString(), { credentials:'include' })
+    const headers: HeadersInit = { credentials:'include' }
+    
+    // Add auth token from sessionStorage if available (for Safari mobile compatibility)
+    const authToken = sessionStorage.getItem('auth_token')
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`
+    }
+    
+    const r = await fetch(new URL('/api/auth/me', API).toString(), headers)
     const j = await r.json()
     setMe(j.user || null)
   }

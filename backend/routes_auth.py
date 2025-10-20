@@ -2,7 +2,7 @@
 import os
 import re
 import uuid
-from urllib.parse import urljoin, urlencode
+from urllib.parse import urljoin, urlencode, urlparse, parse_qs
 
 from flask import Blueprint, request, jsonify, session, redirect, current_app
 from authlib.integrations.flask_client import OAuth
@@ -58,6 +58,20 @@ def _serializer(kind: str = 'email') -> URLSafeTimedSerializer:
 def valid_email(s: str) -> bool:
     return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", s or ""))
 
+def _generate_auth_token(user_id):
+    """Generate a secure auth token for URL-based authentication"""
+    serializer = URLSafeTimedSerializer(current_app.secret_key)
+    return serializer.dumps(str(user_id), salt=current_app.config.get('AUTH_TOKEN_SALT', 'auth-token'))
+
+def _verify_auth_token(token):
+    """Verify and extract user ID from auth token"""
+    try:
+        serializer = URLSafeTimedSerializer(current_app.secret_key)
+        user_id = serializer.loads(token, salt=current_app.config.get('AUTH_TOKEN_SALT', 'auth-token'), max_age=3600)  # 1 hour expiry
+        return user_id
+    except (BadSignature, SignatureExpired):
+        return None
+
 def _id_str(val) -> str:
     """Always return a plain string for IDs; prefer hex (no dashes)."""
     if isinstance(val, uuid.UUID):
@@ -103,6 +117,21 @@ except Exception:
 # ---------------- session endpoints ----------------
 @bp.get("/me")
 def me():
+    # Try Authorization header first (for Safari mobile compatibility)
+    auth_header = request.headers.get('Authorization')
+    if auth_header and auth_header.startswith('Bearer '):
+        token = auth_header[7:]  # Remove 'Bearer ' prefix
+        user_id = _verify_auth_token(token)
+        if user_id:
+            uid = _uuid(user_id)
+            if uid:
+                u = db.session.get(User, uid)
+                if u:
+                    print(f"✅ User found via auth token: {u.email}")
+                    return jsonify({"user": user_json(u)})
+        print(f"❌ Invalid auth token: {token[:20]}...")
+    
+    # Fallback to session-based authentication
     sid = session.get("uid")
     print(f"🔍 /me endpoint: sid={sid}, session_id={session.get('_id', 'None')}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     if not sid:
@@ -244,9 +273,21 @@ def google_cb():
     db.session.commit()
 
     session["uid"] = _id_str(user.id)
-    print(f"🔐 Google callback: Set session uid={session['uid']}, user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
+    
+    # Generate auth token for URL-based authentication (Safari mobile compatibility)
+    auth_token = _generate_auth_token(user.id)
+    
+    print(f"🔐 Google callback: Set session uid={session['uid']}, auth_token={auth_token[:20]}..., user_agent={request.headers.get('User-Agent', 'Unknown')[:50]}...")
     dest = session.pop("post_login_redirect", None) or _frontend_origin()
-    return redirect(dest)
+    
+    # Add auth token to redirect URL for Safari mobile compatibility
+    dest_url = urlparse(dest)
+    query_params = parse_qs(dest_url.query)
+    query_params['auth_token'] = [auth_token]
+    new_query = urlencode(query_params, doseq=True)
+    dest_with_token = f"{dest_url.scheme}://{dest_url.netloc}{dest_url.path}?{new_query}"
+    
+    return redirect(dest_with_token)
 
 # ---------------- Email + Password ----------------
 @bp.post("/signup")
