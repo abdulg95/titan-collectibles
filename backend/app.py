@@ -57,8 +57,9 @@ def health():
     return {"ok": True}
 
 # Debug CORS preflight requests
-@app.options('/api/auth/me')
+@app.route('/api/auth/me', methods=['OPTIONS'])
 def options_me():
+    from flask import request
     print(f"🔍 CORS preflight OPTIONS request for /api/auth/me")
     print(f"  - Origin: {request.headers.get('Origin')}")
     print(f"  - Access-Control-Request-Method: {request.headers.get('Access-Control-Request-Method')}")
