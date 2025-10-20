@@ -69,7 +69,12 @@ export default function Profile() {
     if (!user || !editedName.trim()) return
     
     try {
-      const url = new URL('/api/auth/update-profile', API).toString()
+      const authToken = sessionStorage.getItem('auth_token')
+      let url = new URL('/api/auth/update-profile', API).toString()
+      
+      if (authToken) {
+        url += `?auth_token=${encodeURIComponent(authToken)}`
+      }
       
       const response = await fetch(url, {
         method: 'POST',
@@ -109,7 +114,14 @@ export default function Profile() {
 
   const refreshUserData = async () => {
     try {
-      const response = await fetch(new URL('/api/auth/me', API).toString(), { 
+      const authToken = sessionStorage.getItem('auth_token')
+      let url = new URL('/api/auth/me', API).toString()
+      
+      if (authToken) {
+        url += `?auth_token=${encodeURIComponent(authToken)}`
+      }
+      
+      const response = await fetch(url, { 
         credentials: 'include' 
       })
       if (response.ok) {
@@ -124,7 +136,19 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    fetch(new URL('/api/collection', API).toString(), { credentials: 'include' })
+    const authToken = sessionStorage.getItem('auth_token')
+    let url = new URL('/api/collection', API).toString()
+    
+    if (authToken) {
+      // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+      url += `?auth_token=${encodeURIComponent(authToken)}`
+      console.log('🔐 Sending auth token as query parameter for collection:', `${authToken.substring(0, 20)}...`)
+    } else {
+      console.log('❌ No auth token found in sessionStorage for collection fetch')
+    }
+    
+    console.log('🌐 Fetching /api/collection with URL:', url)
+    fetch(url, { credentials: 'include' })
       .then(r => (r.ok ? r.json() : Promise.reject(r)))
       .then(j => setItems(j.items || []))
       .catch(() => {
@@ -134,7 +158,19 @@ export default function Profile() {
   }, [])
 
   useEffect(() => {
-    fetch(new URL('/api/auth/me', API).toString(), { credentials: 'include' })
+    const authToken = sessionStorage.getItem('auth_token')
+    let url = new URL('/api/auth/me', API).toString()
+    
+    if (authToken) {
+      // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+      url += `?auth_token=${encodeURIComponent(authToken)}`
+      console.log('🔐 Sending auth token as query parameter for /me:', `${authToken.substring(0, 20)}...`)
+    } else {
+      console.log('❌ No auth token found in sessionStorage for /me fetch')
+    }
+    
+    console.log('🌐 Fetching /api/auth/me with URL:', url)
+    fetch(url, { credentials: 'include' })
       .then(r => (r.ok ? r.json() : Promise.reject(r)))
       .then(j => setUser(j.user || null))
       .catch(() => setUser(null))
@@ -168,7 +204,14 @@ export default function Profile() {
                 me={user}
                 onSignInClick={() => navigate('/signin')}
                 onSignOut={() => {
-                  fetch(new URL('/api/auth/logout', API).toString(), { 
+                  const authToken = sessionStorage.getItem('auth_token')
+                  let url = new URL('/api/auth/logout', API).toString()
+                  
+                  if (authToken) {
+                    url += `?auth_token=${encodeURIComponent(authToken)}`
+                  }
+                  
+                  fetch(url, { 
                     method: 'POST', 
                     credentials: 'include' 
                   }).then(() => {
@@ -272,7 +315,14 @@ export default function Profile() {
               me={user}
               onSignInClick={() => navigate('/signin')}
               onSignOut={() => {
-                fetch(new URL('/api/auth/logout', API).toString(), { 
+                const authToken = sessionStorage.getItem('auth_token')
+                let url = new URL('/api/auth/logout', API).toString()
+                
+                if (authToken) {
+                  url += `?auth_token=${encodeURIComponent(authToken)}`
+                }
+                
+                fetch(url, { 
                   method: 'POST', 
                   credentials: 'include' 
                 }).then(() => {

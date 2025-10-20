@@ -9,7 +9,19 @@ export type CollectionItem = {
   const API = import.meta.env.VITE_API_BASE_URL || '';
   
   export async function fetchMyCollection(): Promise<{ items: CollectionItem[] }> {
-    const r = await fetch(new URL('/api/collection', API).toString(), { credentials: 'include' });
+    const authToken = sessionStorage.getItem('auth_token')
+    let url = new URL('/api/collection', API).toString()
+    
+    if (authToken) {
+      // Send auth token as query parameter instead of header (Safari blocks Authorization header)
+      url += `?auth_token=${encodeURIComponent(authToken)}`
+      console.log('🔐 Sending auth token as query parameter for collection:', `${authToken.substring(0, 20)}...`)
+    } else {
+      console.log('❌ No auth token found in sessionStorage for collection fetch')
+    }
+    
+    console.log('🌐 Fetching /api/collection with URL:', url)
+    const r = await fetch(url, { credentials: 'include' });
     if (r.status === 401) throw new Error('auth');
     if (!r.ok) throw new Error('fetch_failed');
     return r.json();
