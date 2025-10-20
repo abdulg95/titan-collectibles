@@ -56,10 +56,12 @@ export default function Layout(){
   }
   useEffect(()=>{ fetchMe() }, [])
 
-  // Handle auth token from URL parameters (for Safari mobile compatibility)
+  // Handle auth token from URL hash fragment (for Safari mobile compatibility)
   useEffect(() => {
+    // Check both query parameters and hash fragments
     const urlParams = new URLSearchParams(location.search)
-    const authToken = urlParams.get('auth_token')
+    const hashParams = new URLSearchParams(location.hash.substring(1))
+    const authToken = urlParams.get('auth_token') || hashParams.get('auth_token')
     
     if (authToken) {
       // Store the auth token in sessionStorage
@@ -68,6 +70,7 @@ export default function Layout(){
       // Remove auth_token from URL to clean up the address bar
       const newUrl = new URL(window.location.href)
       newUrl.searchParams.delete('auth_token')
+      newUrl.hash = newUrl.hash.replace(/[?&]auth_token=[^&]*/, '').replace(/^#/, '')
       window.history.replaceState({}, '', newUrl.toString())
       
       console.log('🔐 Auth token stored from URL for Safari mobile compatibility')
