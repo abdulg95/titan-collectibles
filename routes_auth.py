@@ -299,7 +299,7 @@ def google_cb():
     if frontend_origin == "/":
         # If FRONTEND_ORIGIN is not set, use the production URL
         frontend_origin = "https://www.titansportshq.com/"
-    dest_with_token = f"{frontend_origin}?auth_token={auth_token}"
+    dest_with_token = f"{frontend_origin}#auth_token={auth_token}"
     
     print(f"🔗 Redirect URL: {dest_with_token}")
     return redirect(dest_with_token)
