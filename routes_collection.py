@@ -1,7 +1,9 @@
 # backend/routes_collection.py
-from flask import Blueprint, jsonify, session
-from models import db, CardInstance, CardTemplate, Athlete
+from flask import Blueprint, jsonify, session, request
+from models import db, CardInstance, CardTemplate, Athlete, User
 from sqlalchemy.orm import joinedload
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from flask import current_app
 import uuid as uuidlib
 
 bp = Blueprint('collection', __name__, url_prefix='/api/collection')
@@ -10,9 +12,30 @@ def _uuid(val):
     try: return uuidlib.UUID(str(val))
     except Exception: return None
 
+def _verify_auth_token(token):
+    """Verify and extract user ID from auth token"""
+    try:
+        serializer = URLSafeTimedSerializer(current_app.secret_key)
+        user_id = serializer.loads(token, salt=current_app.config.get('AUTH_TOKEN_SALT', 'auth-token'), max_age=3600)  # 1 hour expiry
+        return user_id
+    except (BadSignature, SignatureExpired):
+        return None
+
 @bp.get('')
 def my_collection():
-    uid = _uuid(session.get('uid'))
+    # Try auth token from query parameter first (for Safari mobile compatibility)
+    auth_token = request.args.get('auth_token')
+    uid = None
+    
+    if auth_token:
+        user_id = _verify_auth_token(auth_token)
+        if user_id:
+            uid = _uuid(user_id)
+    
+    # Fallback to session-based authentication
+    if not uid:
+        uid = _uuid(session.get('uid'))
+    
     if not uid:
         return jsonify({'error':'unauthorized'}), 401
 
