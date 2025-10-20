@@ -296,6 +296,9 @@ def google_cb():
     
     # Always redirect to clean frontend URL with auth token (ignore any previous redirect with errors)
     frontend_origin = _frontend_origin()
+    if frontend_origin == "/":
+        # If FRONTEND_ORIGIN is not set, use the production URL
+        frontend_origin = "https://www.titansportshq.com/"
     dest_with_token = f"{frontend_origin}?auth_token={auth_token}"
     
     return redirect(dest_with_token)
