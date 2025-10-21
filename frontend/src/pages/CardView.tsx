@@ -181,7 +181,14 @@ export default function CardView() {
         const r = await fetch(url.toString(), { credentials: 'include' })
         if (!r.ok) throw new Error(`Card ${r.status}`)
         const j: CardResponse = await r.json()
-        if (!canceled) setCard(j)
+        if (!canceled) {
+          setCard(j)
+          // Debug sponsors data
+          console.log('🔍 Card data loaded:', j)
+          console.log('🔍 Athlete data:', j.template?.athlete)
+          console.log('🔍 Sponsors data:', j.template?.athlete?.sponsors)
+          console.log('🔍 Sponsors length:', j.template?.athlete?.sponsors?.length)
+        }
       } catch (e: any) {
         if (!canceled) setErr(e?.message || 'Failed to load card')
       } finally {
@@ -724,9 +731,13 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
+            <div style={{backgroundColor: 'red', color: 'white', padding: '10px', margin: '10px 0'}}>
+              DEBUG: Sponsors section is rendering! Count: {athlete.sponsors.length}
+            </div>
             <div className="sponsors-grid">
-              {athlete.sponsors.map((sponsor, index) => (
-                sponsor.url ? (
+              {athlete.sponsors.map((sponsor, index) => {
+                console.log('🔍 Rendering sponsor:', sponsor.name, 'logo_url:', sponsor.logo_url)
+                return sponsor.url ? (
                   <a 
                     key={index} 
                     href={sponsor.url} 
@@ -737,6 +748,8 @@ export default function CardView() {
                     <img 
                       src={sponsor.logo_url} 
                       alt={sponsor.name}
+                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
+                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
                     />
                   </a>
                 ) : (
@@ -744,10 +757,12 @@ export default function CardView() {
                     <img 
                       src={sponsor.logo_url} 
                       alt={sponsor.name}
+                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
+                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
                     />
                   </div>
                 )
-              ))}
+              })}
             </div>
           </section>
         )}
