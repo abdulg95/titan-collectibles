@@ -596,10 +596,19 @@
 
 /* Sponsors */
 .sponsors-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
   gap: 20px;
   width: 100%;
+  /* Modern browsers with CSS Grid support */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Safari mobile compatibility */
+  -webkit-display: grid;
+  -webkit-grid-template-columns: repeat(3, 1fr);
+  -webkit-gap: 20px;
 }
 
 .sponsor-logo {
@@ -620,6 +629,31 @@
   width: auto;
   height: auto;
   object-fit: contain;
+  /* Safari mobile compatibility */
+  -webkit-object-fit: contain;
+  /* Ensure images are visible */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Safari mobile specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .sponsors-grid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: space-around !important;
+  }
+  
+  .sponsor-logo {
+    flex: 0 0 calc(33.333% - 20px);
+    margin: 10px;
+  }
+  
+  .sponsor-logo img {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
 }
 
 /* Footer */
