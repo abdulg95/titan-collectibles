@@ -50,8 +50,14 @@ def main():
         
         # Process each athlete
         for athlete_data in athletes_data:
+            # Generate slug from full_name if not provided
+            slug = athlete_data.get('slug')
+            if not slug:
+                # Generate slug from full_name (lowercase, replace spaces with hyphens)
+                slug = athlete_data['full_name'].lower().replace(' ', '-').replace("'", '').replace('.', '')
+            
             # Check if athlete already exists
-            existing = session.query(Athlete).filter_by(slug=athlete_data['slug']).first()
+            existing = session.query(Athlete).filter_by(slug=slug).first()
             
             if existing:
                 print(f"🔄 Updating existing athlete: {athlete_data['full_name']}")
@@ -59,7 +65,7 @@ def main():
             else:
                 print(f"➕ Creating new athlete: {athlete_data['full_name']}")
                 athlete = Athlete()
-                athlete.slug = athlete_data['slug']
+                athlete.slug = slug
             
             # Update athlete data
             athlete.full_name = athlete_data['full_name']
