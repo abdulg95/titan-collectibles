@@ -1,10 +1,14 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+
 const API = import.meta.env.VITE_API_BASE_URL || ''
 
 export default function SignIn(){
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
   const [err,setErr] = useState<string | null>(null)
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirect') || '/'
 
   async function submit(e:any){
     e.preventDefault(); setErr(null)
@@ -15,12 +19,12 @@ export default function SignIn(){
       })
       const j = await r.json()
       if(!r.ok){ setErr(j.error || 'login_failed'); return }
-      window.location.href = '/'
+      window.location.href = redirectTo
     }catch{ setErr('network_error') }
   }
 
   function signInGoogle(){
-    const nxt = window.location.origin + '/'
+    const nxt = window.location.origin + redirectTo
     window.location.href = new URL(`/api/auth/google/start?next=${encodeURIComponent(nxt)}`, API).toString()
   }
 

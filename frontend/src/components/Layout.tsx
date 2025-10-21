@@ -39,9 +39,9 @@ export default function Layout(){
   const [showAuth, setShowAuth] = useState(false)
   const isMobile = useIsMobile()
 
-  async function fetchMe(){
-    try{
-      const authToken = sessionStorage.getItem('auth_token')
+    async function fetchMe(){
+      try{
+        const authToken = localStorage.getItem('auth_token')
       let url = new URL('/api/auth/me', API).toString()
       
       if (authToken) {
@@ -49,7 +49,7 @@ export default function Layout(){
         url += `?auth_token=${encodeURIComponent(authToken)}`
         console.log('🔐 Sending auth token as query parameter:', `${authToken.substring(0, 20)}...`)
       } else {
-        console.log('❌ No auth token found in sessionStorage')
+        console.log('❌ No auth token found in localStorage')
       }
       
       console.log('🌐 Fetching /api/auth/me with URL:', url)
@@ -76,9 +76,9 @@ export default function Layout(){
       authToken: authToken ? `${authToken.substring(0, 20)}...` : null
     })
     
-    if (authToken) {
-      // Store the auth token in sessionStorage
-      sessionStorage.setItem('auth_token', authToken)
+      if (authToken) {
+        // Store the auth token in localStorage (persists across windows/tabs)
+        localStorage.setItem('auth_token', authToken)
       
       // Remove auth_token from URL to clean up the address bar
       const newUrl = new URL(window.location.href)
@@ -86,7 +86,7 @@ export default function Layout(){
       newUrl.hash = newUrl.hash.replace(/[?&]auth_token=[^&]*/, '').replace(/^#/, '')
       window.history.replaceState({}, '', newUrl.toString())
       
-      console.log('🔐 Auth token stored from URL for Safari mobile compatibility:', `${authToken.substring(0, 20)}...`)
+        console.log('🔐 Auth token stored in localStorage for cross-window compatibility:', `${authToken.substring(0, 20)}...`)
       
       // Refresh user data with the new token
       fetchMe()
@@ -97,9 +97,9 @@ export default function Layout(){
     setShowAuth(true)            // ⬅️ open modal instead of redirecting
   }
 
-  async function refreshMe(){
-    try {
-      const authToken = sessionStorage.getItem('auth_token')
+    async function refreshMe(){
+      try {
+        const authToken = localStorage.getItem('auth_token')
       let url = new URL('/api/auth/me', API).toString()
       
       if (authToken) {
@@ -120,9 +120,9 @@ export default function Layout(){
     const nxt = (import.meta.env.VITE_FRONTEND_PUBLIC_ORIGIN || window.location.origin) + '/'
     window.location.href = new URL(`/api/auth/google/start?next=${encodeURIComponent(nxt)}`, API).toString()
   }
-  async function signOut(){
-    try {
-      const authToken = sessionStorage.getItem('auth_token')
+    async function signOut(){
+      try {
+        const authToken = localStorage.getItem('auth_token')
       let url = new URL('/api/auth/logout', API).toString()
       
       if (authToken) {

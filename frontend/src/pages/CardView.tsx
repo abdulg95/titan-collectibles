@@ -217,12 +217,12 @@ export default function CardView() {
       const url = new URL(`/api/cards/${cardId}/claim`, base)
       
       // Add auth token as query parameter for Safari mobile compatibility
-      const authToken = sessionStorage.getItem('auth_token')
+      const authToken = localStorage.getItem('auth_token')
       if (authToken) {
         url.searchParams.set('auth_token', authToken)
         console.log('🔐 Sending auth token as query parameter for card claim:', `${authToken.substring(0, 20)}...`)
       } else {
-        console.log('❌ No auth token found in sessionStorage for card claim')
+        console.log('❌ No auth token found in localStorage for card claim')
       }
       
       console.log('🌐 Claiming card with URL:', url.toString())

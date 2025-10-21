@@ -9,7 +9,7 @@ export type CollectionItem = {
   const API = import.meta.env.VITE_API_BASE_URL || '';
   
   export async function fetchMyCollection(): Promise<{ items: CollectionItem[] }> {
-    const authToken = sessionStorage.getItem('auth_token')
+    const authToken = localStorage.getItem('auth_token')
     let url = new URL('/api/collection', API).toString()
     
     if (authToken) {
@@ -17,7 +17,7 @@ export type CollectionItem = {
       url += `?auth_token=${encodeURIComponent(authToken)}`
       console.log('🔐 Sending auth token as query parameter for collection:', `${authToken.substring(0, 20)}...`)
     } else {
-      console.log('❌ No auth token found in sessionStorage for collection fetch')
+        console.log('❌ No auth token found in localStorage for collection fetch')
     }
     
     console.log('🌐 Fetching /api/collection with URL:', url)

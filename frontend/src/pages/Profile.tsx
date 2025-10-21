@@ -69,7 +69,7 @@ export default function Profile() {
     if (!user || !editedName.trim()) return
     
     try {
-      const authToken = sessionStorage.getItem('auth_token')
+      const authToken = localStorage.getItem('auth_token')
       let url = new URL('/api/auth/update-profile', API).toString()
       
       if (authToken) {
@@ -114,7 +114,7 @@ export default function Profile() {
 
   const refreshUserData = async () => {
     try {
-      const authToken = sessionStorage.getItem('auth_token')
+      const authToken = localStorage.getItem('auth_token')
       let url = new URL('/api/auth/me', API).toString()
       
       if (authToken) {
@@ -204,7 +204,7 @@ export default function Profile() {
                 me={user}
                 onSignInClick={() => navigate('/signin')}
                 onSignOut={() => {
-                  const authToken = sessionStorage.getItem('auth_token')
+                  const authToken = localStorage.getItem('auth_token')
                   let url = new URL('/api/auth/logout', API).toString()
                   
                   if (authToken) {
@@ -315,7 +315,7 @@ export default function Profile() {
               me={user}
               onSignInClick={() => navigate('/signin')}
               onSignOut={() => {
-                const authToken = sessionStorage.getItem('auth_token')
+                const authToken = localStorage.getItem('auth_token')
                 let url = new URL('/api/auth/logout', API).toString()
                 
                 if (authToken) {
