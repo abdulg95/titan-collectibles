@@ -11,7 +11,7 @@ from datetime import date
 # Add the parent directory to the path so we can import models
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from models import db, Athlete, ArcheryDiscipline, Handedness, AthleteQualification
+from models import db, Athlete, ArcheryDiscipline, Handedness, AthleteQualification, AthleteAchievement
 
 def main():
     # Get database URL from environment
@@ -110,7 +110,6 @@ def main():
             athlete.gallery = athlete_data.get('gallery', [])
             athlete.socials = athlete_data.get('socials', {})
             athlete.sponsors = athlete_data.get('sponsors', [])
-            athlete.achievements = athlete_data.get('achievements', [])
             
             if not existing:
                 session.add(athlete)
@@ -133,6 +132,27 @@ def main():
                         score=qual_data['score']
                     )
                     session.add(qualification)
+            
+            # Handle achievements (relationship data)
+            achievements_data = athlete_data.get('achievements', [])
+            if achievements_data:
+                # Clear existing achievements for updates
+                if existing:
+                    session.query(AthleteAchievement).filter_by(athlete_id=athlete.id).delete()
+                
+                # Add new achievements
+                for achievement_data in achievements_data:
+                    achievement = AthleteAchievement(
+                        athlete_id=athlete.id,
+                        title=achievement_data.get('title', ''),
+                        year=achievement_data.get('year'),
+                        result=achievement_data.get('result', ''),
+                        medal=achievement_data.get('medal', 'none'),
+                        position=achievement_data.get('position'),
+                        notes=achievement_data.get('notes', ''),
+                        display_order=achievement_data.get('display_order', 0)
+                    )
+                    session.add(achievement)
         
         # Commit all changes
         session.commit()
