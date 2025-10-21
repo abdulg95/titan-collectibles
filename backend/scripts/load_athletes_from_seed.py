@@ -11,7 +11,7 @@ from datetime import date
 # Add the parent directory to the path so we can import models
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from models import db, Athlete, ArcheryDiscipline, Handedness
+from models import db, Athlete, ArcheryDiscipline, Handedness, AthleteQualification
 
 def main():
     # Get database URL from environment
@@ -91,8 +91,11 @@ def main():
             athlete.quote_text = athlete_data.get('quote_text')
             athlete.quote_source = athlete_data.get('quote_source')
             athlete.card_image_url = athlete_data.get('card_image_url')
+            athlete.card_back_url = athlete_data.get('card_back_url')
             athlete.hero_image_url = athlete_data.get('hero_image_url')
             athlete.video_url = athlete_data.get('video_url')
+            athlete.quote_photo_url = athlete_data.get('quote_photo_url')
+            athlete.action_photo_url = athlete_data.get('action_photo_url')
             
             # JSON fields - store as Python objects for JSONB
             athlete.gallery = athlete_data.get('gallery', [])
@@ -102,6 +105,23 @@ def main():
             
             if not existing:
                 session.add(athlete)
+                session.flush()  # Get the athlete ID for qualifications
+            
+            # Handle qualifications (time-series data)
+            qualifications_data = athlete_data.get('qualifications', [])
+            if qualifications_data:
+                # Clear existing qualifications for updates
+                if existing:
+                    session.query(AthleteQualification).filter_by(athlete_id=athlete.id).delete()
+                
+                # Add new qualifications
+                for qual_data in qualifications_data:
+                    qualification = AthleteQualification(
+                        athlete_id=athlete.id,
+                        year=qual_data['year'],
+                        score=qual_data['score']
+                    )
+                    session.add(qualification)
         
         # Commit all changes
         session.commit()
