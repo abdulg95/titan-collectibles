@@ -114,7 +114,9 @@ def main():
             
             if not existing:
                 session.add(athlete)
-                session.flush()  # Get the athlete ID for qualifications
+            
+            # Flush to get the athlete ID for qualifications
+            session.flush()
             
             # Handle qualifications (time-series data)
             qualifications_data = athlete_data.get('qualifications', [])
