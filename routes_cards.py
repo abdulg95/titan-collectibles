@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify, session
+from flask import Blueprint, jsonify, session, request
 from models import db, CardInstance, CardTemplate, Athlete, CardStatus
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
+from flask import current_app
 import uuid as uuidlib
 
 bp = Blueprint('cards_api', __name__, url_prefix='/api/cards')
@@ -7,6 +9,15 @@ bp = Blueprint('cards_api', __name__, url_prefix='/api/cards')
 def _uuid(val):
     try: return uuidlib.UUID(str(val))
     except Exception: return None
+
+def _verify_auth_token(token):
+    """Verify and extract user ID from auth token"""
+    try:
+        serializer = URLSafeTimedSerializer(current_app.secret_key)
+        user_id = serializer.loads(token, salt=current_app.config.get('AUTH_TOKEN_SALT', 'auth-token'), max_age=3600)  # 1 hour expiry
+        return user_id
+    except (BadSignature, SignatureExpired):
+        return None
 
 @bp.get('/<uuid:card_id>')
 def get_card(card_id):
@@ -101,8 +112,24 @@ def get_card(card_id):
 
 @bp.post('/<uuid:card_id>/claim')
 def claim(card_id):
-    uid = _uuid(session.get('uid'))
+    # Try auth token from query parameter first (for Safari mobile compatibility)
+    auth_token = request.args.get('auth_token')
+    uid = None
+    
+    if auth_token:
+        user_id = _verify_auth_token(auth_token)
+        if user_id:
+            uid = _uuid(user_id)
+            print(f"✅ Card claim: User found via auth token: {user_id}")
+    
+    # Fallback to session-based authentication
     if not uid:
+        uid = _uuid(session.get('uid'))
+        if uid:
+            print(f"✅ Card claim: User found via session")
+    
+    if not uid:
+        print(f"❌ Card claim: No authentication found")
         return jsonify({'error': 'unauthorized', 'message': 'You must be logged in to claim a card'}), 401
     
     inst = db.session.get(CardInstance, card_id)
