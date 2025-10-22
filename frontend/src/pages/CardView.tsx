@@ -746,42 +746,35 @@ export default function CardView() {
                 padding: '20px'
               }}
             >
+              {/* Test with simple div first */}
+              <div style={{
+                display: 'block',
+                width: '100px',
+                height: '60px',
+                border: '2px solid red',
+                backgroundColor: 'yellow',
+                margin: '10px'
+              }}>
+                TEST SPONSOR 1
+              </div>
+              
+              <div style={{
+                display: 'block',
+                width: '100px',
+                height: '60px',
+                border: '2px solid red',
+                backgroundColor: 'yellow',
+                margin: '10px'
+              }}>
+                TEST SPONSOR 2
+              </div>
+              
+              {/* Now try with actual sponsors */}
               {athlete.sponsors.map((sponsor, index) => {
                 console.log('🔍 Rendering sponsor:', sponsor.name, 'logo_url:', sponsor.logo_url)
-                return sponsor.url ? (
-                  <a 
-                    key={index} 
-                    href={sponsor.url} 
-                    className="sponsor-logo"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'block',
-                      width: '100px',
-                      height: '60px',
-                      border: '2px solid red',
-                      backgroundColor: 'yellow',
-                      margin: '10px'
-                    }}
-                  >
-                    <img 
-                      src={sponsor.logo_url} 
-                      alt={sponsor.name}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
-                        display: 'block',
-                        border: '1px solid blue'
-                      }}
-                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
-                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
-                    />
-                  </a>
-                ) : (
+                return (
                   <div 
-                    key={index} 
-                    className="sponsor-logo"
+                    key={index}
                     style={{
                       display: 'block',
                       width: '100px',
