@@ -146,7 +146,7 @@ export default function Layout(){
     <div className="app-shell">
       {!hideHeader && (
       <header className="site-nav">
-        <div className="container nav-grid">
+        <div className="nav-grid">
           {/* left: logo */}
           <Link to="/" className="brand">
             <img src="/assets/logo-titan.svg" alt="TITAN Collectibles" className="brand__logo" />
