@@ -78,10 +78,22 @@ def fix_all_athletes():
             # Update other image URLs
             if seed_athlete.get('card_back_url'):
                 athlete.card_back_url = seed_athlete['card_back_url']
+                print(f"✅ Updated card_back_url: {athlete.card_back_url}")
+            if seed_athlete.get('hero_image_url'):
+                athlete.hero_image_url = seed_athlete['hero_image_url']
+                print(f"✅ Updated hero_image_url: {athlete.hero_image_url}")
+            if seed_athlete.get('video_url'):
+                athlete.video_url = seed_athlete['video_url']
+                print(f"✅ Updated video_url: {athlete.video_url}")
             if seed_athlete.get('quote_photo_url'):
                 athlete.quote_photo_url = seed_athlete['quote_photo_url']
+                print(f"✅ Updated quote_photo_url: {athlete.quote_photo_url}")
             if seed_athlete.get('action_photo_url'):
                 athlete.action_photo_url = seed_athlete['action_photo_url']
+                print(f"✅ Updated action_photo_url: {athlete.action_photo_url}")
+            if seed_athlete.get('qualification_image_url'):
+                athlete.qualification_image_url = seed_athlete['qualification_image_url']
+                print(f"✅ Updated qualification_image_url: {athlete.qualification_image_url}")
             
             # Clear and reload achievements
             if seed_athlete.get('achievements'):
