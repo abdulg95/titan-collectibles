@@ -781,15 +781,18 @@ export default function CardView() {
                           backgroundColor: 'yellow',
                           margin: '15px',
                           position: 'relative',
-                          backgroundImage: `url(${sponsor.logo_url})`,
-                          backgroundSize: 'contain',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'center',
                           transform: 'translateZ(0)',
                           backfaceVisibility: 'hidden',
-                          willChange: 'transform'
+                          willChange: 'transform',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                          color: 'black',
+                          textAlign: 'center',
+                          paddingTop: '20px',
+                          boxSizing: 'border-box'
                         }}
                       >
+                        {sponsor.name}
                         <div 
                           style={{
                             position: 'absolute',
@@ -798,7 +801,8 @@ export default function CardView() {
                             right: 0,
                             bottom: 0,
                             backgroundColor: 'rgba(255,0,0,0.1)',
-                            border: '2px solid blue'
+                            border: '2px solid blue',
+                            pointerEvents: 'none'
                           }}
                         />
                       </div>
@@ -816,15 +820,18 @@ export default function CardView() {
                           backgroundColor: 'yellow',
                           margin: '15px',
                           position: 'relative',
-                          backgroundImage: `url(${sponsor.logo_url})`,
-                          backgroundSize: 'contain',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'center',
                           transform: 'translateZ(0)',
                           backfaceVisibility: 'hidden',
-                          willChange: 'transform'
+                          willChange: 'transform',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                          color: 'black',
+                          textAlign: 'center',
+                          paddingTop: '20px',
+                          boxSizing: 'border-box'
                         }}
                       >
+                        {sponsor.name}
                         <div 
                           style={{
                             position: 'absolute',
@@ -833,7 +840,8 @@ export default function CardView() {
                             right: 0,
                             bottom: 0,
                             backgroundColor: 'rgba(255,0,0,0.1)',
-                            border: '2px solid blue'
+                            border: '2px solid blue',
+                            pointerEvents: 'none'
                           }}
                         />
                       </div>
