@@ -185,7 +185,7 @@ export default function CardView() {
           setCard(j)
           // Safari compositing fix - force repaint after background images load
           setTimeout(() => {
-            const sponsorDivs = document.querySelectorAll('.sponsor-logo > div')
+            const sponsorDivs = document.querySelectorAll('.sponsor-bg')
             sponsorDivs.forEach(div => {
               div.style.webkitTransform = 'translateZ(0)'
               // Force reflow
@@ -748,15 +748,9 @@ export default function CardView() {
                       rel="noopener noreferrer"
                     >
                       <div 
+                        className="sponsor-bg"
                         style={{
-                          width: '100%',
-                          height: '40px',
-                          backgroundImage: `url(${sponsor.logo_url})`,
-                          backgroundSize: 'contain',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'center',
-                          transform: 'translateZ(0)',
-                          backfaceVisibility: 'hidden'
+                          backgroundImage: `url(${sponsor.logo_url})`
                         }}
                         title={sponsor.name}
                       />
@@ -766,15 +760,9 @@ export default function CardView() {
                   return (
                     <div key={index} className="sponsor-logo">
                       <div 
+                        className="sponsor-bg"
                         style={{
-                          width: '100%',
-                          height: '40px',
-                          backgroundImage: `url(${sponsor.logo_url})`,
-                          backgroundSize: 'contain',
-                          backgroundRepeat: 'no-repeat',
-                          backgroundPosition: 'center',
-                          transform: 'translateZ(0)',
-                          backfaceVisibility: 'hidden'
+                          backgroundImage: `url(${sponsor.logo_url})`
                         }}
                         title={sponsor.name}
                       />

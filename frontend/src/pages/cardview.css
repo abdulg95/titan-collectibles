@@ -608,14 +608,27 @@
   justify-content: center;
   text-decoration: none;
   transition: opacity 0.2s ease;
-  /* Safari compositing fixes */
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  will-change: transform;
 }
 
 .sponsor-logo:hover {
   opacity: 0.8;
+}
+
+.sponsor-bg {
+  width: 100%;
+  height: 40px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* Force a paint/composite layer on the element that draws pixels */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
+
+  /* Nudge Safari to actually paint the layer */
+  background-color: rgba(0,0,0,0.001);   /* visually invisible but breaks the bug */
+  isolation: isolate;                    /* new stacking context sometimes helps */
 }
 
 /* Footer */
