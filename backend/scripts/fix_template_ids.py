@@ -51,6 +51,8 @@ def fix_template_ids():
                 f"{athlete_name}_{version}",
                 f"{athlete_name.replace('ó', 'o')}_{version}",  # Sara López -> Sara Lopez
                 f"{athlete_name.replace('í', 'i')}_{version}",  # Matias -> Mathias
+                f"{athlete_name.replace('Matias', 'Mathias')}_{version}",  # Matias -> Mathias
+                f"{athlete_name.replace('Sara López', 'Sara Lopez')}_{version}",  # Sara López -> Sara Lopez
             ]
             
             found_mapping = None
@@ -68,6 +70,8 @@ def fix_template_ids():
                 updated_count += 1
             else:
                 print(f"  ❌ No mapping found for: {athlete_name} ({version})")
+                print(f"      Tried keys: {possible_keys}")
+                print(f"      Available keys: {list(template_mapping.keys())}")
         
         db.session.commit()
         print(f"\n🎉 Successfully updated {updated_count} template IDs!")
