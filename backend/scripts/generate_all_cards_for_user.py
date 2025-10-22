@@ -65,39 +65,38 @@ def generate_all_cards_for_user(email: str):
                 continue
             
             # Create the card instance WITHOUT increasing minted_count
-            with db.session.begin():
-                tag_id, uid = rand_tag(prefix=f"{template.athlete.slug[:3].upper()}")
-                
-                # Use current minted_count + 1 for serial, but don't update minted_count
-                next_serial = (template.minted_count or 0) + 1
-                
-                inst = CardInstance(
-                    template_id=template.id,
-                    serial_no=next_serial,
-                    etrnl_tag_uid=uid,
-                    etrnl_tag_id=tag_id,
-                    last_ctr=1,  # pretend first scan already happened
-                    owner_user_id=user.id,
-                    status=CardStatus.claimed,
-                )
-                db.session.add(inst)
-                
-                # Add a "successful scan" event for the audit trail
-                db.session.add(ScanEvent(
-                    card_instance_id=inst.id,
-                    tag_id=tag_id,
-                    uid=uid,
-                    ctr=1,
-                    authentic=True,
-                    tt_curr="ok",
-                    tt_perm="ok",
-                    ip="127.0.0.1",
-                    user_agent="generate-all-cards/1.0",
-                    created_at=datetime.now(timezone.utc)
-                ))
-                
-                created.append((template, inst))
-                print(f"  ✅ Created CardInstance {inst.id} (serial: {inst.serial_no})")
+            tag_id, uid = rand_tag(prefix=f"{template.athlete.slug[:3].upper()}")
+            
+            # Use current minted_count + 1 for serial, but don't update minted_count
+            next_serial = (template.minted_count or 0) + 1
+            
+            inst = CardInstance(
+                template_id=template.id,
+                serial_no=next_serial,
+                etrnl_tag_uid=uid,
+                etrnl_tag_id=tag_id,
+                last_ctr=1,  # pretend first scan already happened
+                owner_user_id=user.id,
+                status=CardStatus.claimed,
+            )
+            db.session.add(inst)
+            
+            # Add a "successful scan" event for the audit trail
+            db.session.add(ScanEvent(
+                card_instance_id=inst.id,
+                tag_id=tag_id,
+                uid=uid,
+                ctr=1,
+                authentic=True,
+                tt_curr="ok",
+                tt_perm="ok",
+                ip="127.0.0.1",
+                user_agent="generate-all-cards/1.0",
+                created_at=datetime.now(timezone.utc)
+            ))
+            
+            created.append((template, inst))
+            print(f"  ✅ Created CardInstance {inst.id} (serial: {inst.serial_no})")
         
         db.session.commit()
         
