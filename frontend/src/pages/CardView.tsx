@@ -183,29 +183,6 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
-            // Safari compositing fix - force repaint after images load
-            setTimeout(() => {
-              console.log('🔍 Safari fix: Looking for sponsor elements...')
-              const sponsorContainers = document.querySelectorAll('.sponsor-logo')
-              console.log(`🔍 Found ${sponsorContainers.length} sponsor containers`)
-              
-              sponsorContainers.forEach((container, index) => {
-                console.log(`🔍 Container ${index}:`, container)
-                // Force Safari to paint this layer
-                container.style.webkitTransform = 'translateZ(0)'
-                container.style.transform = 'translateZ(0)'
-                // Force reflow
-                void container.offsetHeight
-              })
-              
-              // Also try to force repaint of the entire sponsors section
-              const sponsorsSection = document.querySelector('.sponsors-grid')
-              if (sponsorsSection) {
-                console.log('🔍 Found sponsors grid, forcing repaint...')
-                sponsorsSection.style.webkitTransform = 'translateZ(0)'
-                void sponsorsSection.offsetHeight
-              }
-            }, 200)
         }
       } catch (e: any) {
         if (!canceled) setErr(e?.message || 'Failed to load card')
@@ -749,18 +726,7 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
-            <div 
-              className="sponsors-grid"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                width: '100%',
-                border: '3px solid green',
-                padding: '20px'
-              }}
-            >
+            <div className="sponsors-grid">
               {athlete.sponsors.map((sponsor, index) => {
                 // Safari mobile compatible rendering - avoid ternary operator
                 if (sponsor.url) {
@@ -772,79 +738,19 @@ export default function CardView() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <div 
-                        style={{
-                          display: 'block',
-                          width: '120px',
-                          height: '80px',
-                          border: '3px solid red',
-                          backgroundColor: 'yellow',
-                          margin: '15px',
-                          position: 'relative',
-                          transform: 'translateZ(0)',
-                          backfaceVisibility: 'hidden',
-                          willChange: 'transform',
-                          fontSize: '12px',
-                          fontWeight: 'bold',
-                          color: 'black',
-                          textAlign: 'center',
-                          paddingTop: '20px',
-                          boxSizing: 'border-box'
-                        }}
-                      >
-                        {sponsor.name}
-                        <div 
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(255,0,0,0.1)',
-                            border: '2px solid blue',
-                            pointerEvents: 'none'
-                          }}
-                        />
-                      </div>
+                      <img 
+                        src={sponsor.logo_url} 
+                        alt={sponsor.name}
+                      />
                     </a>
                   )
                 } else {
                   return (
                     <div key={index} className="sponsor-logo">
-                      <div 
-                        style={{
-                          display: 'block',
-                          width: '120px',
-                          height: '80px',
-                          border: '3px solid red',
-                          backgroundColor: 'yellow',
-                          margin: '15px',
-                          position: 'relative',
-                          transform: 'translateZ(0)',
-                          backfaceVisibility: 'hidden',
-                          willChange: 'transform',
-                          fontSize: '12px',
-                          fontWeight: 'bold',
-                          color: 'black',
-                          textAlign: 'center',
-                          paddingTop: '20px',
-                          boxSizing: 'border-box'
-                        }}
-                      >
-                        {sponsor.name}
-                        <div 
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(255,0,0,0.1)',
-                            border: '2px solid blue',
-                            pointerEvents: 'none'
-                          }}
-                        />
-                      </div>
+                      <img 
+                        src={sponsor.logo_url} 
+                        alt={sponsor.name}
+                      />
                     </div>
                   )
                 }
