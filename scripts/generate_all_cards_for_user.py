@@ -65,7 +65,9 @@ def generate_all_cards_for_user(email: str):
                 continue
             
             # Create the card instance WITHOUT increasing minted_count
-            tag_id, uid = rand_tag(prefix=f"{template.athlete.slug[:3].upper()}")
+            # Use athlete slug or fallback to first 3 chars of name
+            prefix = template.athlete.slug[:3].upper() if template.athlete.slug else template.athlete.full_name[:3].upper()
+            tag_id, uid = rand_tag(prefix=prefix)
             
             # Use current minted_count + 1 for serial, but don't update minted_count
             next_serial = (template.minted_count or 0) + 1
