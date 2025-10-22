@@ -29,6 +29,15 @@ def check_mathias_card_logs():
         print(f"  ETRNL Tag ID: {mathias_card.etrnl_tag_id}")
         print(f"  ETRNL Tag UID: {mathias_card.etrnl_tag_uid}")
         
+        # Show template information
+        if mathias_card.template:
+            print(f"  Template ID: {mathias_card.template.id}")
+            print(f"  Template Code: {mathias_card.template.template_code}")
+            print(f"  Template Version: {mathias_card.template.version}")
+            print(f"  Template SKU: {mathias_card.template.sku if hasattr(mathias_card.template, 'sku') else 'N/A'}")
+        else:
+            print(f"  Template: Not found")
+        
         # Check for scan events related to this card
         print(f"\n🔍 Scan Events for this card:")
         scan_events = ScanEvent.query.filter_by(card_instance_id=mathias_card.id).order_by(ScanEvent.created_at.desc()).all()
