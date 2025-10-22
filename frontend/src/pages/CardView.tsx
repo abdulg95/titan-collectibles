@@ -726,9 +726,6 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
-            <div style={{backgroundColor: 'red', color: 'white', padding: '10px', margin: '10px 0'}}>
-              DEBUG: Sponsors section is rendering! Count: {athlete.sponsors.length}
-            </div>
             <div 
               className="sponsors-grid"
               style={{
@@ -737,84 +734,10 @@ export default function CardView() {
                 justifyContent: 'space-around',
                 alignItems: 'center',
                 width: '100%',
-                border: '3px solid green',
-                padding: '20px'
+                gap: '20px'
               }}
             >
-              {/* Test static elements first */}
-              <div style={{
-                display: 'block',
-                width: '100px',
-                height: '60px',
-                border: '2px solid red',
-                backgroundColor: 'yellow',
-                margin: '10px'
-              }}>
-                STATIC TEST 1
-              </div>
-              
-              <div style={{
-                display: 'block',
-                width: '100px',
-                height: '60px',
-                border: '2px solid red',
-                backgroundColor: 'yellow',
-                margin: '10px'
-              }}>
-                STATIC TEST 2
-              </div>
-              
-              {/* Debug sponsors array */}
-              <div style={{
-                display: 'block',
-                width: '100%',
-                border: '2px solid purple',
-                backgroundColor: 'lightblue',
-                margin: '10px',
-                padding: '10px'
-              }}>
-                DEBUG: Sponsors array length: {athlete.sponsors.length}
-                <br />
-                First sponsor: {athlete.sponsors[0]?.name || 'NONE'}
-                <br />
-                First logo: {athlete.sponsors[0]?.logo_url || 'NONE'}
-              </div>
-              
-              {/* Try mapping with simpler structure */}
               {athlete.sponsors.map((sponsor, index) => {
-                console.log('🔍 Rendering sponsor:', sponsor.name, 'logo_url:', sponsor.logo_url)
-                return (
-                  <div 
-                    key={index}
-                    style={{
-                      display: 'block',
-                      width: '100px',
-                      height: '60px',
-                      border: '2px solid red',
-                      backgroundColor: 'yellow',
-                      margin: '10px'
-                    }}
-                  >
-                    <img 
-                      src={sponsor.logo_url} 
-                      alt={sponsor.name}
-                      style={{
-                        width: '80px',
-                        height: '40px',
-                        display: 'block',
-                        border: '2px solid blue',
-                        backgroundColor: 'white'
-                      }}
-                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
-                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
-                    />
-                  </div>
-                )
-              })}
-              
-              {/* Original complex logic */}
-              {athlete.sponsors.map((sponsor, index) => {
-                console.log('🔍 Rendering sponsor (complex):', sponsor.name, 'logo_url:', sponsor.logo_url)
                 // Safari mobile compatible rendering - avoid ternary operator
                 if (sponsor.url) {
                   return (
@@ -825,26 +748,25 @@ export default function CardView() {
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
-                        display: 'block',
-                        width: '100px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '120px',
                         height: '60px',
-                        border: '2px solid red',
-                        backgroundColor: 'yellow',
-                        margin: '10px'
+                        textDecoration: 'none',
+                        transition: 'opacity 0.2s ease'
                       }}
                     >
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
                         style={{
-                        width: '80px',
-                        height: '40px',
-                        display: 'block',
-                        border: '2px solid blue',
-                        backgroundColor: 'white'
+                          maxWidth: '100%',
+                          maxHeight: '40px',
+                          width: 'auto',
+                          height: 'auto',
+                          objectFit: 'contain'
                         }}
-                        onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
-                        onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
                       />
                     </a>
                   )
@@ -854,26 +776,23 @@ export default function CardView() {
                       key={index} 
                       className="sponsor-logo"
                       style={{
-                        display: 'block',
-                        width: '100px',
-                        height: '60px',
-                        border: '2px solid red',
-                        backgroundColor: 'yellow',
-                        margin: '10px'
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '120px',
+                        height: '60px'
                       }}
                     >
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
                         style={{
-                        width: '80px',
-                        height: '40px',
-                        display: 'block',
-                        border: '2px solid blue',
-                        backgroundColor: 'white'
+                          maxWidth: '100%',
+                          maxHeight: '40px',
+                          width: 'auto',
+                          height: 'auto',
+                          objectFit: 'contain'
                         }}
-                        onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
-                        onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
                       />
                     </div>
                   )
