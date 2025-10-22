@@ -88,8 +88,11 @@ def fix_all_athletes():
                         athlete_id=athlete.id,
                         title=achievement_data.get('title', ''),
                         year=achievement_data.get('year'),
-                        description=achievement_data.get('description', ''),
-                        image_url=achievement_data.get('image_url', '')
+                        result=achievement_data.get('result', ''),
+                        notes=achievement_data.get('notes', ''),
+                        medal=achievement_data.get('medal', 'none'),
+                        position=achievement_data.get('position'),
+                        display_order=achievement_data.get('display_order', 0)
                     )
                     db.session.add(achievement)
                 
@@ -104,10 +107,9 @@ def fix_all_athletes():
                 for qual_data in seed_athlete['qualifications']:
                     qualification = AthleteQualification(
                         athlete_id=athlete.id,
-                        title=qual_data.get('title', ''),
                         year=qual_data.get('year'),
-                        description=qual_data.get('description', ''),
-                        image_url=qual_data.get('image_url', '')
+                        score=qual_data.get('score'),
+                        event=qual_data.get('event', '')
                     )
                     db.session.add(qualification)
                 
