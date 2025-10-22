@@ -618,33 +618,8 @@
   max-width: 100%;
   max-height: 40px;
   width: auto;
-  height: auto;
+  height: 40px;
   object-fit: contain;
-  /* Safari mobile compatibility */
-  -webkit-object-fit: contain;
-  /* Ensure images are visible */
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Safari mobile specific fixes */
-@supports (-webkit-touch-callout: none) {
-  .sponsors-grid {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    justify-content: space-around !important;
-  }
-  
-  .sponsor-logo {
-    flex: 0 0 calc(33.333% - 20px);
-    margin: 10px;
-  }
-  
-  .sponsor-logo img {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
 }
 
 /* Footer */
