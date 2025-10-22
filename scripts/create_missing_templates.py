@@ -61,6 +61,13 @@ def create_missing_templates():
                 athlete_name,
                 athlete_name.replace('ó', 'o'),  # Sara López -> Sara Lopez
                 athlete_name.replace('Matias', 'Mathias'),  # Matias -> Mathias
+                # Remove " - Regular" and " - Diamond" suffixes
+                athlete_name.replace(' - Regular', ''),
+                athlete_name.replace(' - Diamond', ''),
+                athlete_name.replace('ó', 'o').replace(' - Regular', ''),
+                athlete_name.replace('ó', 'o').replace(' - Diamond', ''),
+                athlete_name.replace('Matias', 'Mathias').replace(' - Regular', ''),
+                athlete_name.replace('Matias', 'Mathias').replace(' - Diamond', ''),
             ]
             
             for name in possible_names:
