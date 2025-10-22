@@ -24,40 +24,41 @@ def check_last_registered_card():
         print(f"  Card Instance ID: {last_card.id}")
         print(f"  Created At: {last_card.created_at}")
         print(f"  Status: {last_card.status}")
-        print(f"  NFC Tag ID: {getattr(last_card, 'nfc_tag_id', 'N/A')}")
+        print(f"  ETRNL Tag ID: {last_card.etrnl_tag_id or 'N/A'}")
+        print(f"  ETRNL Tag UID: {last_card.etrnl_tag_uid or 'N/A'}")
         
         # Get athlete info
-        if last_card.card_template:
-            athlete = last_card.card_template.athlete
+        if last_card.template:
+            athlete = last_card.template.athlete
             if athlete:
                 print(f"  Athlete: {athlete.full_name}")
                 print(f"  Card Number: {athlete.card_number}")
-                print(f"  Template Version: {last_card.card_template.version}")
+                print(f"  Template Version: {last_card.template.version}")
             else:
-                print(f"  Template ID: {last_card.card_template_id}")
+                print(f"  Template ID: {last_card.template_id}")
                 print(f"  Athlete: Not found")
         else:
-            print(f"  Template ID: {last_card.card_template_id}")
+            print(f"  Template ID: {last_card.template_id}")
             print(f"  Template: Not found")
         
         # Get user info if available
-        if last_card.user:
-            print(f"  Registered by: {last_card.user.email}")
+        if last_card.owner:
+            print(f"  Registered by: {last_card.owner.email}")
         else:
-            print(f"  User ID: {last_card.user_id}")
-            print(f"  User: Not found")
+            print(f"  Owner User ID: {last_card.owner_user_id}")
+            print(f"  Owner: Not found")
         
         print(f"\n📋 Recent Card Instances (last 5):")
         recent_cards = CardInstance.query.order_by(CardInstance.created_at.desc()).limit(5).all()
         
         for i, card in enumerate(recent_cards, 1):
             athlete_name = "Unknown"
-            if card.card_template and card.card_template.athlete:
-                athlete_name = card.card_template.athlete.full_name
+            if card.template and card.template.athlete:
+                athlete_name = card.template.athlete.full_name
             
             user_email = "Unknown"
-            if card.user:
-                user_email = card.user.email
+            if card.owner:
+                user_email = card.owner.email
             
             print(f"  {i}. {card.created_at} - {athlete_name} ({card.status}) - {user_email}")
 
