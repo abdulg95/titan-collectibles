@@ -42,7 +42,7 @@ def create_missing_templates():
         print(f"📊 Loaded {len(missing_templates)} template definitions from CSV")
         
         # Get all athletes
-        athletes = Athlete.query.options(joinedload(Athlete.card_templates)).all()
+        athletes = Athlete.query.all()
         athlete_map = {athlete.full_name: athlete for athlete in athletes}
         
         print(f"📊 Found {len(athletes)} athletes in database")
