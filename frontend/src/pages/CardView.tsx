@@ -799,11 +799,11 @@ export default function CardView() {
                       src={sponsor.logo_url} 
                       alt={sponsor.name}
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
+                        width: '80px',
+                        height: '40px',
                         display: 'block',
-                        border: '1px solid blue'
+                        border: '2px solid blue',
+                        backgroundColor: 'white'
                       }}
                       onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
                       onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
@@ -837,11 +837,11 @@ export default function CardView() {
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          display: 'block',
-                          border: '1px solid blue'
+                        width: '80px',
+                        height: '40px',
+                        display: 'block',
+                        border: '2px solid blue',
+                        backgroundColor: 'white'
                         }}
                         onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
                         onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
@@ -866,11 +866,11 @@ export default function CardView() {
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
                         style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain',
-                          display: 'block',
-                          border: '1px solid blue'
+                        width: '80px',
+                        height: '40px',
+                        display: 'block',
+                        border: '2px solid blue',
+                        backgroundColor: 'white'
                         }}
                         onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
                         onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
