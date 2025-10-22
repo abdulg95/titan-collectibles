@@ -183,11 +183,6 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
-          // Debug sponsors data
-          console.log('🔍 Card data loaded:', j)
-          console.log('🔍 Athlete data:', j.template?.athlete)
-          console.log('🔍 Sponsors data:', j.template?.athlete?.sponsors)
-          console.log('🔍 Sponsors length:', j.template?.athlete?.sponsors?.length)
         }
       } catch (e: any) {
         if (!canceled) setErr(e?.message || 'Failed to load card')
@@ -731,74 +726,34 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
-            <div style={{backgroundColor: 'red', color: 'white', padding: '10px', margin: '10px 0'}}>
-              DEBUG: Sponsors section is rendering! Count: {athlete.sponsors.length}
-            </div>
-            <div 
-              className="sponsors-grid"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                width: '100%',
-                border: '3px solid green',
-                padding: '20px'
-              }}
-            >
-              {/* Test with simple div first */}
-              <div style={{
-                display: 'block',
-                width: '100px',
-                height: '60px',
-                border: '2px solid red',
-                backgroundColor: 'yellow',
-                margin: '10px'
-              }}>
-                TEST SPONSOR 1
-              </div>
-              
-              <div style={{
-                display: 'block',
-                width: '100px',
-                height: '60px',
-                border: '2px solid red',
-                backgroundColor: 'yellow',
-                margin: '10px'
-              }}>
-                TEST SPONSOR 2
-              </div>
-              
-              {/* Now try with actual sponsors */}
+            <div className="sponsors-grid">
               {athlete.sponsors.map((sponsor, index) => {
-                console.log('🔍 Rendering sponsor:', sponsor.name, 'logo_url:', sponsor.logo_url)
-                return (
-                  <div 
-                    key={index}
-                    style={{
-                      display: 'block',
-                      width: '100px',
-                      height: '60px',
-                      border: '2px solid red',
-                      backgroundColor: 'yellow',
-                      margin: '10px'
-                    }}
-                  >
-                    <img 
-                      src={sponsor.logo_url} 
-                      alt={sponsor.name}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'contain',
-                        display: 'block',
-                        border: '1px solid blue'
-                      }}
-                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
-                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
-                    />
-                  </div>
-                )
+                // Safari mobile compatible rendering - avoid ternary operator
+                if (sponsor.url) {
+                  return (
+                    <a 
+                      key={index} 
+                      href={sponsor.url} 
+                      className="sponsor-logo"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img 
+                        src={sponsor.logo_url} 
+                        alt={sponsor.name}
+                      />
+                    </a>
+                  )
+                } else {
+                  return (
+                    <div key={index} className="sponsor-logo">
+                      <img 
+                        src={sponsor.logo_url} 
+                        alt={sponsor.name}
+                      />
+                    </div>
+                  )
+                }
               })}
             </div>
           </section>
