@@ -183,13 +183,13 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
-          // Safari compositing fix - force repaint after images load
+          // Safari compositing fix - force repaint after background images load
           setTimeout(() => {
-            const sponsorImages = document.querySelectorAll('.sponsor-logo img')
-            sponsorImages.forEach(img => {
-              img.style.webkitTransform = 'translateZ(0)'
+            const sponsorDivs = document.querySelectorAll('.sponsor-logo > div')
+            sponsorDivs.forEach(div => {
+              div.style.webkitTransform = 'translateZ(0)'
               // Force reflow
-              void img.offsetHeight
+              void div.offsetHeight
             })
           }, 100)
         }
@@ -747,22 +747,36 @@ export default function CardView() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <img 
-                        src={sponsor.logo_url} 
-                        alt={sponsor.name}
-                        loading="eager"
-                        decoding="sync"
+                      <div 
+                        style={{
+                          width: '100%',
+                          height: '40px',
+                          backgroundImage: `url(${sponsor.logo_url})`,
+                          backgroundSize: 'contain',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden'
+                        }}
+                        title={sponsor.name}
                       />
                     </a>
                   )
                 } else {
                   return (
                     <div key={index} className="sponsor-logo">
-                      <img 
-                        src={sponsor.logo_url} 
-                        alt={sponsor.name}
-                        loading="eager"
-                        decoding="sync"
+                      <div 
+                        style={{
+                          width: '100%',
+                          height: '40px',
+                          backgroundImage: `url(${sponsor.logo_url})`,
+                          backgroundSize: 'contain',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden'
+                        }}
+                        title={sponsor.name}
                       />
                     </div>
                   )

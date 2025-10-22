@@ -608,22 +608,14 @@
   justify-content: center;
   text-decoration: none;
   transition: opacity 0.2s ease;
-}
-
-.sponsor-logo:hover {
-  opacity: 0.8;
-}
-
-.sponsor-logo img {
-  max-width: 100%;
-  max-height: 40px;
-  width: auto;
-  height: 40px;
-  object-fit: contain;
   /* Safari compositing fixes */
   transform: translateZ(0);
   backface-visibility: hidden;
   will-change: transform;
+}
+
+.sponsor-logo:hover {
+  opacity: 0.8;
 }
 
 /* Footer */
