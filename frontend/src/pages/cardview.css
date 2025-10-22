@@ -596,19 +596,10 @@
 
 /* Sponsors */
 .sponsors-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  /* Modern browsers with CSS Grid support */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  /* Safari mobile compatibility */
-  -webkit-display: grid;
-  -webkit-grid-template-columns: repeat(3, 1fr);
-  -webkit-gap: 20px;
+  gap: 20px;
+  width: 100%;
 }
 
 .sponsor-logo {

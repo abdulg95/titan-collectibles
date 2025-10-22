@@ -726,17 +726,7 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
-            <div 
-              className="sponsors-grid"
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                width: '100%',
-                gap: '20px'
-              }}
-            >
+            <div className="sponsors-grid">
               {athlete.sponsors.map((sponsor, index) => {
                 // Safari mobile compatible rendering - avoid ternary operator
                 if (sponsor.url) {
@@ -747,52 +737,19 @@ export default function CardView() {
                       className="sponsor-logo"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '120px',
-                        height: '60px',
-                        textDecoration: 'none',
-                        transition: 'opacity 0.2s ease'
-                      }}
                     >
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
-                        style={{
-                          maxWidth: '100%',
-                          maxHeight: '40px',
-                          width: 'auto',
-                          height: 'auto',
-                          objectFit: 'contain'
-                        }}
                       />
                     </a>
                   )
                 } else {
                   return (
-                    <div 
-                      key={index} 
-                      className="sponsor-logo"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: '120px',
-                        height: '60px'
-                      }}
-                    >
+                    <div key={index} className="sponsor-logo">
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
-                        style={{
-                          maxWidth: '100%',
-                          maxHeight: '40px',
-                          width: 'auto',
-                          height: 'auto',
-                          objectFit: 'contain'
-                        }}
                       />
                     </div>
                   )
