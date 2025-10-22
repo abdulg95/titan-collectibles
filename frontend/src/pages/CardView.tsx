@@ -183,13 +183,13 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
-          // Safari compositing fix - force repaint after background images load
+          // Safari compositing fix - force repaint after images load
           setTimeout(() => {
-            const sponsorDivs = document.querySelectorAll('.sponsor-bg')
-            sponsorDivs.forEach(div => {
-              div.style.webkitTransform = 'translateZ(0)'
+            const sponsorImages = document.querySelectorAll('.sponsor-logo img')
+            sponsorImages.forEach(img => {
+              img.style.webkitTransform = 'translateZ(0)'
               // Force reflow
-              void div.offsetHeight
+              void img.offsetHeight
             })
           }, 100)
         }
@@ -747,25 +747,65 @@ export default function CardView() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <div 
-                        className="sponsor-bg"
-                        style={{
-                          backgroundImage: `url(${sponsor.logo_url})`
-                        }}
-                        title={sponsor.name}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <img 
+                          src={sponsor.logo_url} 
+                          alt={sponsor.name}
+                          style={{
+                            maxWidth: '100%',
+                            maxHeight: '40px',
+                            width: 'auto',
+                            height: 'auto',
+                            objectFit: 'contain'
+                          }}
+                        />
+                        <div 
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0,0,0,0.001)',
+                            transform: 'translateZ(0)',
+                            backfaceVisibility: 'hidden',
+                            willChange: 'transform',
+                            isolation: 'isolate'
+                          }}
+                        />
+                      </div>
                     </a>
                   )
                 } else {
                   return (
                     <div key={index} className="sponsor-logo">
-                      <div 
-                        className="sponsor-bg"
-                        style={{
-                          backgroundImage: `url(${sponsor.logo_url})`
-                        }}
-                        title={sponsor.name}
-                      />
+                      <div style={{ position: 'relative' }}>
+                        <img 
+                          src={sponsor.logo_url} 
+                          alt={sponsor.name}
+                          style={{
+                            maxWidth: '100%',
+                            maxHeight: '40px',
+                            width: 'auto',
+                            height: 'auto',
+                            objectFit: 'contain'
+                          }}
+                        />
+                        <div 
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0,0,0,0.001)',
+                            transform: 'translateZ(0)',
+                            backfaceVisibility: 'hidden',
+                            willChange: 'transform',
+                            isolation: 'isolate'
+                          }}
+                        />
+                      </div>
                     </div>
                   )
                 }
