@@ -735,7 +735,18 @@ export default function CardView() {
         {athlete?.sponsors && athlete.sponsors.length > 0 && (
           <section className="card-section">
             <h2 className="card-section-title">Sponsors</h2>
-            <div className="sponsors-grid">
+            <div 
+              className="sponsors-grid"
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                width: '100%',
+                border: '3px solid green',
+                padding: '20px'
+              }}
+            >
               {athlete.sponsors.map((sponsor, index) => {
                 // Safari mobile compatible rendering - avoid ternary operator
                 if (sponsor.url) {
@@ -747,30 +758,26 @@ export default function CardView() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <div style={{ position: 'relative' }}>
+                      <div 
+                        style={{
+                          display: 'block',
+                          width: '100px',
+                          height: '60px',
+                          border: '2px solid red',
+                          backgroundColor: 'yellow',
+                          margin: '10px',
+                          position: 'relative'
+                        }}
+                      >
                         <img 
                           src={sponsor.logo_url} 
                           alt={sponsor.name}
                           style={{
-                            maxWidth: '100%',
-                            maxHeight: '40px',
-                            width: 'auto',
-                            height: 'auto',
-                            objectFit: 'contain'
-                          }}
-                        />
-                        <div 
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(0,0,0,0.001)',
-                            transform: 'translateZ(0)',
-                            backfaceVisibility: 'hidden',
-                            willChange: 'transform',
-                            isolation: 'isolate'
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            display: 'block',
+                            border: '1px solid blue'
                           }}
                         />
                       </div>
@@ -779,30 +786,26 @@ export default function CardView() {
                 } else {
                   return (
                     <div key={index} className="sponsor-logo">
-                      <div style={{ position: 'relative' }}>
+                      <div 
+                        style={{
+                          display: 'block',
+                          width: '100px',
+                          height: '60px',
+                          border: '2px solid red',
+                          backgroundColor: 'yellow',
+                          margin: '10px',
+                          position: 'relative'
+                        }}
+                      >
                         <img 
                           src={sponsor.logo_url} 
                           alt={sponsor.name}
                           style={{
-                            maxWidth: '100%',
-                            maxHeight: '40px',
-                            width: 'auto',
-                            height: 'auto',
-                            objectFit: 'contain'
-                          }}
-                        />
-                        <div 
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'rgba(0,0,0,0.001)',
-                            transform: 'translateZ(0)',
-                            backfaceVisibility: 'hidden',
-                            willChange: 'transform',
-                            isolation: 'isolate'
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain',
+                            display: 'block',
+                            border: '1px solid blue'
                           }}
                         />
                       </div>
