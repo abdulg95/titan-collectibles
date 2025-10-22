@@ -741,8 +741,80 @@ export default function CardView() {
                 padding: '20px'
               }}
             >
+              {/* Test static elements first */}
+              <div style={{
+                display: 'block',
+                width: '100px',
+                height: '60px',
+                border: '2px solid red',
+                backgroundColor: 'yellow',
+                margin: '10px'
+              }}>
+                STATIC TEST 1
+              </div>
+              
+              <div style={{
+                display: 'block',
+                width: '100px',
+                height: '60px',
+                border: '2px solid red',
+                backgroundColor: 'yellow',
+                margin: '10px'
+              }}>
+                STATIC TEST 2
+              </div>
+              
+              {/* Debug sponsors array */}
+              <div style={{
+                display: 'block',
+                width: '100%',
+                border: '2px solid purple',
+                backgroundColor: 'lightblue',
+                margin: '10px',
+                padding: '10px'
+              }}>
+                DEBUG: Sponsors array length: {athlete.sponsors.length}
+                <br />
+                First sponsor: {athlete.sponsors[0]?.name || 'NONE'}
+                <br />
+                First logo: {athlete.sponsors[0]?.logo_url || 'NONE'}
+              </div>
+              
+              {/* Try mapping with simpler structure */}
               {athlete.sponsors.map((sponsor, index) => {
                 console.log('🔍 Rendering sponsor:', sponsor.name, 'logo_url:', sponsor.logo_url)
+                return (
+                  <div 
+                    key={index}
+                    style={{
+                      display: 'block',
+                      width: '100px',
+                      height: '60px',
+                      border: '2px solid red',
+                      backgroundColor: 'yellow',
+                      margin: '10px'
+                    }}
+                  >
+                    <img 
+                      src={sponsor.logo_url} 
+                      alt={sponsor.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain',
+                        display: 'block',
+                        border: '1px solid blue'
+                      }}
+                      onLoad={() => console.log('✅ Sponsor image loaded:', sponsor.name)}
+                      onError={(e) => console.log('❌ Sponsor image failed to load:', sponsor.name, e)}
+                    />
+                  </div>
+                )
+              })}
+              
+              {/* Original complex logic */}
+              {athlete.sponsors.map((sponsor, index) => {
+                console.log('🔍 Rendering sponsor (complex):', sponsor.name, 'logo_url:', sponsor.logo_url)
                 // Safari mobile compatible rendering - avoid ternary operator
                 if (sponsor.url) {
                   return (
