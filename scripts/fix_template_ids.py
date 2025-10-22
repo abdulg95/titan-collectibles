@@ -59,6 +59,9 @@ def fix_template_ids():
                 f"{athlete_name.replace('ó', 'o')} - Diamond_{version}",
                 f"{athlete_name.replace('Matias', 'Mathias')} - Regular_{version}",
                 f"{athlete_name.replace('Matias', 'Mathias')} - Diamond_{version}",
+                # Try Matias -> Matias (CSV has "Matias" but DB has "Mathias")
+                f"{athlete_name.replace('Mathias', 'Matias')} - Regular_{version}",
+                f"{athlete_name.replace('Mathias', 'Matias')} - Diamond_{version}",
             ]
             
             found_mapping = None
