@@ -68,6 +68,10 @@ def create_missing_templates():
                 athlete_name.replace('ó', 'o').replace(' - Diamond', ''),
                 athlete_name.replace('Matias', 'Mathias').replace(' - Regular', ''),
                 athlete_name.replace('Matias', 'Mathias').replace(' - Diamond', ''),
+                # Handle Sara López specifically
+                athlete_name.replace('Sara Lopez', 'Sara López'),
+                athlete_name.replace('Sara Lopez - Regular', 'Sara López'),
+                athlete_name.replace('Sara Lopez - Diamond', 'Sara López'),
             ]
             
             for name in possible_names:
