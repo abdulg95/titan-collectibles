@@ -187,7 +187,7 @@
     },
     "qualification_image_url": "/assets/best-qualification/EG.png",
     "series_number": 1,
-    "card_number": 4
+    "card_number": 3
   },
   {
     "full_name": "Sara L\u00f3pez",
@@ -343,7 +343,7 @@
     },
     "qualification_image_url": "/assets/best-qualification/SL.png",
     "series_number": 1,
-    "card_number": 6
+    "card_number": 5
   },
   {
     "full_name": "Kim Woojin",
@@ -901,7 +901,7 @@
     },
     "qualification_image_url": "/assets/best-qualification/MF.png",
     "series_number": 1,
-    "card_number": 2
+    "card_number": 8
   },
   {
     "full_name": "Mete Gazoz",
@@ -1246,7 +1246,7 @@
     },
     "qualification_image_url": "/assets/best-qualification/DK.png",
     "series_number": 1,
-    "card_number": 5
+    "card_number": 4
   },
   {
     "full_name": "Lim Sihyeon",
@@ -1396,7 +1396,7 @@
     },
     "qualification_image_url": "/assets/best-qualification/LS.png",
     "series_number": 1,
-    "card_number": 8
+    "card_number": 7
   },
   {
     "full_name": "Mike Schloesser",
@@ -1542,6 +1542,6 @@
     },
     "qualification_image_url": "/assets/best-qualification/MS.png",
     "series_number": 1,
-    "card_number": 7
+    "card_number": 6
   }
 ]
