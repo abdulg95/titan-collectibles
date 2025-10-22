@@ -47,12 +47,18 @@ def fix_template_ids():
             version = template.version
             
             # Try different name variations
+            # The CSV has names like "Sara Lopez - Regular" but DB has "Sara López"
             possible_keys = [
                 f"{athlete_name}_{version}",
                 f"{athlete_name.replace('ó', 'o')}_{version}",  # Sara López -> Sara Lopez
                 f"{athlete_name.replace('í', 'i')}_{version}",  # Matias -> Mathias
                 f"{athlete_name.replace('Matias', 'Mathias')}_{version}",  # Matias -> Mathias
                 f"{athlete_name.replace('Sara López', 'Sara Lopez')}_{version}",  # Sara López -> Sara Lopez
+                # Try with " - Regular" and " - Diamond" suffixes
+                f"{athlete_name.replace('ó', 'o')} - Regular_{version}",
+                f"{athlete_name.replace('ó', 'o')} - Diamond_{version}",
+                f"{athlete_name.replace('Matias', 'Mathias')} - Regular_{version}",
+                f"{athlete_name.replace('Matias', 'Mathias')} - Diamond_{version}",
             ]
             
             found_mapping = None
