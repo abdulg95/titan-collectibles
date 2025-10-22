@@ -183,15 +183,29 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
-          // Safari compositing fix - force repaint after images load
-          setTimeout(() => {
-            const sponsorImages = document.querySelectorAll('.sponsor-logo img')
-            sponsorImages.forEach(img => {
-              img.style.webkitTransform = 'translateZ(0)'
-              // Force reflow
-              void img.offsetHeight
-            })
-          }, 100)
+            // Safari compositing fix - force repaint after images load
+            setTimeout(() => {
+              console.log('🔍 Safari fix: Looking for sponsor elements...')
+              const sponsorContainers = document.querySelectorAll('.sponsor-logo')
+              console.log(`🔍 Found ${sponsorContainers.length} sponsor containers`)
+              
+              sponsorContainers.forEach((container, index) => {
+                console.log(`🔍 Container ${index}:`, container)
+                // Force Safari to paint this layer
+                container.style.webkitTransform = 'translateZ(0)'
+                container.style.transform = 'translateZ(0)'
+                // Force reflow
+                void container.offsetHeight
+              })
+              
+              // Also try to force repaint of the entire sponsors section
+              const sponsorsSection = document.querySelector('.sponsors-grid')
+              if (sponsorsSection) {
+                console.log('🔍 Found sponsors grid, forcing repaint...')
+                sponsorsSection.style.webkitTransform = 'translateZ(0)'
+                void sponsorsSection.offsetHeight
+              }
+            }, 200)
         }
       } catch (e: any) {
         if (!canceled) setErr(e?.message || 'Failed to load card')
@@ -761,23 +775,30 @@ export default function CardView() {
                       <div 
                         style={{
                           display: 'block',
-                          width: '100px',
-                          height: '60px',
-                          border: '2px solid red',
+                          width: '120px',
+                          height: '80px',
+                          border: '3px solid red',
                           backgroundColor: 'yellow',
-                          margin: '10px',
-                          position: 'relative'
+                          margin: '15px',
+                          position: 'relative',
+                          backgroundImage: `url(${sponsor.logo_url})`,
+                          backgroundSize: 'contain',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden',
+                          willChange: 'transform'
                         }}
                       >
-                        <img 
-                          src={sponsor.logo_url} 
-                          alt={sponsor.name}
+                        <div 
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                            display: 'block',
-                            border: '1px solid blue'
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(255,0,0,0.1)',
+                            border: '2px solid blue'
                           }}
                         />
                       </div>
@@ -789,23 +810,30 @@ export default function CardView() {
                       <div 
                         style={{
                           display: 'block',
-                          width: '100px',
-                          height: '60px',
-                          border: '2px solid red',
+                          width: '120px',
+                          height: '80px',
+                          border: '3px solid red',
                           backgroundColor: 'yellow',
-                          margin: '10px',
-                          position: 'relative'
+                          margin: '15px',
+                          position: 'relative',
+                          backgroundImage: `url(${sponsor.logo_url})`,
+                          backgroundSize: 'contain',
+                          backgroundRepeat: 'no-repeat',
+                          backgroundPosition: 'center',
+                          transform: 'translateZ(0)',
+                          backfaceVisibility: 'hidden',
+                          willChange: 'transform'
                         }}
                       >
-                        <img 
-                          src={sponsor.logo_url} 
-                          alt={sponsor.name}
+                        <div 
                           style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'contain',
-                            display: 'block',
-                            border: '1px solid blue'
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(255,0,0,0.1)',
+                            border: '2px solid blue'
                           }}
                         />
                       </div>
