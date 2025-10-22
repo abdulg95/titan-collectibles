@@ -183,6 +183,15 @@ export default function CardView() {
         const j: CardResponse = await r.json()
         if (!canceled) {
           setCard(j)
+          // Safari compositing fix - force repaint after images load
+          setTimeout(() => {
+            const sponsorImages = document.querySelectorAll('.sponsor-logo img')
+            sponsorImages.forEach(img => {
+              img.style.webkitTransform = 'translateZ(0)'
+              // Force reflow
+              void img.offsetHeight
+            })
+          }, 100)
         }
       } catch (e: any) {
         if (!canceled) setErr(e?.message || 'Failed to load card')
@@ -741,6 +750,8 @@ export default function CardView() {
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
+                        loading="eager"
+                        decoding="sync"
                       />
                     </a>
                   )
@@ -750,6 +761,8 @@ export default function CardView() {
                       <img 
                         src={sponsor.logo_url} 
                         alt={sponsor.name}
+                        loading="eager"
+                        decoding="sync"
                       />
                     </div>
                   )

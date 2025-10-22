@@ -620,6 +620,10 @@
   width: auto;
   height: 40px;
   object-fit: contain;
+  /* Safari compositing fixes */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: transform;
 }
 
 /* Footer */
