@@ -51,7 +51,13 @@ def fix_all_athletes():
             
             # Generate slug if missing
             if not athlete.slug:
-                athlete.slug = generate_slug(full_name)
+                base_slug = generate_slug(full_name)
+                slug = base_slug
+                counter = 1
+                while Athlete.query.filter_by(slug=slug).filter(Athlete.id != athlete.id).first():
+                    slug = f"{base_slug}-{counter}"
+                    counter += 1
+                athlete.slug = slug
                 print(f"✅ Generated slug: {athlete.slug}")
             
             # Update sponsors
