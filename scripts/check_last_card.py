@@ -24,7 +24,7 @@ def check_last_registered_card():
         print(f"  Card Instance ID: {last_card.id}")
         print(f"  Created At: {last_card.created_at}")
         print(f"  Status: {last_card.status}")
-        print(f"  NFC Tag ID: {last_card.nfc_tag_id}")
+        print(f"  NFC Tag ID: {getattr(last_card, 'nfc_tag_id', 'N/A')}")
         
         # Get athlete info
         if last_card.card_template:
