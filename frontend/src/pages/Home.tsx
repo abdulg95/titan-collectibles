@@ -72,13 +72,13 @@ export default function Home(){
         <section id="hero" className="hero">
           <div className="container hero__grid">
             {/* Mobile: Image first, Desktop: Text first */}
-            <ParallaxY move={[0, -30]} className="hero__art-mobile-first">
+            <div className="hero__art-mobile-first">
               <div className="hero__art">
                 <div className="pack-wrap">
                   <img src="/assets/pack-placeholder.png" alt="Series One Pack" />
                 </div>
               </div>
-            </ParallaxY>
+            </div>
 
             <Reveal className="hero__copy-mobile-second">
               <div className="hero__copy">

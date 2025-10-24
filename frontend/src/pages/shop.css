@@ -81,13 +81,13 @@
   }
   
   /* spacing for small hint */
-  .config-hint{
+  .shop-page .config-hint{
     margin-top: 10px; font-size: 12px; color: #9fb0c6;
     word-break: break-word;
   }
   
-  /* container helper if you don’t already have one */
-  .container{
+  /* container helper if you don't already have one */
+  .shop-page .container{
     max-width: 1080px;
     padding: 0 16px;
     margin: 0 auto;

@@ -2,6 +2,22 @@
 .hero{ padding: 56px 0 36px; }
 .hero__grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: center; }
 
+.pack-wrap {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 110px;
+  margin-right: 200px;
+}
+
+.pack-wrap img{ 
+  display:block; 
+  max-width: 304px; 
+  aspect-ratio: 304/477;
+  width: 100%; 
+  border-radius: 10px; 
+}
+
 @media (max-width: 980px){ 
   .hero__grid{ 
     grid-template-columns: 1fr; 
@@ -54,12 +70,15 @@
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 800;
   letter-spacing: .02em;
-  margin: 0 0 12px;
+  margin: 16px;
+  text-align: left;
 }
 .hero__body{
   color: var(--muted);
   font-size: 18px; line-height: 1.6;
   max-width: 44ch;
+  margin: 0  16px;
+  text-align: left;
 }
 
 /* --- Fix: prevent CTA buttons from stretching full width --- */
@@ -152,24 +171,15 @@
   }
 }
 
-.hero__art{ display:flex; justify-content:center; }
+.hero__art{ display:flex;  }
 
 .pack-wrap img{ 
   display:block; 
-  max-width: 480px; 
+  max-width: 304px; 
   width: 100%; 
   border-radius: 10px; 
 }
 
-/* Desktop card pack image dimensions */
-@media (min-width: 769px) {
-  .pack-wrap img {
-    width: 304px !important;
-    height: 477px !important;
-    max-width: none !important;
-    aspect-ratio: 304/477;
-  }
-}
 /* Ensure anchors account for sticky nav */
 #hero, #physical, #about, #contact, #faqs { scroll-margin-top: 90px; }
 
@@ -195,10 +205,7 @@
       gap: 0px;
     }
     
-    .physical__content {
-      margin-left: -150px;
-      width: 120%;
-    }
+    
   }
 
   .physical__image {
@@ -208,10 +215,25 @@
     position: relative;
   }
 
-  /* Desktop: Move iPhone 160px to the left */
-  @media (min-width: 769px) {
+  /* Desktop: Move iPhone 160px to the left because there is 160px of space in image itself */
+
+
+  /* Breakpoint for 1024px-1440px screens */
+  @media (min-width: 1024px) and (max-width: 1439px) {
     .physical__image {
-      margin-left: -160px;
+      margin-left: -80px;
+    }
+    
+  }
+
+  /* Breakpoint for 1440px and above */
+  @media (min-width: 1440px) {
+    .physical__image {
+      margin-left: -360px;
+    }
+    .physical__content {
+      margin-left: -150px;
+      width: 120%;
     }
   }
 
@@ -220,7 +242,6 @@
     position: relative;
     width: min(500px, 90vw);           /* reasonable size */
     aspect-ratio: 9 / 19.5;            /* ballpark iPhone 14 aspect; keeps proportions */
-    margin: 24px auto;
   }
 
   /* Circular highlight behind phone */
@@ -252,22 +273,35 @@
     position: absolute;
     overflow: auto;                     /* enables scrolling */
     border-radius: 26px;                /* soften to match the glass corners */
-    -webkit-mask-image: radial-gradient(white, black); /* minor antialias aid on iOS */
+    mask-image: radial-gradient(white, black); /* minor antialias aid */
+    -webkit-mask-image: radial-gradient(white, black); /* Safari support */
     background: #0000;                  /* transparent */
-    /* Desktop insets - adjusted for larger phone */
-    top: 150px;
-    right: 92px;  
-    bottom: 235px;
-    left: 93px;
+    
+    /* Fixed mobile insets to prevent scaling issues */
+    top: 92px;
+    right: 54px;
+    bottom: 135px;
+    left: 54px;
   }
 
-  /* Mobile insets - adjust for smaller screen proportions */
-  @media (max-width: 768px) {
+  /* Use viewport scaling only for larger screens */
+  @media (min-width: 768px) {
     .phone-screen {
-      top: 82px;
-      right: 54px;
-      bottom: 135px;
-      left: 54px;
+      /* Responsive insets using viewport units for larger screens */
+      top: calc(28.75vw + (10.42vw - 28.75vw) * ((100vw - 768px) / (1440px - 768px)));
+      right: calc(16.88vw + (6.39vw - 16.88vw) * ((100vw - 768px) / (1440px - 768px)));
+      bottom: calc(42.19vw + (16.32vw - 42.19vw) * ((100vw - 768px) / (1440px - 768px)));
+      left: calc(16.88vw + (6.46vw - 16.88vw) * ((100vw - 768px) / (1440px - 768px)));
+    }
+  }
+
+  /* Clamp values to prevent extreme scaling */
+  @media (min-width: 1440px) {
+    .phone-screen {
+      top: 150px;
+      right: 92px;
+      bottom: 235px;
+      left: 93px;
     }
   }
 
@@ -717,7 +751,7 @@ summary{ cursor:pointer; font-weight: 600; outline:none; }
 }
 
 .celebrate-section__background img {
-  width: 1440px;
+  width: 100%;
   height: 906px;
   flex-shrink: 0;
   aspect-ratio: 240/151;
@@ -813,9 +847,8 @@ summary{ cursor:pointer; font-weight: 600; outline:none; }
   .phone-wrap {
     width: min(1200px, 100vw);
     height: min(2400px, 100vh);
-    margin: 0 auto 0 -25px;
     position: relative;
-    transform: scale(1.3);
+    /* transform: scale(1.3); */
   }
   
   /* Hide scrollbar inside iPhone on all devices */

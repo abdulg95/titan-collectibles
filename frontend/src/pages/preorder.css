@@ -133,20 +133,7 @@ html, body, #root {
   .partner small{ display: block; margin-top: 8px; opacity: 0.8; font-size: 12px; }
   
   /* ===== Right column (pack) ===== */
-  .pack-wrap {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 110px;
-    margin-right: 200px;
-  }
-  .pack-img {
-    width: 321px;
-    height: 504px;
-    aspect-ratio: 107 / 168;
-    object-fit: contain;
-    filter: drop-shadow(0 18px 34px rgba(0,0,0,.45));
-  }
+
   
   /* ===== Footer (logo row, copyright underneath) ===== */
   .preorder-footer {

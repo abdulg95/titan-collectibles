@@ -194,6 +194,15 @@
   }
   .social img{ width:18px; height:18px }
   
+  /* Ensure Google sign-in button is visible on mobile */
+  @media (max-width: 768px) {
+    .social {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+  
   .switch{ text-align:center; margin: 10px 0 4px; color:#cfd8e6 }
   .linklike{ background:none; border:0; color:#cfe3ff; text-decoration:underline; cursor:pointer }
 
