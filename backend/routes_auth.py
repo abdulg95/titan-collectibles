@@ -498,7 +498,17 @@ def verify_resend():
       <p>Confirm your email to activate your account:</p>
       <p><a href="{verify_url}">Verify your email</a></p>
     """
-    send_email(u.email, "Verify your email", html, f"Open this link to verify: {verify_url}")
+    
+    print(f"📧 Resending verification email to {u.email}")
+    print(f"🔗 Verification URL: {verify_url}")
+    
+    try:
+        send_email(u.email, "Verify your email", html, f"Open this link to verify: {verify_url}")
+        print(f"✅ Email resent successfully to {u.email}")
+    except Exception as e:
+        print(f"❌ Email resending failed: {e}")
+        current_app.logger.exception("Email resending error: %s", e)
+    
     return jsonify({"ok": True})
 
     # --- Password reset: request link ---
