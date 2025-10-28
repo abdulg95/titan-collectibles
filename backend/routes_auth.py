@@ -444,7 +444,21 @@ def verify_email():
         db.session.commit()
 
     session["uid"] = _id_str(u.id)
-    return redirect(_frontend_origin() + "/?verify=ok")
+    
+    # Generate auth token for URL-based authentication (Safari mobile compatibility)
+    auth_token = _generate_auth_token(u.id)
+    
+    print(f"✅ Email verification: Set session uid={session['uid']}, auth_token={auth_token[:20]}...")
+    
+    # Redirect to frontend with auth token
+    frontend_origin = _frontend_origin()
+    if frontend_origin == "/":
+        # If FRONTEND_ORIGIN is not set, use the production URL
+        frontend_origin = "https://www.titansportshq.com/"
+    dest_with_token = f"{frontend_origin}#auth_token={auth_token}"
+    
+    print(f"🔗 Email verification redirect URL: {dest_with_token}")
+    return redirect(dest_with_token)
 
 @bp.post("/verify/resend")
 def verify_resend():
