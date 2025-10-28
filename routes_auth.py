@@ -358,13 +358,18 @@ def signup():
     location = data.get("location") or ""
     date_of_birth = data.get("date_of_birth")
 
+    print(f"🔍 Signup attempt: email={email}, name={name}")
+
     if not valid_email(email):
+        print(f"❌ Invalid email: {email}")
         return jsonify({"ok": False, "error": "invalid_email"}), 400
     if len(password) < 8:
+        print(f"❌ Weak password for {email}")
         return jsonify({"ok": False, "error": "weak_password"}), 400
 
     existing = User.query.filter_by(email=email).first()
     if existing:
+        print(f"❌ Email already in use: {email}")
         return jsonify({"ok": False, "error": "email_in_use"}), 409
 
     # Only pass supported kwargs to the model
@@ -384,11 +389,13 @@ def signup():
     u.set_password(password)
     db.session.add(u)
     db.session.commit()
+    
+    print(f"✅ User created: {u.id} ({email})")
 
     # JSON-safe token (string id)
     token = _serializer().dumps({"uid": _id_str(u.id)})
 
-    # Clear session (optional) or keep a pending uid; we’ll clear for safety
+    # Clear session (optional) or keep a pending uid; we'll clear for safety
     session.clear()
 
     verify_url = urljoin(
@@ -399,9 +406,19 @@ def signup():
       <p>Hi {getattr(u, 'name', None) or u.email},</p>
       <p>Confirm your email to activate your account:</p>
       <p><a href="{verify_url}">Verify your email</a></p>
-      <p>If you didn’t sign up, you can ignore this message.</p>
+      <p>If you didn't sign up, you can ignore this message.</p>
     """
-    send_email(u.email, "Verify your email", html, f"Open this link to verify: {verify_url}")
+    
+    print(f"📧 Sending verification email to {u.email}")
+    print(f"🔗 Verification URL: {verify_url}")
+    
+    try:
+        send_email(u.email, "Verify your email", html, f"Open this link to verify: {verify_url}")
+        print(f"✅ Email sent successfully to {u.email}")
+    except Exception as e:
+        print(f"❌ Email sending failed: {e}")
+        # Don't fail the signup if email fails
+        current_app.logger.exception("Email sending error during signup: %s", e)
 
     return jsonify({"ok": True, "need_verification": True})
 
