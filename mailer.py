@@ -28,7 +28,15 @@ def send_email(to: str, subject: str, html: str, text: str | None = None):
                 "content":[
                     {"type":"text/plain", "value":text},
                     {"type":"text/html", "value":html}
-                ]
+                ],
+                "tracking_settings": {
+                    "click_tracking": {
+                        "enable": False
+                    },
+                    "open_tracking": {
+                        "enable": False
+                    }
+                }
             })
         )
         if resp.status_code >= 300:
