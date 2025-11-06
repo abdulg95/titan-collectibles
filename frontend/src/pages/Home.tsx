@@ -7,6 +7,8 @@ import './home.css'
 export default function Home(){
   const [currentTextIndex, setCurrentTextIndex] = useState(0)
   const phoneScreenRef = useRef<HTMLDivElement>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null)
 
   const scrollTexts = [
     {
@@ -64,6 +66,47 @@ export default function Home(){
       return () => phoneScreen.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitMessage(null)
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+    
+    const data = {
+      firstName: formData.get('firstName') as string,
+      lastName: formData.get('lastName') as string,
+      email: formData.get('email') as string,
+      message: formData.get('message') as string,
+    }
+
+    try {
+      const API = import.meta.env.VITE_API_BASE_URL || ''
+      const url = new URL('/api/contact', API).toString()
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (response.ok) {
+        setSubmitMessage(result.message || 'Thanks! We will get back to you.')
+        form.reset()
+      } else {
+        setSubmitMessage(result.error || 'Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      setSubmitMessage('Failed to send message. Please try again later.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className={`home ${currentTextIndex === 4 ? 'dark-background' : ''}`}>
@@ -367,7 +410,7 @@ export default function Home(){
                   <li>Move your phone slowly around the card in case the reader is in a different spot.</li>
                 </ul>
                 <p>
-                  Still not working? Contact us at <a href="mailto:support@titansports.ca">support@titansports.ca</a>,
+                  Still not working? Contact us at <a href="mailto:support@titansportshq.com">support@titansportshq.com</a>,
                   and we’ll help you out.
                 </p>
               </details>
@@ -393,14 +436,21 @@ export default function Home(){
         <div className="container contact__grid">
           <Reveal><h2>Still have questions?</h2></Reveal>
           <Reveal delay={0.08}>
-            <form className="contact__form" onSubmit={(e)=>{e.preventDefault(); alert('Thanks! We will get back to you.')}}>
+            <form className="contact__form" onSubmit={handleContactSubmit}>
               <div className="row">
-                <label>First name<input required/></label>
-                <label>Last name<input required/></label>
+                <label>First name<input name="firstName" required/></label>
+                <label>Last name<input name="lastName" required/></label>
               </div>
-              <label>Email<input type="email" required/></label>
-              <label>Message<textarea rows={5} required/></label>
-              <button className="btn-secondary" type="submit">Contact Us</button>
+              <label>Email<input name="email" type="email" required/></label>
+              <label>Message<textarea name="message" rows={5} required/></label>
+              {submitMessage && (
+                <div className={submitMessage.includes('Thank') ? 'contact__success' : 'contact__error'}>
+                  {submitMessage}
+                </div>
+              )}
+              <button className="btn-secondary" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Contact Us'}
+              </button>
             </form>
           </Reveal>
         </div>
