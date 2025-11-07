@@ -156,75 +156,77 @@ export default function Home(){
         </section>
 
             {/* PHYSICAL MEETS DIGITAL (video first, text below) */}
-            <section id="physical" className="physical">
-              <div className="container physical__grid">
-                <div className="physical__image">
-                  <div className="phone-wrap">
-                    {/* Scrollable screen area */}
-                    <div className="phone-screen" ref={phoneScreenRef}>
-                      {/* The Ella features image is taller than the screen so you can scroll */}
+            {false && (
+              <section id="physical" className="physical">
+                <div className="container physical__grid">
+                  <div className="physical__image">
+                    <div className="phone-wrap">
+                      {/* Scrollable screen area */}
+                      <div className="phone-screen" ref={phoneScreenRef}>
+                        {/* The Ella features image is taller than the screen so you can scroll */}
+                        <img 
+                          src="/assets/card-features/Ella features call out prototype.png" 
+                          alt="Ella features" 
+                          className="screen-photo"
+                        />
+                      </div>
+
+                      {/* The iPhone frame sits on top; pointer-events none so scroll still works */}
                       <img 
-                        src="/assets/card-features/Ella features call out prototype.png" 
-                        alt="Ella features" 
-                        className="screen-photo"
+                        src="/assets/card-features/iPhone 14 Pro.png" 
+                        alt="iPhone frame" 
+                        className="phone-frame"
                       />
                     </div>
-
-                    {/* The iPhone frame sits on top; pointer-events none so scroll still works */}
-                    <img 
-                      src="/assets/card-features/iPhone 14 Pro.png" 
-                      alt="iPhone frame" 
-                      className="phone-frame"
-                    />
+                  </div>
+                  <div className="physical__content">
+                    <h3 className="physical__title">
+                      <span className="accent">{scrollTexts[currentTextIndex].title} </span>
+                      <span className="highlight">{scrollTexts[currentTextIndex].highlight}</span>
+                      <br />
+                      <span className="highlight">{scrollTexts[currentTextIndex].subtitle}</span>
+                    </h3>
+                    {scrollTexts[currentTextIndex].description && (
+                      <p className="physical__para">
+                        {scrollTexts[currentTextIndex].description}
+                      </p>
+                    )}
+                    {currentTextIndex === 1 && (
+                      <div className="bio-pill">
+                        BIO
+                      </div>
+                    )}
+                    {currentTextIndex === 2 && (
+                      <div className="pills-container">
+                        <div className="personal-video-pill">
+                          Personal Video
+                        </div>
+                        <div className="diamond-feature-pill">
+                          <span className="pill-icon">💎</span>
+                          Diamond Feature
+                        </div>
+                      </div>
+                    )}
+                    {currentTextIndex === 3 && (
+                      <div className="pills-container">
+                        <div className="personal-video-pill">
+                          Mental Game
+                        </div>
+                        <div className="diamond-feature-pill">
+                          <span className="pill-icon">💎</span>
+                          Diamond Feature
+                        </div>
+                      </div>
+                    )}
+                    {currentTextIndex === 4 && (
+                      <div className="titan-icon-container">
+                        <img src="/assets/titan-icon 1.png" alt="TITAN" className="titan-icon" />
+                      </div>
+                    )}
                   </div>
                 </div>
-                <div className="physical__content">
-                  <h3 className="physical__title">
-                    <span className="accent">{scrollTexts[currentTextIndex].title} </span>
-                    <span className="highlight">{scrollTexts[currentTextIndex].highlight}</span>
-                    <br />
-                    <span className="highlight">{scrollTexts[currentTextIndex].subtitle}</span>
-                  </h3>
-                  {scrollTexts[currentTextIndex].description && (
-                    <p className="physical__para">
-                      {scrollTexts[currentTextIndex].description}
-                    </p>
-                  )}
-                  {currentTextIndex === 1 && (
-                    <div className="bio-pill">
-                      BIO
-                    </div>
-                  )}
-                  {currentTextIndex === 2 && (
-                    <div className="pills-container">
-                      <div className="personal-video-pill">
-                        Personal Video
-                      </div>
-                      <div className="diamond-feature-pill">
-                        <span className="pill-icon">💎</span>
-                        Diamond Feature
-                      </div>
-                    </div>
-                  )}
-                  {currentTextIndex === 3 && (
-                    <div className="pills-container">
-                      <div className="personal-video-pill">
-                        Mental Game
-                      </div>
-                      <div className="diamond-feature-pill">
-                        <span className="pill-icon">💎</span>
-                        Diamond Feature
-                      </div>
-                    </div>
-                  )}
-                  {currentTextIndex === 4 && (
-                    <div className="titan-icon-container">
-                      <img src="/assets/titan-icon 1.png" alt="TITAN" className="titan-icon" />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
+              </section>
+            )}
 
        </div>
       
