@@ -125,10 +125,12 @@ const renderMedalSequence = (sequence: string) => {
       if (diff !== 0) return diff
       return 0
     })
+
+  const displayIcons = [...icons].reverse()
  
   return (
     <div className="olympic-medals">
-      {icons.map((iconType, index) => {
+      {displayIcons.map((iconType, index) => {
         const trimmedType = iconType.trim()
         let iconSrc = ''
         let iconAlt = ''
