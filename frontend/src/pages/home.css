@@ -77,7 +77,7 @@
   color: var(--muted);
   font-size: 18px; line-height: 1.6;
   max-width: 44ch;
-  margin: 0  16px;
+  margin: 0  16px 16px;
   text-align: left;
 }
 
@@ -168,6 +168,22 @@
   }
   .license__caption{
     text-align: center;
+  }
+}
+
+.hero__copy{
+  padding-left: 16px;
+}
+
+@media (min-width: 769px){
+  .hero__copy{
+    padding-left: 16px;
+  }
+  .hero__title{
+    margin-left: 0;
+  }
+  .hero__body{
+    margin-left: 0;
   }
 }
 
