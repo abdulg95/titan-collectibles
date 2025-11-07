@@ -74,27 +74,29 @@ type CardResponse = {
 }
 
 // Helper function to determine achievement icon
+const ASSET_VERSION = '20251107'
+
 const getAchievementIcon = (achievement: Achievement) => {
   // Check if notes field contains special icon type or sequence
   if (achievement.notes && achievement.notes.includes(',')) {
     // Handle sequences (e.g., "trophy,silver", "gold,silver,bronze")
     return 'sequence'
   } else if (achievement.notes === 'trophy') {
-    return '/assets/achievements/trophy.png'
+    return `/assets/achievements/trophy.png?v=${ASSET_VERSION}`
   } else if (achievement.notes === 'award') {
-    return '/assets/achievements/award.png'
+    return `/assets/achievements/award.png?v=${ASSET_VERSION}`
   }
   
   // Default to medal type
   switch (achievement.medal) {
     case 'gold':
-      return '/assets/achievements/gold-medal.png'
+      return `/assets/achievements/gold-medal.png?v=${ASSET_VERSION}`
     case 'silver':
-      return '/assets/achievements/silver-medal.png'
+      return `/assets/achievements/silver-medal.png?v=${ASSET_VERSION}`
     case 'bronze':
-      return '/assets/achievements/bronze-medal.png'
+      return `/assets/achievements/bronze-medal.png?v=${ASSET_VERSION}`
     default:
-      return '/assets/achievements/gold-medal.png'
+      return `/assets/achievements/gold-medal.png?v=${ASSET_VERSION}`
   }
 }
 
@@ -137,14 +139,14 @@ const renderMedalSequence = (sequence: string) => {
         
         // Handle special icon types
         if (trimmedType === 'trophy') {
-          iconSrc = '/assets/achievements/trophy.png'
+          iconSrc = `/assets/achievements/trophy.png?v=${ASSET_VERSION}`
           iconAlt = 'trophy'
         } else if (trimmedType === 'award') {
-          iconSrc = '/assets/achievements/award.png'
+          iconSrc = `/assets/achievements/award.png?v=${ASSET_VERSION}`
           iconAlt = 'award'
         } else {
           // Handle medal types
-          iconSrc = `/assets/achievements/${trimmedType}-medal.png`
+          iconSrc = `/assets/achievements/${trimmedType}-medal.png?v=${ASSET_VERSION}`
           iconAlt = `${trimmedType} medal`
         }
         
