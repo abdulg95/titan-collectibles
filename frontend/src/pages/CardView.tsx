@@ -100,7 +100,32 @@ const getAchievementIcon = (achievement: Achievement) => {
 
 // Helper function to render medal sequence
 const renderMedalSequence = (sequence: string) => {
-  const icons = sequence.split(',')
+  const priority = (type: string) => {
+    switch (type) {
+      case 'gold':
+        return 3
+      case 'silver':
+        return 2
+      case 'bronze':
+        return 1
+      case 'trophy':
+      case 'award':
+        return 4
+      default:
+        return 0
+    }
+  }
+
+  const icons = sequence
+    .split(',')
+    .map(icon => icon.trim())
+    .filter(Boolean)
+    .sort((a, b) => {
+      const diff = priority(b) - priority(a)
+      if (diff !== 0) return diff
+      return 0
+    })
+ 
   return (
     <div className="olympic-medals">
       {icons.map((iconType, index) => {

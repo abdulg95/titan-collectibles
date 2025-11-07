@@ -430,7 +430,7 @@
   height: 42px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .olympic-medals .achievement-icon {
@@ -438,11 +438,11 @@
   top: 0;
 }
 
-.olympic-medals .achievement-icon:nth-child(1) { right: 0; z-index: 5; }
-.olympic-medals .achievement-icon:nth-child(2) { right: 18px; z-index: 4; }
-.olympic-medals .achievement-icon:nth-child(3) { right: 36px; z-index: 3; }
-.olympic-medals .achievement-icon:nth-child(4) { right: 54px; z-index: 2; }
-.olympic-medals .achievement-icon:nth-child(5) { right: 72px; z-index: 1; }
+.olympic-medals .achievement-icon:nth-child(1) { left: 0; z-index: 5; }
+.olympic-medals .achievement-icon:nth-child(2) { left: 18px; z-index: 4; }
+.olympic-medals .achievement-icon:nth-child(3) { left: 36px; z-index: 3; }
+.olympic-medals .achievement-icon:nth-child(4) { left: 54px; z-index: 2; }
+.olympic-medals .achievement-icon:nth-child(5) { left: 72px; z-index: 1; }
 
 /* Quote Section */
 .quote-section {
