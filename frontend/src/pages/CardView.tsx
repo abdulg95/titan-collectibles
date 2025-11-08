@@ -29,6 +29,7 @@ type Stats = {
   win_percentage: number | null
   average_arrow: number | null
   tiebreak_win_rate: number | null
+  extras?: Record<string, any>
 }
 
 type CardResponse = {
@@ -445,7 +446,9 @@ export default function CardView() {
                   <div className="nationality-row">
                     <p className="about-value">{athlete.nationality}</p>
                     {athlete.nationality === 'United States' && <span className="flag-emoji">🇺🇸</span>}
-                    {athlete.nationality === 'Turkey' && <span className="flag-emoji">🇹🇷</span>}
+                    {(athlete.nationality === 'Turkey' || athlete.nationality === 'Türkiye') && (
+                      <span className="flag-emoji">🇹🇷</span>
+                    )}
                     {athlete.nationality === 'Great Britain' && <span className="flag-emoji">🇬🇧</span>}
                     {athlete.nationality === 'India' && <span className="flag-emoji">🇮🇳</span>}
                     {athlete.nationality === 'Colombia' && <span className="flag-emoji">🇨🇴</span>}
