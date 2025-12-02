@@ -88,14 +88,17 @@ export default function Home(){
               
               // Easing function for smooth animation
               const easeOutQuart = 1 - Math.pow(1 - progress, 4)
-              const currentValue = Math.floor(easeOutQuart * targetValue)
+              let currentValue = Math.round(easeOutQuart * targetValue)
+              
+              // Ensure we reach the target value exactly
+              if (progress >= 1) {
+                currentValue = targetValue
+              }
               
               setCountValue(currentValue)
               
               if (progress < 1) {
                 requestAnimationFrame(animate)
-              } else {
-                setCountValue(targetValue)
               }
             }
             
@@ -174,9 +177,9 @@ export default function Home(){
           loop
           muted
           playsInline
+          preload="auto"
         >
-          <source src="/assets/Particles background video.mp4" type="video/mp4" />
-          <source src="/assets/Particles background video.mov" type="video/quicktime" />
+          <source src="/assets/particles-background-video.mp4" type="video/mp4" />
         </video>
 
         {/* Mountain Image Overlay */}
