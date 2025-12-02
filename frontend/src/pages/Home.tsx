@@ -167,6 +167,18 @@ export default function Home(){
   return (
     <div className={`home ${currentTextIndex === 4 ? 'dark-background' : ''}`}>
        <div className="top-bg">
+        {/* Particle Background Video */}
+        <video 
+          className="particles-bg-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src="/assets/Particles background video.mp4" type="video/mp4" />
+          <source src="/assets/Particles background video.mov" type="video/quicktime" />
+        </video>
+
         {/* HERO */}
         <section id="hero" className="hero">
           <div className="container hero__grid">
