@@ -298,7 +298,7 @@ export default function Home(){
                     )}
                     {currentTextIndex === 4 && (
                       <div className="titan-icon-container">
-                        <img src="/assets/titan-icon 1.png" alt="TITAN" className="titan-icon" />
+                        <img src="/assets/titan-icon.png" alt="TITAN" className="titan-icon" />
                       </div>
                     )}
                   </div>
