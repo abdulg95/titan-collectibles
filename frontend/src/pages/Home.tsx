@@ -179,6 +179,13 @@ export default function Home(){
           <source src="/assets/Particles background video.mov" type="video/quicktime" />
         </video>
 
+        {/* Mountain Image Overlay */}
+        <img 
+          src="/assets/mountians2.png" 
+          alt="" 
+          className="mountains-overlay"
+        />
+
         {/* HERO */}
         <section id="hero" className="hero">
           <div className="container hero__grid">
