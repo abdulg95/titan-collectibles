@@ -9,6 +9,8 @@ export default function Home(){
   const phoneScreenRef = useRef<HTMLDivElement>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState<string | null>(null)
+  const [countValue, setCountValue] = useState(0)
+  const aboutSectionRef = useRef<HTMLElement>(null)
 
   const scrollTexts = [
     {
@@ -64,6 +66,60 @@ export default function Home(){
     if (phoneScreen) {
       phoneScreen.addEventListener('scroll', handleScroll)
       return () => phoneScreen.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  // Count-up animation effect
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Reset and animate every time it comes into view
+            setCountValue(0)
+            
+            const targetValue = 1800
+            const duration = 2000 // 2 seconds
+            const startTime = Date.now()
+            
+            const animate = () => {
+              const elapsed = Date.now() - startTime
+              const progress = Math.min(elapsed / duration, 1)
+              
+              // Easing function for smooth animation
+              const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+              const currentValue = Math.floor(easeOutQuart * targetValue)
+              
+              setCountValue(currentValue)
+              
+              if (progress < 1) {
+                requestAnimationFrame(animate)
+              } else {
+                setCountValue(targetValue)
+              }
+            }
+            
+            requestAnimationFrame(animate)
+          } else {
+            // Reset when out of view
+            setCountValue(0)
+          }
+        })
+      },
+      {
+        threshold: 0.3, // Trigger when 30% of the section is visible
+        rootMargin: '0px'
+      }
+    )
+
+    if (aboutSectionRef.current) {
+      observer.observe(aboutSectionRef.current)
+    }
+
+    return () => {
+      if (aboutSectionRef.current) {
+        observer.unobserve(aboutSectionRef.current)
+      }
     }
   }, [])
 
@@ -232,10 +288,10 @@ export default function Home(){
       
 
       {/* ABOUT SECTION */}
-      <section className="about-section">
+      <section ref={aboutSectionRef} className="about-section">
         <div className="container about-section__content">
           <div className="about-section__amount">
-            $<span className="amount-spacing">1800+</span>
+            $<span className="amount-spacing">{countValue}+</span>
           </div>
           <div className="about-section__text">
             <h3 className="about-section__title">
