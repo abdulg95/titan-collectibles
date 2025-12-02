@@ -43,6 +43,7 @@ export async function getProductByHandle(handle: string) {
             id
             title
             availableForSale
+            quantityAvailable
             price { amount currencyCode }  # MoneyV2
           }
         }
@@ -151,6 +152,7 @@ export type CartLine = {
   merchandise: {
     id: string;                // variant id
     title: string;
+    availableForSale: boolean;
     product: { title: string; handle: string; images: { nodes: { url: string }[] } };
     image?: { url: string; altText: string | null };
     price: Money;
@@ -184,6 +186,7 @@ export async function getCart(id: string): Promise<CartData | null> {
               ... on ProductVariant {
                 id
                 title
+                availableForSale
                 price { amount currencyCode }
                 product {
                   title handle

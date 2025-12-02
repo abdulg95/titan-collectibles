@@ -46,11 +46,21 @@ export default function CartDrawer(){
         if (!p) return
         const v = p.variants?.nodes?.[0]
         const img = p.images?.nodes?.[0]?.url || ''
-        if (!v?.id) return
+        
+        // Only show add-on if variant exists, is available for sale, and has stock
+        // quantityAvailable can be null if inventory is not tracked, so check both
+        // If quantityAvailable is 0 or negative, don't show it
+        const qty = v?.quantityAvailable
+        const hasStock = qty === null || qty === undefined || qty > 0
+        
+        if (!v?.id || !v?.availableForSale || !hasStock) return
+        
         if (!cancelled){
           setAddon({ variantId: v.id, title: p.title, image: img, price: v.price })
         }
-      } catch {/* ignore */}
+      } catch (e) {
+        console.error('Error loading add-on:', e)
+      }
     }
     loadAddon()
     return () => { cancelled = true }

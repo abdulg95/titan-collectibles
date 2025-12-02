@@ -50,14 +50,20 @@ export default function PreorderPage() {
         if (p1 && !cancel) {
           const v = p1.variants?.nodes?.[0]
           const img = p1.images?.nodes?.[0]?.url || ''
-          if (v?.id) setPack({ variantId: v.id, title: p1.title, image: img, price: v.price })
+          // Only show pack if variant exists, is available for sale, and has stock
+          const qty = v?.quantityAvailable
+          const hasStock = qty === null || qty === undefined || qty > 0
+          if (v?.id && v?.availableForSale && hasStock) setPack({ variantId: v.id, title: p1.title, image: img, price: v.price })
         }
 
         const p2 = await getProductByHandle(ADDON_HANDLE).catch(() => null)
         if (p2 && !cancel) {
           const v = p2.variants?.nodes?.[0]
           const img = p2.images?.nodes?.[0]?.url || ''
-          if (v?.id) setAddon({ variantId: v.id, title: p2.title, image: img, price: v.price })
+          // Only show add-on if variant exists, is available for sale, and has stock
+          const qty = v?.quantityAvailable
+          const hasStock = qty === null || qty === undefined || qty > 0
+          if (v?.id && v?.availableForSale && hasStock) setAddon({ variantId: v.id, title: p2.title, image: img, price: v.price })
         }
       } catch {/* ignore */}
     })()
@@ -118,8 +124,9 @@ export default function PreorderPage() {
     }
   }
 
-  // Filter out our two items from “other items” list
+  // Filter out our two items from "other items" list, and only show available items
   const otherLines = cartLines.filter(l =>
+    l.merchandise.availableForSale &&
     l.merchandise.id !== pack?.variantId && l.merchandise.id !== addon?.variantId
   )
 

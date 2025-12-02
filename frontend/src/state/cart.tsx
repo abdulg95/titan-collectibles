@@ -77,7 +77,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     open: () => setOpen(true),
     close: () => setOpen(false),
     totalQty: cart?.totalQuantity || 0,
-    lines: cart?.lines.nodes || [],
+    // Filter out out-of-stock items from lines
+    lines: (cart?.lines.nodes || []).filter(l => l.merchandise.availableForSale),
     add,
     addByHandle,               // ⬅️ EXPOSE IT
     inc,
